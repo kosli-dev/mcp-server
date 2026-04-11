@@ -13,6 +13,7 @@ describe("loadConfig", () => {
   });
 
   it("loads valid config from env vars", () => {
+    delete process.env.KOSLI_API_TOKEN;
     process.env.KOSLI_API_KEY = "test-key";
     process.env.KOSLI_ORG = "test-org";
 
@@ -33,11 +34,32 @@ describe("loadConfig", () => {
     expect(config.baseUrl).toBe("https://staging.kosli.com");
   });
 
-  it("throws when KOSLI_API_KEY is missing", () => {
+  it("prefers KOSLI_API_TOKEN over KOSLI_API_KEY", () => {
+    process.env.KOSLI_API_TOKEN = "token-value";
+    process.env.KOSLI_API_KEY = "key-value";
+    process.env.KOSLI_ORG = "test-org";
+
+    const config = loadConfig();
+
+    expect(config.apiKey).toBe("token-value");
+  });
+
+  it("falls back to KOSLI_API_KEY when KOSLI_API_TOKEN is missing", () => {
+    delete process.env.KOSLI_API_TOKEN;
+    process.env.KOSLI_API_KEY = "key-value";
+    process.env.KOSLI_ORG = "test-org";
+
+    const config = loadConfig();
+
+    expect(config.apiKey).toBe("key-value");
+  });
+
+  it("throws when both KOSLI_API_TOKEN and KOSLI_API_KEY are missing", () => {
     process.env.KOSLI_ORG = "test-org";
     delete process.env.KOSLI_API_KEY;
+    delete process.env.KOSLI_API_TOKEN;
 
-    expect(() => loadConfig()).toThrow("KOSLI_API_KEY");
+    expect(() => loadConfig()).toThrow("KOSLI_API_TOKEN");
   });
 
   it("throws when KOSLI_ORG is missing", () => {

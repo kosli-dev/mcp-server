@@ -1,9 +1,9 @@
 import type { Config } from "./types.js";
 
 export function loadConfig(): Config {
-  const apiKey = process.env.KOSLI_API_KEY;
+  const apiKey = process.env.KOSLI_API_TOKEN || process.env.KOSLI_API_KEY;
   if (!apiKey) {
-    throw new Error("KOSLI_API_KEY environment variable is required");
+    throw new Error("KOSLI_API_TOKEN (or KOSLI_API_KEY) environment variable is required");
   }
 
   const org = process.env.KOSLI_ORG;
