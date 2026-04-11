@@ -1,0 +1,85 @@
+[
+  {
+    "id": "list_environments",
+    "method": "GET",
+    "path": "/environments/{org}",
+    "summary": "List environments",
+    "description": "List all environments in an organization.",
+    "tags": ["Environments"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" }
+    ],
+    "requestBody": null,
+    "searchText": "list environments get environments org"
+  },
+  {
+    "id": "get_environment",
+    "method": "GET",
+    "path": "/environments/{org}/{env_name}",
+    "summary": "Get environment",
+    "description": "Get details of a specific environment.",
+    "tags": ["Environments"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "env_name", "in": "path", "required": true, "description": "Environment name" }
+    ],
+    "requestBody": null,
+    "searchText": "get environment get environments env_name org"
+  },
+  {
+    "id": "list_flows",
+    "method": "GET",
+    "path": "/flows/{org}",
+    "summary": "List flows",
+    "description": "List all flows in an organization.",
+    "tags": ["Flows"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" }
+    ],
+    "requestBody": null,
+    "searchText": "list flows get flows org"
+  },
+  {
+    "id": "get_trail",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}/{trail_name}",
+    "summary": "Get trail",
+    "description": "Get details of a specific trail.",
+    "tags": ["Trails"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "flow_name", "in": "path", "required": true, "description": "Flow name" },
+      { "name": "trail_name", "in": "path", "required": true, "description": "Trail name" }
+    ],
+    "requestBody": null,
+    "searchText": "get trail get trails flow_name trail_name org"
+  },
+  {
+    "id": "search_artifacts_by_sha",
+    "method": "GET",
+    "path": "/search/{org}/sha/{search_value}",
+    "summary": "Search artifacts by SHA or fingerprint",
+    "description": "Search for artifacts by commit SHA or fingerprint.",
+    "tags": ["Search"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "search_value", "in": "path", "required": true, "description": "SHA or fingerprint to search for" }
+    ],
+    "requestBody": null,
+    "searchText": "search artifacts by sha or fingerprint get search sha search_value org"
+  },
+  {
+    "id": "list_snapshots",
+    "method": "GET",
+    "path": "/snapshots/{org}/{env_name}",
+    "summary": "List snapshots",
+    "description": "List snapshots for an environment.",
+    "tags": ["Snapshots"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "env_name", "in": "path", "required": true, "description": "Environment name" }
+    ],
+    "requestBody": null,
+    "searchText": "list snapshots get snapshots env_name org"
+  }
+]
