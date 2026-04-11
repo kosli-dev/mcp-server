@@ -1,0 +1,4409 @@
+[
+  {
+    "id": "allow_artifact_for_env_allowlists__org___env_name__put",
+    "method": "PUT",
+    "path": "/allowlists/{org}/{env_name}",
+    "summary": "Allow artifact for environment",
+    "description": "Allow an artifact for an environment.",
+    "tags": [
+      "Allowlists"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/AllowlistPutInput"
+        }
+      }
+    ],
+    "searchText": "allow artifact for environment allow an artifact for an environment. put allowlists org env_name allowlists"
+  },
+  {
+    "id": "archive_custom_attestation_type_custom_attestation_types__org___custom_attestation_type_name__archive_put",
+    "method": "PUT",
+    "path": "/custom-attestation-types/{org}/{custom_attestation_type_name}/archive",
+    "summary": "Archive custom attestation type",
+    "description": "Archive a custom attestation type.",
+    "tags": [
+      "Custom Attestation Types"
+    ],
+    "parameters": [
+      {
+        "name": "custom_attestation_type_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Custom Attestation Type Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "archive custom attestation type archive a custom attestation type. put custom-attestation-types org custom_attestation_type_name archive custom attestation types"
+  },
+  {
+    "id": "archive_env_environments__org___env_name__archive_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/archive",
+    "summary": "Archive environment",
+    "description": "Archive an environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "archive environment archive an environment. put environments org env_name archive environments"
+  },
+  {
+    "id": "archive_flow_flows__org___flow_name__archive_put",
+    "method": "PUT",
+    "path": "/flows/{org}/{flow_name}/archive",
+    "summary": "Archive flow",
+    "description": "Archive a flow.",
+    "tags": [
+      "Flows"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "archive flow archive a flow. put flows org flow_name archive flows"
+  },
+  {
+    "id": "assert_artifact_asserts__org__fingerprint__fingerprint__get",
+    "method": "GET",
+    "path": "/asserts/{org}/fingerprint/{fingerprint}",
+    "summary": "Assert artifact",
+    "description": "Assert an artifact.",
+    "tags": [
+      "Asserts"
+    ],
+    "parameters": [
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "flow_name",
+        "in": "query",
+        "required": false,
+        "description": "Filter by flow name",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by flow name",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "environment_name",
+        "in": "query",
+        "required": false,
+        "description": "The name of the environment. Ignored if environment does not use policies.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the environment. Ignored if environment does not use policies.",
+          "title": "Environment Name"
+        }
+      },
+      {
+        "name": "policy_name",
+        "in": "query",
+        "required": false,
+        "description": "List of policy names to assert against. ?policy_name=a&policy_name=b",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "List of policy names to assert against. ?policy_name=a&policy_name=b",
+          "title": "Policy Name"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "assert artifact assert an artifact. get asserts org fingerprint fingerprint asserts"
+  },
+  {
+    "id": "attach_policy_to_env_environments__org___env_name__policies_post",
+    "method": "POST",
+    "path": "/environments/{org}/{env_name}/policies",
+    "summary": "Attach policy to environment",
+    "description": "Attach a Policy to an environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/AttachPoliciesPutInput"
+        }
+      }
+    ],
+    "searchText": "attach policy to environment attach a policy to an environment. post environments org env_name policies environments"
+  },
+  {
+    "id": "azure_apps_report_environments__org___env_name__report_azure_apps_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/azure-apps",
+    "summary": "Report Azure Web and Function Apps environment",
+    "description": "[beta] Process a report for an Azure Web and Function Apps environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/AzureAppsReport"
+        }
+      }
+    ],
+    "searchText": "report azure web and function apps environment [beta] process a report for an azure web and function apps environment. put environments org env_name report azure-apps environments"
+  },
+  {
+    "id": "create_artifact_artifacts__org___flow_name__post",
+    "method": "POST",
+    "path": "/artifacts/{org}/{flow_name}",
+    "summary": "Report artifact",
+    "description": "Create an artifact for organization.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/CreateArtifact"
+        }
+      }
+    ],
+    "searchText": "report artifact create an artifact for organization. post artifacts org flow_name artifacts"
+  },
+  {
+    "id": "create_env_environments__org__put",
+    "method": "PUT",
+    "path": "/environments/{org}",
+    "summary": "Create or update environment",
+    "description": "Create or update an Environment for an organization.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/CreateEnvironmentPutInput"
+        }
+      }
+    ],
+    "searchText": "create or update environment create or update an environment for an organization. put environments org environments"
+  },
+  {
+    "id": "create_flow_with_template_flows__org__template_file_put",
+    "method": "PUT",
+    "path": "/flows/{org}/template_file",
+    "summary": "Create or update flow with template",
+    "description": "Create or update a flow for an organization.",
+    "tags": [
+      "Flows"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_create_flow_with_template_flows__org__template_file_put"
+        }
+      }
+    ],
+    "searchText": "create or update flow with template create or update a flow for an organization. put flows org template_file flows"
+  },
+  {
+    "id": "create_or_update_env_action_actions__org__environments_put",
+    "method": "PUT",
+    "path": "/actions/{org}/environments",
+    "summary": "Create or update environment action",
+    "description": "Create or Update an environment action for an org.",
+    "tags": [
+      "Actions"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/EnvActionPutInput"
+        }
+      }
+    ],
+    "searchText": "create or update environment action create or update an environment action for an org. put actions org environments actions"
+  },
+  {
+    "id": "create_or_update_flow_action_actions__org__flows_put",
+    "method": "PUT",
+    "path": "/actions/{org}/flows",
+    "summary": "Create or update flow action",
+    "description": "Create or Update a flow action for an org.",
+    "tags": [
+      "Actions"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/FlowActionPutInput"
+        }
+      }
+    ],
+    "searchText": "create or update flow action create or update a flow action for an org. put actions org flows actions"
+  },
+  {
+    "id": "create_trail_trails__org___flow_name__put",
+    "method": "PUT",
+    "path": "/trails/{org}/{flow_name}",
+    "summary": "Begin trail",
+    "description": "Add a Trail to a Flow.",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_create_trail_trails__org___flow_name__put"
+        }
+      }
+    ],
+    "searchText": "begin trail add a trail to a flow. put trails org flow_name trails"
+  },
+  {
+    "id": "delete_action_actions__org___action_number__delete",
+    "method": "DELETE",
+    "path": "/actions/{org}/{action_number}",
+    "summary": "Delete an action",
+    "description": "Delete a specific action for an org.",
+    "tags": [
+      "Actions"
+    ],
+    "parameters": [
+      {
+        "name": "action_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Action Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "delete an action delete a specific action for an org. delete actions org action_number actions"
+  },
+  {
+    "id": "delete_environment_notification_organizations__org__environments_notifications__notification_number__delete",
+    "method": "DELETE",
+    "path": "/organizations/{org}/environments_notifications/{notification_number}",
+    "summary": "Delete environment notification",
+    "description": "Delete a specific environments-notification for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "notification_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Notification Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "delete environment notification delete a specific environments-notification for an org. delete organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "detach_policy_from_env_environments__org___env_name__policies_delete",
+    "method": "DELETE",
+    "path": "/environments/{org}/{env_name}/policies",
+    "summary": "Detach policy from environment",
+    "description": "Detach a Policy from an environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/AttachPoliciesPutInput"
+        }
+      }
+    ],
+    "searchText": "detach policy from environment detach a policy from an environment. delete environments org env_name policies environments"
+  },
+  {
+    "id": "docker_report_environments__org___env_name__report_docker_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/docker",
+    "summary": "Report Docker environment",
+    "description": "Process a report for a Docker environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/DockerReport"
+        }
+      }
+    ],
+    "searchText": "report docker environment process a report for a docker environment. put environments org env_name report docker environments"
+  },
+  {
+    "id": "download_trail_audit_package_trails__org___flow_name___trail_name__audit_package_get",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}/{trail_name}/audit_package",
+    "summary": "Download trail audit package",
+    "description": "Download the full trail audit package (same content as the app “Download Full Audit Package”).",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "download trail audit package download the full trail audit package (same content as the app “download full audit package”). get trails org flow_name trail_name audit_package trails"
+  },
+  {
+    "id": "download_trail_audit_pdf_trails__org___flow_name___trail_name__audit_pdf_get",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}/{trail_name}/audit_pdf",
+    "summary": "Download trail audit PDF",
+    "description": "Download only the trail PDF report (same as `trail-page.pdf` inside the full audit package).",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "download trail audit pdf download only the trail pdf report (same as `trail-page.pdf` inside the full audit package). get trails org flow_name trail_name audit_pdf trails"
+  },
+  {
+    "id": "ecs_report_environments__org___env_name__report_ECS_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/ECS",
+    "summary": "Report ECS environment",
+    "description": "Process a report for an ECS environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/ECSReport"
+        }
+      }
+    ],
+    "searchText": "report ecs environment process a report for an ecs environment. put environments org env_name report ecs environments"
+  },
+  {
+    "id": "environment_diff_env_diff__org__get",
+    "method": "GET",
+    "path": "/env-diff/{org}",
+    "summary": "Get environment diff",
+    "description": "Get diff between to snapshots",
+    "tags": [
+      "EnvDiff"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "snappish1",
+        "in": "query",
+        "required": true,
+        "description": "Expression to specify the snapshot 1 for comparison.\nMust contain environment name.\nAdd '#N' to specify exact snapshot number N.\nAdd '~N' to get N-th behind the latest snapshot.\nExamples: staging, staging#10, staging~2",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Expression to specify the snapshot 1 for comparison.\nMust contain environment name.\nAdd '#N' to specify exact snapshot number N.\nAdd '~N' to get N-th behind the latest snapshot.\nExamples: staging, staging#10, staging~2",
+          "title": "Snappish1"
+        }
+      },
+      {
+        "name": "snappish2",
+        "in": "query",
+        "required": true,
+        "description": "Expression to specify the snapshot 2 for comparison.\nMust contain environment name.\nAdd '#N' to specify exact snapshot number N.\n'Add '~N' to get N-th behind the latest snapshot.\nExamples: staging, staging#10, staging~2",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Expression to specify the snapshot 2 for comparison.\nMust contain environment name.\nAdd '#N' to specify exact snapshot number N.\n'Add '~N' to get N-th behind the latest snapshot.\nExamples: staging, staging#10, staging~2",
+          "title": "Snappish2"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get environment diff get diff between to snapshots get env-diff org envdiff"
+  },
+  {
+    "id": "get_action_actions__org___action_number__get",
+    "method": "GET",
+    "path": "/actions/{org}/{action_number}",
+    "summary": "Get action",
+    "description": "Get a specific action for an org.",
+    "tags": [
+      "Actions"
+    ],
+    "parameters": [
+      {
+        "name": "action_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Action Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get action get a specific action for an org. get actions org action_number actions"
+  },
+  {
+    "id": "get_approval_approvals__org___flow_name___approval_number__get",
+    "method": "GET",
+    "path": "/approvals/{org}/{flow_name}/{approval_number}",
+    "summary": "Get approval",
+    "description": "Get an approval record.",
+    "tags": [
+      "Approval"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "approval_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Approval Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get approval get an approval record. get approvals org flow_name approval_number approval"
+  },
+  {
+    "id": "get_artifact_attestation_attestations__org___flow_name__artifact__fingerprint___attestation_name__get",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}/artifact/{fingerprint}/{attestation_name}",
+    "summary": "Get artifact attestation",
+    "description": "",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{5,64}$",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "attestation_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Attestation Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get artifact attestation  get attestations org flow_name artifact fingerprint attestation_name attestation"
+  },
+  {
+    "id": "get_artifact_by_commit_sha_artifacts__org___flow_name__commit_sha__commit_sha__get",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/commit_sha/{commit_sha}",
+    "summary": "Get artifacts by commit SHA",
+    "description": "Get artifact by commit sha.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "commit_sha",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Commit Sha"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "trail",
+        "in": "query",
+        "required": false,
+        "description": "The name of the trail the artifact was reported to.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the trail the artifact was reported to.",
+          "title": "Trail"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get artifacts by commit sha get artifact by commit sha. get artifacts org flow_name commit_sha commit_sha artifacts"
+  },
+  {
+    "id": "get_artifact_by_fingerprint_artifacts__org___flow_name__fingerprint__fingerprint__get",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/fingerprint/{fingerprint}",
+    "summary": "Get artifact by fingerprint",
+    "description": "Get artifact by fingerprint.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "trail",
+        "in": "query",
+        "required": false,
+        "description": "The name of the trail the artifact was reported to.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the trail the artifact was reported to.",
+          "title": "Trail"
+        }
+      },
+      {
+        "name": "attestation_id",
+        "in": "query",
+        "required": false,
+        "description": "Internal artifact attestation id.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Internal artifact attestation id.",
+          "title": "Attestation Id"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get artifact by fingerprint get artifact by fingerprint. get artifacts org flow_name fingerprint fingerprint artifacts"
+  },
+  {
+    "id": "get_attestation_evidence_attestations__org___flow_name__trail__trail_name__attestation__attestation_id__evidence_get",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/attestation/{attestation_id}/evidence",
+    "summary": "Get attestation evidence file",
+    "description": "Download the evidence file attached to an attestation.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "attestation_id",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Attestation Id"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get attestation evidence file download the evidence file attached to an attestation. get attestations org flow_name trail trail_name attestation attestation_id evidence attestation"
+  },
+  {
+    "id": "get_attestations_attestations__org__get",
+    "method": "GET",
+    "path": "/attestations/{org}",
+    "summary": "List attestations",
+    "description": "Get a paginated list attestations for an organization based on filters provided as query parameters.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "attestation_id",
+        "in": "query",
+        "required": false,
+        "description": "The attestation ID to search for",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The attestation ID to search for",
+          "title": "Attestation Id"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list attestations get a paginated list attestations for an organization based on filters provided as query parameters. get attestations org attestation"
+  },
+  {
+    "id": "get_audit_package_artifacts__org___flow_name___fingerprint__audit_package_get",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/audit_package",
+    "summary": "Get artifact audit package",
+    "description": "Get audit package for an artifact.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get artifact audit package get audit package for an artifact. get artifacts org flow_name fingerprint audit_package artifacts"
+  },
+  {
+    "id": "get_commit_of_running_artifact_approvals__org___flow_name__artifact_commit__env_name__get",
+    "method": "GET",
+    "path": "/approvals/{org}/{flow_name}/artifact-commit/{env_name}",
+    "summary": "Get commit of running artifact",
+    "description": "Get the git commit of a running artifact in a specific environment that comes from a given flow",
+    "tags": [
+      "Approval"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get commit of running artifact get the git commit of a running artifact in a specific environment that comes from a given flow get approvals org flow_name artifact-commit env_name approval"
+  },
+  {
+    "id": "get_custom_attestation_type_custom_attestation_types__org___custom_attestation_type_name__get",
+    "method": "GET",
+    "path": "/custom-attestation-types/{org}/{custom_attestation_type_name}",
+    "summary": "Get custom attestation type",
+    "description": "Get a custom attestation type.",
+    "tags": [
+      "Custom Attestation Types"
+    ],
+    "parameters": [
+      {
+        "name": "custom_attestation_type_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Custom Attestation Type Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "version",
+        "in": "query",
+        "required": false,
+        "description": "Version of the custom attestation type",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Version of the custom attestation type",
+          "title": "Version"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get custom attestation type get a custom attestation type. get custom-attestation-types org custom_attestation_type_name custom attestation types"
+  },
+  {
+    "id": "get_custom_attestation_types_custom_attestation_types__org__get",
+    "method": "GET",
+    "path": "/custom-attestation-types/{org}",
+    "summary": "List custom attestation types",
+    "description": "List all custom attestation types for an org.",
+    "tags": [
+      "Custom Attestation Types"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list custom attestation types list all custom attestation types for an org. get custom-attestation-types org custom attestation types"
+  },
+  {
+    "id": "get_env_auditlog_environments__org___env_name__auditlog_get",
+    "method": "GET",
+    "path": "/environments/{org}/{env_name}/auditlog",
+    "summary": "Get environment audit log",
+    "description": "Get audit log (as a CSV file) for an environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "from_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "From timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "From timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
+          "title": "From Timestamp"
+        }
+      },
+      {
+        "name": "to_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "To timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "To timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
+          "title": "To Timestamp"
+        }
+      },
+      {
+        "name": "event_types",
+        "in": "query",
+        "required": false,
+        "description": "Event types filter. Can be one of started, exited, changed. e.g. event_types=started,exited",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Event types filter. Can be one of started, exited, changed. e.g. event_types=started,exited",
+          "title": "Event Types"
+        }
+      },
+      {
+        "name": "flow_names",
+        "in": "query",
+        "required": false,
+        "description": "Flow names filter as comma separated list. Use 'no provenance' to include artifacts without provenance.e.g. flow_names=server,web,no provenance",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Flow names filter as comma separated list. Use 'no provenance' to include artifacts without provenance.e.g. flow_names=server,web,no provenance",
+          "title": "Flow Names"
+        }
+      },
+      {
+        "name": "repo_names",
+        "in": "query",
+        "required": false,
+        "description": "Repo names filter as comma separated list. e.g. repo_names=repo1,repo2",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Repo names filter as comma separated list. e.g. repo_names=repo1,repo2",
+          "title": "Repo Names"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get environment audit log get audit log (as a csv file) for an environment. get environments org env_name auditlog environments"
+  },
+  {
+    "id": "get_env_events_environments__org___env_name__events_get",
+    "method": "GET",
+    "path": "/environments/{org}/{env_name}/events",
+    "summary": "List environment events",
+    "description": "Get events log for an environment.\n\n**Response Headers:**\n\n* `X-Total-Count`: Total number of events available\n* `X-Per-Page`: Number of events per page\n* `X-Current-Page`: Current page number\n* `X-Total-Pages`: Total number of pages\n* `Link`: Pagination links (first, prev, next, last) when applicable\n\n**Pagination Links Format:**\n```\n<url?page=1&per_page=15>; rel=\"first\",\n<url?page=2&per_page=15>; rel=\"prev\",\n<url?page=4&per_page=15>; rel=\"next\",\n<url?page=10&per_page=15>; rel=\"last\"\n```\n\n**Note:** The Link header is only included when there are multiple pages.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "interval",
+        "in": "query",
+        "required": false,
+        "description": "Deprecated, use 'start' and 'end' instead. Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW'",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Deprecated, use 'start' and 'end' instead. Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW'",
+          "deprecated": true,
+          "title": "Interval"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The page number of response.",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response. min: 1, max: 100",
+        "schema": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1,
+          "description": "How many results to return per page of response. min: 1, max: 100",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "reverse",
+        "in": "query",
+        "required": false,
+        "description": "Return results in reverse order. Expected values: True or False. Defaults to False.",
+        "schema": {
+          "type": "boolean",
+          "description": "Return results in reverse order. Expected values: True or False. Defaults to False.",
+          "default": false,
+          "title": "Reverse"
+        }
+      },
+      {
+        "name": "repo_name",
+        "in": "query",
+        "required": false,
+        "description": "Filter events by repo name. Can be repeated for multiple repos, e.g. repo_name=repo1&repo_name=repo2",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter events by repo name. Can be repeated for multiple repos, e.g. repo_name=repo1&repo_name=repo2",
+          "title": "Repo Name"
+        }
+      },
+      {
+        "name": "start",
+        "in": "query",
+        "required": false,
+        "description": "The start of the interval to query. Can be a positive snapshot index (1, 2, etc.), negative snapshot index (-1 for latest, -2 for second latest, etc.), or time reference ['NOW', '1hour', '1h', '2days', '30mins'], or an exact unix timestamp (1719638400).",
+        "schema": {
+          "type": "string",
+          "description": "The start of the interval to query. Can be a positive snapshot index (1, 2, etc.), negative snapshot index (-1 for latest, -2 for second latest, etc.), or time reference ['NOW', '1hour', '1h', '2days', '30mins'], or an exact unix timestamp (1719638400).",
+          "default": "1",
+          "title": "Start"
+        }
+      },
+      {
+        "name": "end",
+        "in": "query",
+        "required": false,
+        "description": "The end of the interval to query. Can be a positive snapshot index (1, 2, etc.), negative snapshot index (-1 for latest, -2 for second latest, etc.), or time reference ['NOW', '1hour', '1h', '2days', '30mins'], or an exact unix timestamp (1719638400).",
+        "schema": {
+          "type": "string",
+          "description": "The end of the interval to query. Can be a positive snapshot index (1, 2, etc.), negative snapshot index (-1 for latest, -2 for second latest, etc.), or time reference ['NOW', '1hour', '1h', '2days', '30mins'], or an exact unix timestamp (1719638400).",
+          "default": "NOW",
+          "title": "End"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list environment events get events log for an environment.\n\n**response headers:**\n\n* `x-total-count`: total number of events available\n* `x-per-page`: number of events per page\n* `x-current-page`: current page number\n* `x-total-pages`: total number of pages\n* `link`: pagination links (first, prev, next, last) when applicable\n\n**pagination links format:**\n```\n<url?page=1&per_page=15>; rel=\"first\",\n<url?page=2&per_page=15>; rel=\"prev\",\n<url?page=4&per_page=15>; rel=\"next\",\n<url?page=10&per_page=15>; rel=\"last\"\n```\n\n**note:** the link header is only included when there are multiple pages. get environments org env_name events environments"
+  },
+  {
+    "id": "get_environment_environments__org___env_name__get",
+    "method": "GET",
+    "path": "/environments/{org}/{env_name}",
+    "summary": "Get environment",
+    "description": "Get an environment for an organization.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get environment get an environment for an organization. get environments org env_name environments"
+  },
+  {
+    "id": "get_environment_notification_organizations__org__environments_notifications__notification_number__get",
+    "method": "GET",
+    "path": "/organizations/{org}/environments_notifications/{notification_number}",
+    "summary": "Get environment notification",
+    "description": "Get a specific environments-notification for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "notification_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Notification Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get environment notification get a specific environments-notification for an org. get organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "get_environment_notifications_organizations__org__environments_notifications_get",
+    "method": "GET",
+    "path": "/organizations/{org}/environments_notifications",
+    "summary": "List environment notifications",
+    "description": "List environments-notifications for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list environment notifications list environments-notifications for an org. get organizations org environments_notifications organizations"
+  },
+  {
+    "id": "get_flow_attestations_attestations__org___flow_name__get",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}",
+    "summary": "List flow attestations",
+    "description": "Get all attestations for a flow for a given time span.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How many results to return per page of response",
+          "default": 20,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "from_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
+          "title": "From Timestamp"
+        }
+      },
+      {
+        "name": "to_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
+          "title": "To Timestamp"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list flow attestations get all attestations for a flow for a given time span. get attestations org flow_name attestation"
+  },
+  {
+    "id": "get_flow_flows__org___flow_name__get",
+    "method": "GET",
+    "path": "/flows/{org}/{flow_name}",
+    "summary": "Get flow",
+    "description": "Get a flow for an organization.",
+    "tags": [
+      "Flows"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get flow get a flow for an organization. get flows org flow_name flows"
+  },
+  {
+    "id": "get_flows_flows__org__get",
+    "method": "GET",
+    "path": "/flows/{org}",
+    "summary": "List flows",
+    "description": "List flows for an organization.",
+    "tags": [
+      "Flows"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "search_by_name",
+        "in": "query",
+        "required": false,
+        "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+          "title": "Search By Name"
+        }
+      },
+      {
+        "name": "case_sensitive",
+        "in": "query",
+        "required": false,
+        "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
+        "schema": {
+          "type": "boolean",
+          "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
+          "default": true,
+          "title": "Case Sensitive"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list flows list flows for an organization. get flows org flows"
+  },
+  {
+    "id": "get_latest_artifact_commit_artifacts__org___flow_name___fingerprint__latest_commit_get",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/latest_commit",
+    "summary": "Get latest artifact commit",
+    "description": "Get the latest git commit of the artifact.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "branch",
+        "in": "query",
+        "required": false,
+        "description": "The branch to get the commit from",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The branch to get the commit from",
+          "title": "Branch"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get latest artifact commit get the latest git commit of the artifact. get artifacts org flow_name fingerprint latest_commit artifacts"
+  },
+  {
+    "id": "get_organization_organizations__org__get",
+    "method": "GET",
+    "path": "/organizations/{org}",
+    "summary": "Get organization",
+    "description": "Get a specific org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get organization get a specific org. get organizations org organizations"
+  },
+  {
+    "id": "get_policy_policies__org___policy_name__get",
+    "method": "GET",
+    "path": "/policies/{org}/{policy_name}",
+    "summary": "Get policy",
+    "description": "Get a Policy in an organization.",
+    "tags": [
+      "Policies"
+    ],
+    "parameters": [
+      {
+        "name": "policy_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Policy Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get policy get a policy in an organization. get policies org policy_name policies"
+  },
+  {
+    "id": "get_repo_live_artifacts_repos__org__live_artifacts__repo_name__get",
+    "method": "GET",
+    "path": "/repos/{org}/live-artifacts/{repo_name}",
+    "summary": "Get live artifacts for a repo",
+    "description": "Get the live status of artifacts from a repository across all environments.\n\nReturns a `RepoLiveStatusResponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit SHA, and start timestamp.\n\nIf multiple repos share the same name across different VCS providers, use the `provider`\nparameter to disambiguate. Without it, the most recently created matching repo is returned.",
+    "tags": [
+      "Repos"
+    ],
+    "parameters": [
+      {
+        "name": "repo_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Repo Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "provider",
+        "in": "query",
+        "required": false,
+        "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+        "schema": {
+          "anyOf": [
+            {
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "azure-devops",
+                "circleci"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+          "title": "Provider"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get live artifacts for a repo get the live status of artifacts from a repository across all environments.\n\nreturns a `repolivestatusresponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit sha, and start timestamp.\n\nif multiple repos share the same name across different vcs providers, use the `provider`\nparameter to disambiguate. without it, the most recently created matching repo is returned. get repos org live-artifacts repo_name repos"
+  },
+  {
+    "id": "get_search_search__org__sha__search_value__get",
+    "method": "GET",
+    "path": "/search/{org}/sha/{search_value}",
+    "summary": "Search artifacts by SHA or fingerprint",
+    "description": "Get artifacts that match fingerprint or commit-sha.",
+    "tags": [
+      "Search"
+    ],
+    "parameters": [
+      {
+        "name": "search_value",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Search Value"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "search artifacts by sha or fingerprint get artifacts that match fingerprint or commit-sha. get search org sha search_value search"
+  },
+  {
+    "id": "get_snapshot_snapshots__org___env_name___snapshot_expression__get",
+    "method": "GET",
+    "path": "/snapshots/{org}/{env_name}/{snapshot_expression}",
+    "summary": "Get snapshot",
+    "description": "Get a snapshot for an environment.\n\n`snapshot_expression` can be specified as follows:\n- `N`: the Nth snapshot, counting from 1. Negative values count from the latest snapshot i.e. -1 is the latest snapshot.\n    example: 42\n- `~N`: the Nth snapshot behind the latest, at the time of the request\n    example: ~5\n- `@{YYYY-MM-DDTHH:MM:SS}`: the snapshot at specific moment in time in UTC\n    example: @{2023-10-02T12:00:00}\n- `@{N.<hours|days|weeks|months>.ago}`: the snapshot at a time relative to the time of the request. N is a positive integer.\n    example: @{2.hours.ago}\n- `@{now}`: the snapshot at the time of the request\n    example: @{now}",
+    "tags": [
+      "Snapshots"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "snapshot_expression",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Snapshot Expression"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get snapshot get a snapshot for an environment.\n\n`snapshot_expression` can be specified as follows:\n- `n`: the nth snapshot, counting from 1. negative values count from the latest snapshot i.e. -1 is the latest snapshot.\n    example: 42\n- `~n`: the nth snapshot behind the latest, at the time of the request\n    example: ~5\n- `@{yyyy-mm-ddthh:mm:ss}`: the snapshot at specific moment in time in utc\n    example: @{2023-10-02t12:00:00}\n- `@{n.<hours|days|weeks|months>.ago}`: the snapshot at a time relative to the time of the request. n is a positive integer.\n    example: @{2.hours.ago}\n- `@{now}`: the snapshot at the time of the request\n    example: @{now} get snapshots org env_name snapshot_expression snapshots"
+  },
+  {
+    "id": "get_snapshot_snapshots__org___env_name__get",
+    "method": "GET",
+    "path": "/snapshots/{org}/{env_name}",
+    "summary": "List snapshots",
+    "description": "Get list of snapshots for an environment.",
+    "tags": [
+      "Snapshots"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How many results to return per page of response",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "interval",
+        "in": "query",
+        "required": false,
+        "description": "Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW",
+          "default": "1..NOW",
+          "title": "Interval"
+        }
+      },
+      {
+        "name": "reverse",
+        "in": "query",
+        "required": false,
+        "description": "Return results in reverse order. Expected values: True or False. Defaults to False.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Return results in reverse order. Expected values: True or False. Defaults to False.",
+          "default": false,
+          "title": "Reverse"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list snapshots get list of snapshots for an environment. get snapshots org env_name snapshots"
+  },
+  {
+    "id": "get_trail_attestation_attestations__org___flow_name__trail__trail_name___attestation_name__get",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/{attestation_name}",
+    "summary": "Get trail attestation",
+    "description": "",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "attestation_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Attestation Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get trail attestation  get attestations org flow_name trail trail_name attestation_name attestation"
+  },
+  {
+    "id": "get_trail_trails__org___flow_name___trail_name__get",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}/{trail_name}",
+    "summary": "Get trail",
+    "description": "Get a Trail for a Flow in an organization.",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get trail get a trail for a flow in an organization. get trails org flow_name trail_name trails"
+  },
+  {
+    "id": "join_physical_to_logical_environments__org___env_name__join_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/join",
+    "summary": "Add environment to logical environment",
+    "description": "Join the given physical environment to this Logical environment",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/JoinPhysicalToLogicalPutInput"
+        }
+      }
+    ],
+    "searchText": "add environment to logical environment join the given physical environment to this logical environment put environments org env_name join environments"
+  },
+  {
+    "id": "k8s_report_environments__org___env_name__report_K8S_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/K8S",
+    "summary": "Report K8S environment",
+    "description": "Process a report for a K8S environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/K8SReport"
+        }
+      }
+    ],
+    "searchText": "report k8s environment process a report for a k8s environment. put environments org env_name report k8s environments"
+  },
+  {
+    "id": "lambda_report_environments__org___env_name__report_lambda_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/lambda",
+    "summary": "Report Lambda environment",
+    "description": "Process a report for a Lambda environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/LambdaReport"
+        }
+      }
+    ],
+    "searchText": "report lambda environment process a report for a lambda environment. put environments org env_name report lambda environments"
+  },
+  {
+    "id": "launch_darkly_webhook_webhooks_launch_darkly__hook_uid__post",
+    "method": "POST",
+    "path": "/webhooks/launch-darkly/{hook_uid}",
+    "summary": "Launch Darkly Webhook",
+    "description": "Receive and process LaunchDarkly webhook events.",
+    "tags": [
+      "Webhooks"
+    ],
+    "parameters": [
+      {
+        "name": "hook_uid",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Hook Uid"
+        }
+      },
+      {
+        "name": "x-ld-signature",
+        "in": "header",
+        "required": false,
+        "description": "",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "X-Ld-Signature"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "title": "Payload"
+        }
+      }
+    ],
+    "searchText": "launch darkly webhook receive and process launchdarkly webhook events. post webhooks launch-darkly hook_uid webhooks"
+  },
+  {
+    "id": "list_actions_actions__org__get",
+    "method": "GET",
+    "path": "/actions/{org}",
+    "summary": "List actions",
+    "description": "List actions for an org.",
+    "tags": [
+      "Actions"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list actions list actions for an org. get actions org actions"
+  },
+  {
+    "id": "list_allowlist_allowlists__org__get",
+    "method": "GET",
+    "path": "/allowlists/{org}",
+    "summary": "List allowlist",
+    "description": "List Allowlist records in an organization.",
+    "tags": [
+      "Allowlists"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list allowlist list allowlist records in an organization. get allowlists org allowlists"
+  },
+  {
+    "id": "list_approvals_approvals__org___flow_name__get",
+    "method": "GET",
+    "path": "/approvals/{org}/{flow_name}",
+    "summary": "List approvals",
+    "description": "List Allowlist records in an organization.",
+    "tags": [
+      "Approval"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How many results to return per page of response",
+          "default": 20,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list approvals list allowlist records in an organization. get approvals org flow_name approval"
+  },
+  {
+    "id": "list_artifact_approvals_artifacts__org___flow_name___fingerprint__approvals_get",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/approvals",
+    "summary": "List artifact approvals",
+    "description": "List approvals for an artifact.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list artifact approvals list approvals for an artifact. get artifacts org flow_name fingerprint approvals artifacts"
+  },
+  {
+    "id": "list_artifacts_artifacts__org__get",
+    "method": "GET",
+    "path": "/artifacts/{org}",
+    "summary": "List artifacts",
+    "description": "List artifacts in organization. Can be filtered by flow name or repo name.\n\n- The result is paginated.\n- The list of artifacts is sorted by creation time in descending order.",
+    "tags": [
+      "Artifacts"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "flow_name",
+        "in": "query",
+        "required": false,
+        "description": "The name of the flow to list artifacts from",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the flow to list artifacts from",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "repo_name",
+        "in": "query",
+        "required": false,
+        "description": "The name of the repo to list artifacts from",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the repo to list artifacts from",
+          "title": "Repo Name"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "type": "integer",
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many artifacts to return per page of response",
+        "schema": {
+          "type": "integer",
+          "description": "How many artifacts to return per page of response",
+          "default": 15,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list artifacts list artifacts in organization. can be filtered by flow name or repo name.\n\n- the result is paginated.\n- the list of artifacts is sorted by creation time in descending order. get artifacts org artifacts"
+  },
+  {
+    "id": "list_attestations_for_criteria_attestations__org__list_attestations_for_criteria_get",
+    "method": "GET",
+    "path": "/attestations/{org}/list_attestations_for_criteria",
+    "summary": "List attestations for criteria",
+    "description": "List attestations matching a search criteria within an organization.\n\nThis endpoint returns a dictionary mapping commit SHAs to lists of attestations.\nEach attestation contains metadata about compliance, timing, and type-specific data.\n\n## Usage Examples\n\n### Get all attestations for a specific flow\n```\nGET /attestations/my-org?flow_name=production-flow\n```\n\n### Get security attestations for specific commits\n```\nGET /attestations/my-org?attestation_type=snyk&commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### Get a specific attestation by name\n```\nGET /attestations/my-org?attestation_name=manual-test\n```\n\n### Get custom attestations\n```\nGET /attestations/my-org?attestation_type=custom:security-scan\n```",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "flow_name",
+        "in": "query",
+        "required": false,
+        "description": "The flow name to search for attestations in",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The flow name to search for attestations in",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "commit_list",
+        "in": "query",
+        "required": false,
+        "description": "The commit list that the attestations are associated with",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The commit list that the attestations are associated with",
+          "title": "Commit List"
+        }
+      },
+      {
+        "name": "attestation_name",
+        "in": "query",
+        "required": false,
+        "description": "The attestation name to search for",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The attestation name to search for",
+          "title": "Attestation Name"
+        }
+      },
+      {
+        "name": "attestation_id",
+        "in": "query",
+        "required": false,
+        "description": "The attestation ID to search for",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The attestation ID to search for",
+          "title": "Attestation Id"
+        }
+      },
+      {
+        "name": "attestation_type",
+        "in": "query",
+        "required": false,
+        "description": "The attestation type to search for. Use built-in types (e.g., 'junit') or 'custom:<name>' for custom types.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The attestation type to search for. Use built-in types (e.g., 'junit') or 'custom:<name>' for custom types.",
+          "title": "Attestation Type"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list attestations for criteria list attestations matching a search criteria within an organization.\n\nthis endpoint returns a dictionary mapping commit shas to lists of attestations.\neach attestation contains metadata about compliance, timing, and type-specific data.\n\n## usage examples\n\n### get all attestations for a specific flow\n```\nget /attestations/my-org?flow_name=production-flow\n```\n\n### get security attestations for specific commits\n```\nget /attestations/my-org?attestation_type=snyk&commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### get a specific attestation by name\n```\nget /attestations/my-org?attestation_name=manual-test\n```\n\n### get custom attestations\n```\nget /attestations/my-org?attestation_type=custom:security-scan\n``` get attestations org list_attestations_for_criteria attestation"
+  },
+  {
+    "id": "list_builds_builds__org__get",
+    "method": "GET",
+    "path": "/builds/{org}",
+    "summary": "List Builds",
+    "description": "List builds for an organization.\n\n- end-ts defaults to now.\n- start-ts defaults to 28 days before end-ts.",
+    "tags": [
+      "Builds"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of builds per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 50,
+          "minimum": 0,
+          "description": "Number of builds per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "repo_id",
+        "in": "query",
+        "required": false,
+        "description": "Filter by external VCS repo ID",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by external VCS repo ID",
+          "title": "Repo Id"
+        }
+      },
+      {
+        "name": "repo_name",
+        "in": "query",
+        "required": false,
+        "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
+          "title": "Repo Name"
+        }
+      },
+      {
+        "name": "start-ts",
+        "in": "query",
+        "required": false,
+        "description": "Include builds created at or after this timestamp. Defaults to 28 days before end-ts",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Include builds created at or after this timestamp. Defaults to 28 days before end-ts",
+          "title": "Start-Ts"
+        }
+      },
+      {
+        "name": "end-ts",
+        "in": "query",
+        "required": false,
+        "description": "Include builds created at or before this timestamp. Defaults to now",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Include builds created at or before this timestamp. Defaults to now",
+          "title": "End-Ts"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list builds list builds for an organization.\n\n- end-ts defaults to now.\n- start-ts defaults to 28 days before end-ts. get builds org builds"
+  },
+  {
+    "id": "list_envs_environments__org__get",
+    "method": "GET",
+    "path": "/environments/{org}",
+    "summary": "List environments",
+    "description": "List environments of an organization.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list environments list environments of an organization. get environments org environments"
+  },
+  {
+    "id": "list_policies_policies__org__get",
+    "method": "GET",
+    "path": "/policies/{org}",
+    "summary": "List policies",
+    "description": "List Policies in an organization.",
+    "tags": [
+      "Policies"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list policies list policies in an organization. get policies org policies"
+  },
+  {
+    "id": "list_repos_repos__org__get",
+    "method": "GET",
+    "path": "/repos/{org}",
+    "summary": "List repos",
+    "description": "List repos for an organization.\n\nRepos are paginated.\n- The response includes pagination information and the list of repos.\n- The list of repos is sorted by the repo name.\n- Optional filters: name (exact match), provider (VCS provider), and repo_id (external repo ID).\n- repo_id is the stronger identifier as names of repos can change. So if repo_id is provided, name is ignored.\n\nRepos are captured when attestations include a reference to a repo.\nThis happens automatically when using Kosli CLI v2.11.35 or higher.",
+    "tags": [
+      "Repos"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of repos per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 50,
+          "minimum": 1,
+          "description": "Number of repos per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "name",
+        "in": "query",
+        "required": false,
+        "description": "Filter by repo name (exact match). This is ignored if repo_id is provided. Returns empty list if no match.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by repo name (exact match). This is ignored if repo_id is provided. Returns empty list if no match.",
+          "title": "Name"
+        }
+      },
+      {
+        "name": "provider",
+        "in": "query",
+        "required": false,
+        "description": "Filter by VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci).",
+        "schema": {
+          "anyOf": [
+            {
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "azure-devops",
+                "circleci"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci).",
+          "title": "Provider"
+        }
+      },
+      {
+        "name": "repo_id",
+        "in": "query",
+        "required": false,
+        "description": "Filter by external repo ID (exact match). Returns empty list if no match.",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by external repo ID (exact match). Returns empty list if no match.",
+          "title": "Repo Id"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list repos list repos for an organization.\n\nrepos are paginated.\n- the response includes pagination information and the list of repos.\n- the list of repos is sorted by the repo name.\n- optional filters: name (exact match), provider (vcs provider), and repo_id (external repo id).\n- repo_id is the stronger identifier as names of repos can change. so if repo_id is provided, name is ignored.\n\nrepos are captured when attestations include a reference to a repo.\nthis happens automatically when using kosli cli v2.11.35 or higher. get repos org repos"
+  },
+  {
+    "id": "list_trails_for_org_trails__org__get",
+    "method": "GET",
+    "path": "/trails/{org}",
+    "summary": "List trails for organization",
+    "description": "Get a paginated list of trails for an organization based on filters provided as query parameters.",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "flow",
+        "in": "query",
+        "required": false,
+        "description": "The name of the flow to filter trails by",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The name of the flow to filter trails by",
+          "title": "Flow"
+        }
+      },
+      {
+        "name": "flow_tag",
+        "in": "query",
+        "required": false,
+        "description": "Filter trails by flows that have this tag (format: key=value, e.g., team=backend)",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter trails by flows that have this tag (format: key=value, e.g., team=backend)",
+          "title": "Flow Tag"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "query",
+        "required": false,
+        "description": "The fingerprint of the artifact reported to the trail or trails",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The fingerprint of the artifact reported to the trail or trails",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How many results to return per page of response",
+          "default": 20,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list trails for organization get a paginated list of trails for an organization based on filters provided as query parameters. get trails org trails"
+  },
+  {
+    "id": "list_trails_trails__org___flow_name__get",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}",
+    "summary": "List trails",
+    "description": "List Trails of a Flow.",
+    "tags": [
+      "Trails"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How many results to return per page of response",
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list trails list trails of a flow. get trails org flow_name trails"
+  },
+  {
+    "id": "patch_tags_tags__org___resource_type___resource_id__patch",
+    "method": "PATCH",
+    "path": "/tags/{org}/{resource_type}/{resource_id}",
+    "summary": "Update tags",
+    "description": "Patch tags for resource.",
+    "tags": [
+      "Tags"
+    ],
+    "parameters": [
+      {
+        "name": "resource_type",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Resource Type"
+        }
+      },
+      {
+        "name": "resource_id",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Resource Id"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/TagPatchInput"
+        }
+      }
+    ],
+    "searchText": "update tags patch tags for resource. patch tags org resource_type resource_id tags"
+  },
+  {
+    "id": "post_approval_approvals__org___flow_name__post",
+    "method": "POST",
+    "path": "/approvals/{org}/{flow_name}",
+    "summary": "Create approval",
+    "description": "Create an approval.",
+    "tags": [
+      "Approval"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/ApprovalPostInput"
+        }
+      }
+    ],
+    "searchText": "create approval create an approval. post approvals org flow_name approval"
+  },
+  {
+    "id": "post_custom_attestation_attestations__org___flow_name__trail__trail_name__custom_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/custom",
+    "summary": "Attest custom",
+    "description": "Add custom attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_custom_attestation_attestations__org___flow_name__trail__trail_name__custom_post"
+        }
+      }
+    ],
+    "searchText": "attest custom add custom attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name custom attestation"
+  },
+  {
+    "id": "post_custom_attestation_type_custom_attestation_types__org__post",
+    "method": "POST",
+    "path": "/custom-attestation-types/{org}",
+    "summary": "Create or update custom attestation type",
+    "description": "Create or update a custom attestation type for an org.",
+    "tags": [
+      "Custom Attestation Types"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_custom_attestation_type_custom_attestation_types__org__post"
+        }
+      }
+    ],
+    "searchText": "create or update custom attestation type create or update a custom attestation type for an org. post custom-attestation-types org custom attestation types"
+  },
+  {
+    "id": "post_generic_attestation_attestations__org___flow_name__trail__trail_name__generic_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/generic",
+    "summary": "Attest generic",
+    "description": "Add Generic attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_generic_attestation_attestations__org___flow_name__trail__trail_name__generic_post"
+        }
+      }
+    ],
+    "searchText": "attest generic add generic attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name generic attestation"
+  },
+  {
+    "id": "post_jira_attestation_attestations__org___flow_name__trail__trail_name__jira_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/jira",
+    "summary": "Attest Jira issue",
+    "description": "Add Jira attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_jira_attestation_attestations__org___flow_name__trail__trail_name__jira_post"
+        }
+      }
+    ],
+    "searchText": "attest jira issue add jira attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name jira attestation"
+  },
+  {
+    "id": "post_junit_attestation_attestations__org___flow_name__trail__trail_name__junit_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/junit",
+    "summary": "Attest JUnit test results",
+    "description": "Add JUnit attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_junit_attestation_attestations__org___flow_name__trail__trail_name__junit_post"
+        }
+      }
+    ],
+    "searchText": "attest junit test results add junit attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name junit attestation"
+  },
+  {
+    "id": "post_override_attestation_attestations__org___flow_name__trail__trail_name__override_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/override",
+    "summary": "Override attestation",
+    "description": "Override an attestation in a trail.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/OverrideAttestationPostInput"
+        }
+      }
+    ],
+    "searchText": "override attestation override an attestation in a trail. post attestations org flow_name trail trail_name override attestation"
+  },
+  {
+    "id": "post_pull_request_attestation_attestations__org___flow_name__trail__trail_name__pull_request_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/pull_request",
+    "summary": "Attest pull request",
+    "description": "Add Pull-Request attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_pull_request_attestation_attestations__org___flow_name__trail__trail_name__pull_request_post"
+        }
+      }
+    ],
+    "searchText": "attest pull request add pull-request attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name pull_request attestation"
+  },
+  {
+    "id": "post_snyk_attestation_attestations__org___flow_name__trail__trail_name__snyk_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/snyk",
+    "summary": "Attest Snyk scan",
+    "description": "Add Snyk attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_snyk_attestation_attestations__org___flow_name__trail__trail_name__snyk_post"
+        }
+      }
+    ],
+    "searchText": "attest snyk scan add snyk attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name snyk attestation"
+  },
+  {
+    "id": "post_sonar_attestation_attestations__org___flow_name__trail__trail_name__sonar_post",
+    "method": "POST",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/sonar",
+    "summary": "Attest Sonar scan",
+    "description": "Add Sonar attestation to a trail with an optional attachment file.",
+    "tags": [
+      "Attestation"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_post_sonar_attestation_attestations__org___flow_name__trail__trail_name__sonar_post"
+        }
+      }
+    ],
+    "searchText": "attest sonar scan add sonar attestation to a trail with an optional attachment file. post attestations org flow_name trail trail_name sonar attestation"
+  },
+  {
+    "id": "put_environment_notifications_organizations__org__environments_notifications_put",
+    "method": "PUT",
+    "path": "/organizations/{org}/environments_notifications",
+    "summary": "Create or update environment notification",
+    "description": "Create or Update an environments-notification for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/EnvActionPutInput"
+        }
+      }
+    ],
+    "searchText": "create or update environment notification create or update an environments-notification for an org. put organizations org environments_notifications organizations"
+  },
+  {
+    "id": "put_policy_policies__org__put",
+    "method": "PUT",
+    "path": "/policies/{org}",
+    "summary": "Create or update policy",
+    "description": "Create or update a Policy in an organization.",
+    "tags": [
+      "Policies"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (multipart/form-data)",
+        "schema": {
+          "$ref": "#/components/schemas/Body_put_policy_policies__org__put"
+        }
+      }
+    ],
+    "searchText": "create or update policy create or update a policy in an organization. put policies org policies"
+  },
+  {
+    "id": "put_user_default_org_user__org__put",
+    "method": "PUT",
+    "path": "/user/{org}",
+    "summary": "Set default organization",
+    "description": "Set a default org for the current user.",
+    "tags": [
+      "User"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "set default organization set a default org for the current user. put user org user"
+  },
+  {
+    "id": "rename_environment_environments__org___env_name__rename_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/rename",
+    "summary": "Rename environment",
+    "description": "Rename an environment",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/RenameEnvironmentPutInput"
+        }
+      }
+    ],
+    "searchText": "rename environment rename an environment put environments org env_name rename environments"
+  },
+  {
+    "id": "rename_flow_flows__org___flow_name__rename_put",
+    "method": "PUT",
+    "path": "/flows/{org}/{flow_name}/rename",
+    "summary": "Rename flow",
+    "description": "Rename a flow.\nThe flow will remain available under its old name until that name is taken by another flow.",
+    "tags": [
+      "Flows"
+    ],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/RenameFlow"
+        }
+      }
+    ],
+    "searchText": "rename flow rename a flow.\nthe flow will remain available under its old name until that name is taken by another flow. put flows org flow_name rename flows"
+  },
+  {
+    "id": "s3_report_environments__org___env_name__report_S3_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/S3",
+    "summary": "Report S3 environment",
+    "description": "Process a report for an S3 environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/S3Report"
+        }
+      }
+    ],
+    "searchText": "report s3 environment process a report for an s3 environment. put environments org env_name report s3 environments"
+  },
+  {
+    "id": "server_report_environments__org___env_name__report_server_put",
+    "method": "PUT",
+    "path": "/environments/{org}/{env_name}/report/server",
+    "summary": "Report server environment",
+    "description": "Process a report for a server environment.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/ServerReport"
+        }
+      }
+    ],
+    "searchText": "report server environment process a report for a server environment. put environments org env_name report server environments"
+  },
+  {
+    "id": "sonar_qube_webhook_webhooks_sonar__hook_uid__post",
+    "method": "POST",
+    "path": "/webhooks/sonar/{hook_uid}",
+    "summary": "Sonar Qube Webhook",
+    "description": "Receive and process sonar qube webhook events.",
+    "tags": [
+      "Webhooks"
+    ],
+    "parameters": [
+      {
+        "name": "hook_uid",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Hook Uid"
+        }
+      },
+      {
+        "name": "X-Sonar-Webhook-HMAC-SHA256",
+        "in": "header",
+        "required": false,
+        "description": "",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "X-Sonar-Webhook-Hmac-Sha256"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "title": "Payload"
+        }
+      }
+    ],
+    "searchText": "sonar qube webhook receive and process sonar qube webhook events. post webhooks sonar hook_uid webhooks"
+  },
+  {
+    "id": "update_environment_notification_organizations__org__environments_notifications__notification_number__put",
+    "method": "PUT",
+    "path": "/organizations/{org}/environments_notifications/{notification_number}",
+    "summary": "Update environment notification",
+    "description": "Update a specific environments-notification for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "notification_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "title": "Notification Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/EnvActionPutInput"
+        }
+      }
+    ],
+    "searchText": "update environment notification update a specific environments-notification for an org. put organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "update_experimental_features_organizations__org__experimental_features_put",
+    "method": "PUT",
+    "path": "/organizations/{org}/experimental_features",
+    "summary": "Update experimental features",
+    "description": "Enable/Disable beta features for an org.",
+    "tags": [
+      "Organizations"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/OrganizationUpdate"
+        }
+      }
+    ],
+    "searchText": "update experimental features enable/disable beta features for an org. put organizations org experimental_features organizations"
+  }
+]
