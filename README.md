@@ -59,6 +59,16 @@ Typical LLM flow:
 
 The `org` path parameter defaults to `KOSLI_ORG` if not supplied. For `GET`/`DELETE`, non-path params become query parameters; for other methods they become the JSON body.
 
+`execute_action` accepts an optional `fields` array to request only specific top-level fields from each object in the response. This dramatically reduces response size and token usage:
+
+```json
+{
+  "actionId": "get_snapshot_snapshots__org___env_name___snapshot_expression__get",
+  "params": { "env_name": "prod-aws", "snapshot_expression": "-1" },
+  "fields": ["name", "compliant", "fingerprint", "reasons_for_incompliance"]
+}
+```
+
 ## Regenerate the catalog
 
 `src/catalog.json` is committed and bundled into the build. Refresh it from the live OpenAPI spec with:
