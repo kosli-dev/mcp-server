@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { executeAction } from "../../src/tools/execute-action.js";
+import { executeAction, pickFields } from "../../src/tools/execute-action.js";
 import catalog from "../fixtures/catalog-subset.json" with { type: "json" };
 import type { CatalogEntry, Config } from "../../src/types.js";
 
@@ -18,7 +18,7 @@ describe("executeAction", () => {
       json: () => Promise.resolve({ environments: ["prod", "staging"] }),
     });
 
-    const result = await executeAction(entries, config, "list_environments", {}, mockFetch);
+    const result = await executeAction(entries, config, "list_environments", {}, undefined, mockFetch);
 
     expect(result).toEqual({ environments: ["prod", "staging"] });
     expect(mockFetch).toHaveBeenCalledOnce();
@@ -27,7 +27,7 @@ describe("executeAction", () => {
   it("returns error for unknown action ID", async () => {
     const mockFetch = vi.fn();
 
-    const result = await executeAction(entries, config, "nonexistent_action", {}, mockFetch);
+    const result = await executeAction(entries, config, "nonexistent_action", {}, undefined, mockFetch);
 
     expect(result).toEqual({
       error: true,
@@ -46,11 +46,83 @@ describe("executeAction", () => {
     await executeAction(entries, config, "get_trail", {
       flow_name: "my-flow",
       trail_name: "v1.0",
-    }, mockFetch);
+    }, undefined, mockFetch);
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/trails/test-org/my-flow/v1.0"),
       expect.anything(),
     );
+  });
+
+  it("applies field selection to the response", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve([
+        { name: "prod", type: "ECS", description: "Production", tags: {} },
+        { name: "staging", type: "ECS", description: "Staging", tags: {} },
+      ]),
+    });
+
+    const result = await executeAction(
+      entries, config, "list_environments", {},
+      ["name", "type"],
+      mockFetch,
+    );
+
+    expect(result).toEqual([
+      { name: "prod", type: "ECS" },
+      { name: "staging", type: "ECS" },
+    ]);
+  });
+
+  it("returns full response when fields is undefined", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ name: "prod", type: "ECS", tags: {} }),
+    });
+
+    const result = await executeAction(entries, config, "list_environments", {}, undefined, mockFetch);
+
+    expect(result).toEqual({ name: "prod", type: "ECS", tags: {} });
+  });
+});
+
+describe("pickFields", () => {
+  it("picks specified fields from an object", () => {
+    const data = { name: "prod", type: "ECS", description: "long text", tags: {} };
+    expect(pickFields(data, ["name", "type"])).toEqual({ name: "prod", type: "ECS" });
+  });
+
+  it("picks fields from each item in an array", () => {
+    const data = [
+      { name: "a", value: 1, extra: "x" },
+      { name: "b", value: 2, extra: "y" },
+    ];
+    expect(pickFields(data, ["name", "value"])).toEqual([
+      { name: "a", value: 1 },
+      { name: "b", value: 2 },
+    ]);
+  });
+
+  it("ignores fields that don't exist", () => {
+    const data = { name: "prod" };
+    expect(pickFields(data, ["name", "missing"])).toEqual({ name: "prod" });
+  });
+
+  it("returns primitives unchanged", () => {
+    expect(pickFields("hello", ["name"])).toBe("hello");
+    expect(pickFields(42, ["name"])).toBe(42);
+    expect(pickFields(null, ["name"])).toBe(null);
+  });
+
+  it("handles nested arrays", () => {
+    const data = [
+      { name: "env", artifacts: [{ name: "art1", fp: "abc" }] },
+    ];
+    expect(pickFields(data, ["name", "artifacts"])).toEqual([
+      { name: "env", artifacts: [{ name: "art1", fp: "abc" }] },
+    ]);
   });
 });

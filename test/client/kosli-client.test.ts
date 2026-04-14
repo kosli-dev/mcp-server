@@ -62,6 +62,7 @@ describe("KosliClient", () => {
         method: "GET",
         headers: expect.objectContaining({
           Authorization: "Bearer test-api-key",
+          "User-Agent": "kosli-mcp-server",
         }),
       }),
     );

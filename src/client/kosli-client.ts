@@ -28,6 +28,7 @@ export class KosliClient {
       headers: {
         Authorization: `Bearer ${this.config.apiKey}`,
         "Content-Type": "application/json",
+        "User-Agent": "kosli-mcp-server",
       },
     };
 

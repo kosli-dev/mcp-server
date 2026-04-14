@@ -28,7 +28,7 @@ server.tool(
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify(results, null, 2),
+          text: JSON.stringify(results),
         },
       ],
     };
@@ -41,14 +41,15 @@ server.tool(
   {
     actionId: z.string().describe("The action ID from search_actions results"),
     params: z.record(z.string(), z.unknown()).optional().default({}).describe("Parameters for the action (path params, query params, or body)"),
+    fields: z.array(z.string()).optional().describe("Only include these fields in each object of the response. Dramatically reduces response size. Example: [\"name\",\"compliant\",\"fingerprint\",\"reasons_for_incompliance\"]"),
   },
-  async ({ actionId, params }) => {
-    const result = await executeAction(entries, config, actionId, params);
+  async ({ actionId, params, fields }) => {
+    const result = await executeAction(entries, config, actionId, params, fields);
     return {
       content: [
         {
           type: "text" as const,
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(result),
         },
       ],
     };
