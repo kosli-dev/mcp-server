@@ -1,4 +1,4 @@
-import type { CatalogEntry } from "../types.js";
+import type { ActionHint, ActionHints, CatalogEntry } from "../types.js";
 
 export interface SearchResult {
   id: string;
@@ -8,12 +8,14 @@ export interface SearchResult {
   tags: string[];
   parameters: CatalogEntry["parameters"];
   requestBody: CatalogEntry["requestBody"];
+  hints?: ActionHint;
 }
 
 export function searchActions(
   catalog: CatalogEntry[],
   query: string,
   limit: number = 10,
+  hints?: ActionHints,
 ): SearchResult[] {
   const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
   if (terms.length === 0) return [];
@@ -38,13 +40,20 @@ export function searchActions(
 
   scored.sort((a, b) => b.score - a.score);
 
-  return scored.slice(0, limit).map(({ entry }) => ({
-    id: entry.id,
-    method: entry.method,
-    path: entry.path,
-    summary: entry.summary,
-    tags: entry.tags,
-    parameters: entry.parameters,
-    requestBody: entry.requestBody,
-  }));
+  return scored.slice(0, limit).map(({ entry }) => {
+    const result: SearchResult = {
+      id: entry.id,
+      method: entry.method,
+      path: entry.path,
+      summary: entry.summary,
+      tags: entry.tags,
+      parameters: entry.parameters,
+      requestBody: entry.requestBody,
+    };
+    const hint = hints?.[entry.id];
+    if (hint) {
+      result.hints = hint;
+    }
+    return result;
+  });
 }
