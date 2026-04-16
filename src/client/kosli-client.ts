@@ -7,7 +7,57 @@ export interface ErrorResponse {
   message: string;
 }
 
+/**
+ * Shape for a file-valued param in a multipart request. Strings, numbers,
+ * and booleans are passed as plain form fields; objects matching this shape
+ * are uploaded as files. `content` is the file body as text (e.g. YAML);
+ * binary uploads are not supported — the LLM transport is JSON-only.
+ */
+export interface FileParam {
+  filename: string;
+  content: string;
+  contentType?: string;
+}
+
 type FetchFn = typeof globalThis.fetch;
+
+function getRequestContentType(entry: CatalogEntry): string | undefined {
+  const body = entry.requestBody?.[0];
+  if (!body) return undefined;
+  // The generator encodes content type in the description as
+  // "Request body (application/json)" / "Request body (multipart/form-data)".
+  const match = body.description.match(/\(([^)]+)\)/);
+  return match?.[1];
+}
+
+function isFileParam(v: unknown): v is FileParam {
+  if (typeof v !== "object" || v === null) return false;
+  const o = v as Record<string, unknown>;
+  return typeof o.filename === "string" && typeof o.content === "string";
+}
+
+function buildFormData(params: Record<string, unknown>): FormData {
+  const form = new FormData();
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null) continue;
+    if (isFileParam(value)) {
+      const blob = new Blob([value.content], {
+        type: value.contentType ?? "application/octet-stream",
+      });
+      form.append(key, blob, value.filename);
+    } else if (Array.isArray(value)) {
+      for (const item of value) {
+        form.append(key, String(item));
+      }
+    } else if (typeof value === "object") {
+      // Non-file objects are JSON-encoded so nested structures survive.
+      form.append(key, JSON.stringify(value));
+    } else {
+      form.append(key, String(value));
+    }
+  }
+  return form;
+}
 
 export class KosliClient {
   private config: Config;
@@ -25,14 +75,6 @@ export class KosliClient {
     const urlResult = this.buildUrl(entry, params);
     if (typeof urlResult !== "string") return urlResult;
     const url = urlResult;
-    const init: RequestInit = {
-      method: entry.method,
-      headers: {
-        Authorization: `Bearer ${this.config.apiKey}`,
-        "Content-Type": "application/json",
-        "User-Agent": "kosli-mcp-server",
-      },
-    };
 
     // Collect non-path params as query params for GET, body for others
     const pathParamNames = new Set(
@@ -44,6 +86,17 @@ export class KosliClient {
         extraParams[key] = value;
       }
     }
+
+    const isMultipart = getRequestContentType(entry) === "multipart/form-data";
+    const baseHeaders: Record<string, string> = {
+      Authorization: `Bearer ${this.config.apiKey}`,
+      "User-Agent": "kosli-mcp-server",
+    };
+    // For multipart, let fetch set Content-Type with the generated boundary.
+    if (!isMultipart) {
+      baseHeaders["Content-Type"] = "application/json";
+    }
+    const init: RequestInit = { method: entry.method, headers: baseHeaders };
 
     if (entry.method === "GET" || entry.method === "DELETE") {
       const queryEntries = Object.entries(extraParams).filter(
@@ -57,6 +110,8 @@ export class KosliClient {
         const separator = url.includes("?") ? "&" : "?";
         return this.doFetch(`${url}${separator}${searchParams.toString()}`, init);
       }
+    } else if (isMultipart) {
+      init.body = buildFormData(extraParams);
     } else if (Object.keys(extraParams).length > 0) {
       init.body = JSON.stringify(extraParams);
     }
