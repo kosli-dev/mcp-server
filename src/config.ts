@@ -12,6 +12,17 @@ export function loadConfig(): Config {
   }
 
   const baseUrl = process.env.KOSLI_BASE_URL || "https://app.kosli.com";
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(baseUrl);
+  } catch {
+    throw new Error(`KOSLI_BASE_URL is not a valid URL: ${baseUrl}`);
+  }
+  if (parsedUrl.protocol !== "https:") {
+    throw new Error(
+      `KOSLI_BASE_URL must use https:// (got ${parsedUrl.protocol}//). The bearer token is sent with every request.`,
+    );
+  }
 
   return { apiKey, org, baseUrl };
 }

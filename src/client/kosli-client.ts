@@ -22,7 +22,9 @@ export class KosliClient {
     entry: CatalogEntry,
     params: Record<string, unknown>,
   ): Promise<unknown | ErrorResponse> {
-    const url = this.buildUrl(entry, params);
+    const urlResult = this.buildUrl(entry, params);
+    if (typeof urlResult !== "string") return urlResult;
+    const url = urlResult;
     const init: RequestInit = {
       method: entry.method,
       headers: {
@@ -62,7 +64,7 @@ export class KosliClient {
     return this.doFetch(url, init);
   }
 
-  private buildUrl(entry: CatalogEntry, params: Record<string, unknown>): string {
+  private buildUrl(entry: CatalogEntry, params: Record<string, unknown>): string | ErrorResponse {
     let path = entry.path;
 
     for (const param of entry.parameters) {
@@ -76,9 +78,12 @@ export class KosliClient {
       }
 
       if (value === undefined && param.required) {
-        throw new Error(
-          `Missing required path parameter: ${param.name} for ${entry.method} ${entry.path}`,
-        );
+        return {
+          error: true,
+          status: 0,
+          statusText: "Invalid Request",
+          message: `Missing required path parameter: ${param.name} for ${entry.method} ${entry.path}`,
+        };
       }
 
       if (value !== undefined) {
@@ -110,12 +115,14 @@ export class KosliClient {
       }
 
       return response.json();
-    } catch (err) {
+    } catch {
+      // Do not forward the raw error: it may contain internal hostnames,
+      // proxy URLs, or other topology that could leak via the LLM.
       return {
         error: true,
         status: 0,
         statusText: "Network Error",
-        message: err instanceof Error ? err.message : String(err),
+        message: "Request failed before reaching the Kosli API",
       };
     }
   }

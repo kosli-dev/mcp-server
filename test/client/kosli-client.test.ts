@@ -119,8 +119,8 @@ describe("KosliClient", () => {
     });
   });
 
-  it("returns structured error on network failure", async () => {
-    mockFetch.mockRejectedValue(new Error("Network error"));
+  it("returns structured error on network failure without leaking raw error detail", async () => {
+    mockFetch.mockRejectedValue(new Error("connect ECONNREFUSED 10.0.0.5:443"));
 
     const result = await client.execute(listEnvEntry, {});
 
@@ -128,13 +128,21 @@ describe("KosliClient", () => {
       error: true,
       status: 0,
       statusText: "Network Error",
-      message: "Network error",
+      message: "Request failed before reaching the Kosli API",
     });
+    // Specifically: the internal IP from the raw error must not surface.
+    expect(JSON.stringify(result)).not.toContain("10.0.0.5");
   });
 
-  it("throws on missing required path param", async () => {
-    await expect(
-      client.execute(getTrailEntry, { flow_name: "my-flow" }),
-    ).rejects.toThrow("trail_name");
+  it("returns structured error on missing required path param (does not throw)", async () => {
+    const result = await client.execute(getTrailEntry, { flow_name: "my-flow" });
+
+    expect(result).toEqual({
+      error: true,
+      status: 0,
+      statusText: "Invalid Request",
+      message: expect.stringContaining("trail_name"),
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 });

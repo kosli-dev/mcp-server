@@ -68,4 +68,20 @@ describe("loadConfig", () => {
 
     expect(() => loadConfig()).toThrow("KOSLI_ORG");
   });
+
+  it("throws when KOSLI_BASE_URL is not https", () => {
+    process.env.KOSLI_API_KEY = "test-key";
+    process.env.KOSLI_ORG = "test-org";
+    process.env.KOSLI_BASE_URL = "http://evil.example.com";
+
+    expect(() => loadConfig()).toThrow(/https/);
+  });
+
+  it("throws when KOSLI_BASE_URL is not a valid URL", () => {
+    process.env.KOSLI_API_KEY = "test-key";
+    process.env.KOSLI_ORG = "test-org";
+    process.env.KOSLI_BASE_URL = "not a url";
+
+    expect(() => loadConfig()).toThrow(/not a valid URL/);
+  });
 });
