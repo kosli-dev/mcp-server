@@ -1,3 +1,8 @@
 node_modules/
 dist/
 *.tsbuildinfo
+.vscode
+.mcp.json
+.DS_Store
+reports/
+docs/
