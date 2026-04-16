@@ -87,6 +87,28 @@ describe("executeAction", () => {
 
     expect(result).toEqual({ name: "prod", type: "ECS", tags: {} });
   });
+
+  it("preserves error responses when fields is set (does not strip to {})", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: "Not Found",
+      json: () => Promise.resolve({ message: "Environment not found" }),
+    });
+
+    const result = await executeAction(
+      entries, config, "list_environments", {},
+      ["name", "type"],
+      mockFetch,
+    );
+
+    expect(result).toEqual({
+      error: true,
+      status: 404,
+      statusText: "Not Found",
+      message: "Environment not found",
+    });
+  });
 });
 
 describe("pickFields", () => {

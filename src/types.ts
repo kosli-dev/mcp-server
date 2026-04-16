@@ -30,3 +30,10 @@ export interface Config {
   org: string;
   baseUrl: string;
 }
+
+export interface ActionHint {
+  schemaUrl: string;
+  example: Record<string, string>;
+}
+
+export type ActionHints = Record<string, ActionHint>;

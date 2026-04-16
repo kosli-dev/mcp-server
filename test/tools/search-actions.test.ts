@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { searchActions } from "../../src/tools/search-actions.js";
 import catalog from "../fixtures/catalog-subset.json" with { type: "json" };
-import type { CatalogEntry } from "../../src/types.js";
+import hints from "../../src/hints.json" with { type: "json" };
+import type { CatalogEntry, ActionHints } from "../../src/types.js";
 
 const entries = catalog as CatalogEntry[];
 
@@ -48,5 +49,26 @@ describe("searchActions", () => {
     const results = searchActions(entries, "fingerprint");
 
     expect(results.some((r) => r.id === "search_artifacts_by_sha")).toBe(true);
+  });
+
+  it("includes hints when a matching hint exists", () => {
+    const results = searchActions(entries, "policy", 10, hints as ActionHints);
+
+    const policy = results.find((r) => r.id === "put_policy_policies__org__put");
+    expect(policy).toBeDefined();
+    expect(policy!.hints).toEqual({
+      schemaUrl: "https://kosli.mintlify.app/schemas/policy/v1.json",
+      example: {
+        policy_file: "_schema: https://kosli.mintlify.app/schemas/policy/v1\nartifacts:\n  provenance:\n    required: true\n",
+      },
+    });
+  });
+
+  it("omits hints field when no hint exists for an action", () => {
+    const results = searchActions(entries, "environments", 10, hints as ActionHints);
+
+    const env = results.find((r) => r.id === "list_environments");
+    expect(env).toBeDefined();
+    expect(env!.hints).toBeUndefined();
   });
 });

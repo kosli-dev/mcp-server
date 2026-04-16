@@ -20,6 +20,15 @@ export function pickFields(data: unknown, fields: string[]): unknown {
   return data;
 }
 
+function isErrorResult(value: unknown): boolean {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    (value as Record<string, unknown>).error === true
+  );
+}
+
 export async function executeAction(
   catalog: CatalogEntry[],
   config: Config,
@@ -36,7 +45,9 @@ export async function executeAction(
   const client = new KosliClient(config, fetchFn);
   const result = await client.execute(entry, params);
 
-  if (fields && fields.length > 0) {
+  // Never strip error shapes — pickFields would reduce them to {}
+  // and hide the failure from the LLM.
+  if (fields && fields.length > 0 && !isErrorResult(result)) {
     return pickFields(result, fields);
   }
 

@@ -497,6 +497,49 @@
     "searchText": "create or update flow action create or update a flow action for an org. put actions org flows actions"
   },
   {
+    "id": "create_service_account_api_key_service_accounts__org___name__api_keys_post",
+    "method": "POST",
+    "path": "/service-accounts/{org}/{name}/api-keys",
+    "summary": "Create an API key for a service account",
+    "description": "Create a new API key for a service account. The key value is only returned once.",
+    "tags": [
+      "Service Accounts"
+    ],
+    "parameters": [
+      {
+        "name": "name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/ApiKeyPostInput"
+        }
+      }
+    ],
+    "searchText": "create an api key for a service account create a new api key for a service account. the key value is only returned once. post service-accounts org name api-keys service accounts"
+  },
+  {
     "id": "create_trail_trails__org___flow_name__put",
     "method": "PUT",
     "path": "/trails/{org}/{flow_name}",
@@ -606,6 +649,50 @@
     ],
     "requestBody": null,
     "searchText": "delete environment notification delete a specific environments-notification for an org. delete organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "delete_service_account_api_key_service_accounts__org___name__api_keys__key_id__delete",
+    "method": "DELETE",
+    "path": "/service-accounts/{org}/{name}/api-keys/{key_id}",
+    "summary": "Revoke an API key for a service account",
+    "description": "Revoke an API key for a service account.",
+    "tags": [
+      "Service Accounts"
+    ],
+    "parameters": [
+      {
+        "name": "name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Name"
+        }
+      },
+      {
+        "name": "key_id",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Key Id"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "revoke an api key for a service account revoke an api key for a service account. delete service-accounts org name api-keys key_id service accounts"
   },
   {
     "id": "detach_policy_from_env_environments__org___env_name__policies_delete",
@@ -1424,6 +1511,50 @@
     ],
     "requestBody": null,
     "searchText": "list custom attestation types list all custom attestation types for an org. get custom-attestation-types org custom attestation types"
+  },
+  {
+    "id": "get_deployment_deployments__org___env_name___fingerprint__get",
+    "method": "GET",
+    "path": "/deployments/{org}/{env_name}/{fingerprint}",
+    "summary": "Get Deployment",
+    "description": "Get a single deployment by environment and fingerprint.",
+    "tags": [
+      "Deployments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Fingerprint"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get deployment get a single deployment by environment and fingerprint. get deployments org env_name fingerprint deployments"
   },
   {
     "id": "get_env_auditlog_environments__org___env_name__auditlog_get",
@@ -2573,58 +2704,6 @@
     "searchText": "report lambda environment process a report for a lambda environment. put environments org env_name report lambda environments"
   },
   {
-    "id": "launch_darkly_webhook_webhooks_launch_darkly__hook_uid__post",
-    "method": "POST",
-    "path": "/webhooks/launch-darkly/{hook_uid}",
-    "summary": "Launch Darkly Webhook",
-    "description": "Receive and process LaunchDarkly webhook events.",
-    "tags": [
-      "Webhooks"
-    ],
-    "parameters": [
-      {
-        "name": "hook_uid",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Hook Uid"
-        }
-      },
-      {
-        "name": "x-ld-signature",
-        "in": "header",
-        "required": false,
-        "description": "",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "X-Ld-Signature"
-        }
-      }
-    ],
-    "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (application/json)",
-        "schema": {
-          "type": "object",
-          "additionalProperties": true,
-          "title": "Payload"
-        }
-      }
-    ],
-    "searchText": "launch darkly webhook receive and process launchdarkly webhook events. post webhooks launch-darkly hook_uid webhooks"
-  },
-  {
     "id": "list_actions_actions__org__get",
     "method": "GET",
     "path": "/actions/{org}",
@@ -2998,7 +3077,7 @@
     "method": "GET",
     "path": "/builds/{org}",
     "summary": "List Builds",
-    "description": "List builds for an organization.\n\n- end-ts defaults to now.\n- start-ts defaults to 28 days before end-ts.",
+    "description": "List builds for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
     "tags": [
       "Builds"
     ],
@@ -3077,10 +3156,10 @@
         }
       },
       {
-        "name": "start-ts",
+        "name": "start_ts",
         "in": "query",
         "required": false,
-        "description": "Include builds created at or after this timestamp. Defaults to 28 days before end-ts",
+        "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
         "schema": {
           "anyOf": [
             {
@@ -3090,12 +3169,12 @@
               "type": "null"
             }
           ],
-          "description": "Include builds created at or after this timestamp. Defaults to 28 days before end-ts",
-          "title": "Start-Ts"
+          "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
+          "title": "Start Ts"
         }
       },
       {
-        "name": "end-ts",
+        "name": "end_ts",
         "in": "query",
         "required": false,
         "description": "Include builds created at or before this timestamp. Defaults to now",
@@ -3109,12 +3188,135 @@
             }
           ],
           "description": "Include builds created at or before this timestamp. Defaults to now",
-          "title": "End-Ts"
+          "title": "End Ts"
         }
       }
     ],
     "requestBody": null,
-    "searchText": "list builds list builds for an organization.\n\n- end-ts defaults to now.\n- start-ts defaults to 28 days before end-ts. get builds org builds"
+    "searchText": "list builds list builds for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get builds org builds"
+  },
+  {
+    "id": "list_deployments_deployments__org__get",
+    "method": "GET",
+    "path": "/deployments/{org}",
+    "summary": "List Deployments",
+    "description": "List deployments for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
+    "tags": [
+      "Deployments"
+    ],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of deployments per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 50,
+          "minimum": 0,
+          "description": "Number of deployments per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "repo_name",
+        "in": "query",
+        "required": false,
+        "description": "Filter by repo name (e.g. 'kosli-dev/server')",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by repo name (e.g. 'kosli-dev/server')",
+          "title": "Repo Name"
+        }
+      },
+      {
+        "name": "env_name",
+        "in": "query",
+        "required": false,
+        "description": "Filter by environment name",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Filter by environment name",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "start_ts",
+        "in": "query",
+        "required": false,
+        "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
+          "title": "Start Ts"
+        }
+      },
+      {
+        "name": "end_ts",
+        "in": "query",
+        "required": false,
+        "description": "Include deployments at or before this timestamp. Defaults to now",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Include deployments at or before this timestamp. Defaults to now",
+          "title": "End Ts"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list deployments list deployments for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get deployments org deployments"
   },
   {
     "id": "list_envs_environments__org__get",
@@ -3275,6 +3477,40 @@
     ],
     "requestBody": null,
     "searchText": "list repos list repos for an organization.\n\nrepos are paginated.\n- the response includes pagination information and the list of repos.\n- the list of repos is sorted by the repo name.\n- optional filters: name (exact match), provider (vcs provider), and repo_id (external repo id).\n- repo_id is the stronger identifier as names of repos can change. so if repo_id is provided, name is ignored.\n\nrepos are captured when attestations include a reference to a repo.\nthis happens automatically when using kosli cli v2.11.35 or higher. get repos org repos"
+  },
+  {
+    "id": "list_service_account_api_keys_service_accounts__org___name__api_keys_get",
+    "method": "GET",
+    "path": "/service-accounts/{org}/{name}/api-keys",
+    "summary": "List API keys for a service account",
+    "description": "List all active API keys for a service account.",
+    "tags": [
+      "Service Accounts"
+    ],
+    "parameters": [
+      {
+        "name": "name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list api keys for a service account list all active api keys for a service account. get service-accounts org name api-keys service accounts"
   },
   {
     "id": "list_trails_for_org_trails__org__get",
@@ -4277,58 +4513,6 @@
       }
     ],
     "searchText": "report server environment process a report for a server environment. put environments org env_name report server environments"
-  },
-  {
-    "id": "sonar_qube_webhook_webhooks_sonar__hook_uid__post",
-    "method": "POST",
-    "path": "/webhooks/sonar/{hook_uid}",
-    "summary": "Sonar Qube Webhook",
-    "description": "Receive and process sonar qube webhook events.",
-    "tags": [
-      "Webhooks"
-    ],
-    "parameters": [
-      {
-        "name": "hook_uid",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Hook Uid"
-        }
-      },
-      {
-        "name": "X-Sonar-Webhook-HMAC-SHA256",
-        "in": "header",
-        "required": false,
-        "description": "",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "X-Sonar-Webhook-Hmac-Sha256"
-        }
-      }
-    ],
-    "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (application/json)",
-        "schema": {
-          "type": "object",
-          "additionalProperties": true,
-          "title": "Payload"
-        }
-      }
-    ],
-    "searchText": "sonar qube webhook receive and process sonar qube webhook events. post webhooks sonar hook_uid webhooks"
   },
   {
     "id": "update_environment_notification_organizations__org__environments_notifications__notification_number__put",

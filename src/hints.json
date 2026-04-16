@@ -1,0 +1,14 @@
+{
+  "put_policy_policies__org__put": {
+    "schemaUrl": "https://kosli.mintlify.app/schemas/policy/v1.json",
+    "example": {
+      "policy_file": "_schema: https://kosli.mintlify.app/schemas/policy/v1\nartifacts:\n  provenance:\n    required: true\n"
+    }
+  },
+  "create_flow_with_template_flows__org__template_file_put": {
+    "schemaUrl": "https://kosli.mintlify.app/schemas/flow-template.json",
+    "example": {
+      "template_file": "version: 1\ntrail:\n  attestations:\n    - name: pull-request\n      type: pull_request\n  artifacts:\n    - name: backend\n      attestations:\n        - name: unit-tests\n          type: junit\n"
+    }
+  }
+}
