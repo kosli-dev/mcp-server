@@ -6,7 +6,8 @@ import { loadConfig } from "./config.js";
 import { searchActions } from "./tools/search-actions.js";
 import { executeAction } from "./tools/execute-action.js";
 import catalog from "./catalog.json" with { type: "json" };
-import type { CatalogEntry } from "./types.js";
+import hints from "./hints.json" with { type: "json" };
+import type { CatalogEntry, ActionHints } from "./types.js";
 
 const entries = catalog as CatalogEntry[];
 const config = loadConfig();
@@ -27,7 +28,7 @@ server.registerTool(
     },
   },
   async ({ query, limit }) => {
-    const results = searchActions(entries, query, limit);
+    const results = searchActions(entries, query, limit, hints as ActionHints);
     return {
       content: [
         {
