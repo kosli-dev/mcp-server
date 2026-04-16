@@ -33,7 +33,24 @@ The server reads configuration from environment variables:
 
 ## Wire up to an MCP client
 
-Example `.mcp.json`:
+Once published, point your client at the package via `npx` — no install step needed:
+
+```json
+{
+  "mcpServers": {
+    "kosli": {
+      "command": "npx",
+      "args": ["-y", "@kosli/mcp-server"],
+      "env": {
+        "KOSLI_API_TOKEN": "${KOSLI_API_TOKEN}",
+        "KOSLI_ORG": "${KOSLI_ORG}"
+      }
+    }
+  }
+}
+```
+
+If you're running from a local checkout instead:
 
 ```json
 {

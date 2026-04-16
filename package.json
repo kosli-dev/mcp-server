@@ -1,15 +1,39 @@
 {
-  "name": "@kosli-dev/mcp-server",
+  "name": "@kosli/mcp-server",
   "version": "0.1.0",
-  "private": true,
+  "description": "Model Context Protocol server for the Kosli API",
   "type": "module",
+  "bin": {
+    "kosli-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate-catalog": "tsx scripts/generate-catalog.ts"
+    "generate-catalog": "tsx scripts/generate-catalog.ts",
+    "prepublishOnly": "npm run build && npm test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kosli-dev/kosli-mcp-server.git"
+  },
+  "homepage": "https://github.com/kosli-dev/kosli-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/kosli-dev/kosli-mcp-server/issues"
+  },
+  "keywords": [
+    "kosli",
+    "mcp",
+    "model-context-protocol",
+    "claude"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0"
   },
