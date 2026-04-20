@@ -12,7 +12,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - **`src/index.ts`** registers exactly two MCP tools. Don't add more tools per endpoint — keep the catalog-driven design.
 - **`src/tools/search-actions.ts`** does a cheap client-side scored keyword search over `catalog.searchText`. No index, no embedding — deliberately simple.
 - **`src/tools/execute-action.ts`** + **`src/client/kosli-client.ts`** build the URL from path params, put remaining params into query string (GET/DELETE) or JSON body (other methods), and return the JSON response (or a structured error object — it does not throw on non-2xx). `execute_action` also supports an optional `fields` array that filters response objects to only the requested keys via `pickFields` before returning — this is critical for token efficiency.
-- **`src/config.ts`** loads env vars. `KOSLI_API_TOKEN` is preferred; `KOSLI_API_KEY` is a backwards-compat fallback.
+- **`src/config.ts`** loads env vars. `KOSLI_API_TOKEN` is preferred; `KOSLI_API_KEY` is a backwards-compat fallback. The server is **read-only by default** — `execute_action` rejects non-GET methods unless `KOSLI_READ_WRITE=true` is set.
 
 ## Conventions
 

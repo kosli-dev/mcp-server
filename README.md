@@ -30,6 +30,7 @@ The server reads configuration from environment variables:
 | `KOSLI_API_TOKEN` | yes | — | Preferred. `KOSLI_API_KEY` is accepted as a fallback. |
 | `KOSLI_ORG` | yes | — | Default org used when a path param `org` is not supplied. |
 | `KOSLI_BASE_URL` | no | `https://app.kosli.com` | Override for self-hosted instances. |
+| `KOSLI_READ_WRITE` | no | — | Set to `true` to enable write operations (POST, PUT, DELETE). The server is **read-only by default**. |
 
 ## Wire up to an MCP client
 

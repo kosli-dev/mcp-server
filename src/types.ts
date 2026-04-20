@@ -29,6 +29,7 @@ export interface Config {
   apiKey: string;
   org: string;
   baseUrl: string;
+  readOnly: boolean;
 }
 
 export interface ActionHint {

@@ -24,5 +24,7 @@ export function loadConfig(): Config {
     );
   }
 
-  return { apiKey, org, baseUrl };
+  const readOnly = process.env.KOSLI_READ_WRITE !== "true";
+
+  return { apiKey, org, baseUrl, readOnly };
 }
