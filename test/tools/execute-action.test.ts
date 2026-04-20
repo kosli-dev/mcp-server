@@ -8,6 +8,7 @@ const config: Config = {
   apiKey: "test-key",
   org: "test-org",
   baseUrl: "https://app.kosli.com",
+  readOnly: true,
 };
 
 describe("executeAction", () => {
@@ -86,6 +87,32 @@ describe("executeAction", () => {
     const result = await executeAction(entries, config, "list_environments", {}, undefined, mockFetch);
 
     expect(result).toEqual({ name: "prod", type: "ECS", tags: {} });
+  });
+
+  it("blocks write operations in read-only mode", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch);
+
+    expect(result).toEqual({
+      error: true,
+      message: "Write operations are disabled by default. To allow PUT /policies/{org}, set the KOSLI_READ_WRITE=true environment variable and restart the MCP server.",
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("allows write operations when readOnly is false", async () => {
+    const writeConfig: Config = { ...config, readOnly: false };
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ policy: "created" }),
+    });
+
+    const result = await executeAction(entries, writeConfig, "put_policy_policies__org__put", {}, undefined, mockFetch);
+
+    expect(result).toEqual({ policy: "created" });
+    expect(mockFetch).toHaveBeenCalledOnce();
   });
 
   it("preserves error responses when fields is set (does not strip to {})", async () => {

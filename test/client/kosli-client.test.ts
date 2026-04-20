@@ -6,6 +6,7 @@ const config: Config = {
   apiKey: "test-api-key",
   org: "test-org",
   baseUrl: "https://app.kosli.com",
+  readOnly: true,
 };
 
 const listEnvEntry: CatalogEntry = {

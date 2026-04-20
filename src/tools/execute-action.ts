@@ -42,6 +42,13 @@ export async function executeAction(
     return { error: true, message: `Unknown action: ${actionId}` };
   }
 
+  if (config.readOnly && entry.method !== "GET") {
+    return {
+      error: true,
+      message: `Write operations are disabled by default. To allow ${entry.method} ${entry.path}, set the KOSLI_READ_WRITE=true environment variable and restart the MCP server.`,
+    };
+  }
+
   const client = new KosliClient(config, fetchFn);
   const result = await client.execute(entry, params);
 
