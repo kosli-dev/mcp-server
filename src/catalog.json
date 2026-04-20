@@ -2959,7 +2959,7 @@
     "method": "GET",
     "path": "/attestations/{org}/list_attestations_for_criteria",
     "summary": "List attestations for criteria",
-    "description": "List attestations matching a search criteria within an organization.\n\nThis endpoint returns a dictionary mapping commit SHAs to lists of attestations.\nEach attestation contains metadata about compliance, timing, and type-specific data.\n\n## Usage Examples\n\n### Get all attestations for a specific flow\n```\nGET /attestations/my-org?flow_name=production-flow\n```\n\n### Get security attestations for specific commits\n```\nGET /attestations/my-org?attestation_type=snyk&commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### Get a specific attestation by name\n```\nGET /attestations/my-org?attestation_name=manual-test\n```\n\n### Get custom attestations\n```\nGET /attestations/my-org?attestation_type=custom:security-scan\n```",
+    "description": "List attestations matching a search criteria within an organization.\n\nThis endpoint returns a dictionary mapping commit SHAs to lists of attestations.\nEach attestation contains metadata about compliance, timing, and type-specific data.\n\n`commit_list` is required; it scopes the search to a specific set of commits.\n`attestation_type`, `attestation_name`, and `flow_name` further narrow results\nwithin that commit set but cannot be used on their own.\n\n## Usage Examples\n\n### Get all attestations for a list of commits\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### Narrow by flow and attestation type\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&flow_name=production-flow&attestation_type=snyk\n```\n\n### Narrow by attestation name\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_name=manual-test\n```\n\n### Narrow by custom attestation type\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_type=custom:security-scan\n```",
     "tags": [
       "Attestation"
     ],
@@ -3036,7 +3036,7 @@
         "name": "attestation_id",
         "in": "query",
         "required": false,
-        "description": "The attestation ID to search for",
+        "description": "The attestation ID to search for. Not yet supported on this endpoint — currently ignored.",
         "schema": {
           "anyOf": [
             {
@@ -3046,7 +3046,7 @@
               "type": "null"
             }
           ],
-          "description": "The attestation ID to search for",
+          "description": "The attestation ID to search for. Not yet supported on this endpoint — currently ignored.",
           "title": "Attestation Id"
         }
       },
@@ -3070,7 +3070,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list attestations for criteria list attestations matching a search criteria within an organization.\n\nthis endpoint returns a dictionary mapping commit shas to lists of attestations.\neach attestation contains metadata about compliance, timing, and type-specific data.\n\n## usage examples\n\n### get all attestations for a specific flow\n```\nget /attestations/my-org?flow_name=production-flow\n```\n\n### get security attestations for specific commits\n```\nget /attestations/my-org?attestation_type=snyk&commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### get a specific attestation by name\n```\nget /attestations/my-org?attestation_name=manual-test\n```\n\n### get custom attestations\n```\nget /attestations/my-org?attestation_type=custom:security-scan\n``` get attestations org list_attestations_for_criteria attestation"
+    "searchText": "list attestations for criteria list attestations matching a search criteria within an organization.\n\nthis endpoint returns a dictionary mapping commit shas to lists of attestations.\neach attestation contains metadata about compliance, timing, and type-specific data.\n\n`commit_list` is required; it scopes the search to a specific set of commits.\n`attestation_type`, `attestation_name`, and `flow_name` further narrow results\nwithin that commit set but cannot be used on their own.\n\n## usage examples\n\n### get all attestations for a list of commits\n```\nget /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### narrow by flow and attestation type\n```\nget /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&flow_name=production-flow&attestation_type=snyk\n```\n\n### narrow by attestation name\n```\nget /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_name=manual-test\n```\n\n### narrow by custom attestation type\n```\nget /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_type=custom:security-scan\n``` get attestations org list_attestations_for_criteria attestation"
   },
   {
     "id": "list_builds_builds__org__get",
