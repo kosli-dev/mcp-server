@@ -57,9 +57,9 @@ describe("searchActions", () => {
     const policy = results.find((r) => r.id === "put_policy_policies__org__put");
     expect(policy).toBeDefined();
     expect(policy!.hints).toEqual({
-      schemaUrl: "https://kosli.mintlify.app/schemas/policy/v1.json",
+      schemaUrl: "https://docs.kosli.com/schemas/policy/v1.json",
       example: {
-        policy_file: "_schema: https://kosli.mintlify.app/schemas/policy/v1\nartifacts:\n  provenance:\n    required: true\n",
+        policy_file: "_schema: https://docs.kosli.com/schemas/policy/v1\nartifacts:\n  provenance:\n    required: true\n",
       },
     });
   });
