@@ -4515,6 +4515,49 @@
     "searchText": "report server environment process a report for a server environment. put environments org env_name report server environments"
   },
   {
+    "id": "update_env_environments__org___env_name__patch",
+    "method": "PATCH",
+    "path": "/environments/{org}/{env_name}",
+    "summary": "Update environment",
+    "description": "Update an existing Environment for an organization. Only fields present in the\nrequest body are updated; omitted fields are left unchanged. Unlike the PUT\nendpoint, an empty string for description will clear the description.",
+    "tags": [
+      "Environments"
+    ],
+    "parameters": [
+      {
+        "name": "env_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Env Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "title": "Org"
+        }
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "$ref": "#/components/schemas/UpdateEnvironmentPatchInput"
+        }
+      }
+    ],
+    "searchText": "update environment update an existing environment for an organization. only fields present in the\nrequest body are updated; omitted fields are left unchanged. unlike the put\nendpoint, an empty string for description will clear the description. patch environments org env_name environments"
+  },
+  {
     "id": "update_environment_notification_organizations__org__environments_notifications__notification_number__put",
     "method": "PUT",
     "path": "/organizations/{org}/environments_notifications/{notification_number}",

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { CatalogEntry, ActionParam, RequestBodyParam } from "../src/types.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OPENAPI_URL = "https://app.kosli.com/api/fastapi/openapi.json";
+const OPENAPI_URL = "https://app.kosli.com/api/v2/openapi.json";
 const OUTPUT_PATH = join(__dirname, "..", "src", "catalog.json");
 
 interface OpenAPIParam {
