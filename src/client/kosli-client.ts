@@ -146,7 +146,7 @@ export class KosliClient {
       }
     }
 
-    return `${this.config.baseUrl}/api/fastapi${path}`;
+    return `${this.config.baseUrl}/api/v2${path}`;
   }
 
   private async doFetch(url: string, init: RequestInit): Promise<unknown | ErrorResponse> {

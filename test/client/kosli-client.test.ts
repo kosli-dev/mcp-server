@@ -98,7 +98,7 @@ describe("KosliClient", () => {
     await client.execute(listEnvEntry, {});
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://app.kosli.com/api/fastapi/environments/test-org",
+      "https://app.kosli.com/api/v2/environments/test-org",
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
@@ -122,7 +122,7 @@ describe("KosliClient", () => {
     });
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://app.kosli.com/api/fastapi/trails/test-org/my-flow/my-trail",
+      "https://app.kosli.com/api/v2/trails/test-org/my-flow/my-trail",
       expect.anything(),
     );
   });
@@ -137,7 +137,7 @@ describe("KosliClient", () => {
     await client.execute(listEnvEntry, { org: "other-org" });
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://app.kosli.com/api/fastapi/environments/other-org",
+      "https://app.kosli.com/api/v2/environments/other-org",
       expect.anything(),
     );
   });
