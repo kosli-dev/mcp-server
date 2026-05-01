@@ -34,7 +34,17 @@ The server reads configuration from environment variables:
 
 ## Wire up to an MCP client
 
-Point your client at the package via `npx` — no install step needed:
+### Claude Code
+
+Run this from your project directory (or use `--scope user` for global):
+
+```bash
+claude mcp add kosli -e KOSLI_API_TOKEN=your-token -e KOSLI_ORG=your-org -- npx -y @kosli/mcp-server
+```
+
+### Claude Desktop
+
+Add the following to your `claude_desktop_config.json` (Settings → Developer → Edit Config):
 
 ```json
 {
@@ -43,13 +53,19 @@ Point your client at the package via `npx` — no install step needed:
       "command": "npx",
       "args": ["-y", "@kosli/mcp-server"],
       "env": {
-        "KOSLI_API_TOKEN": "${KOSLI_API_TOKEN}",
-        "KOSLI_ORG": "${KOSLI_ORG}"
+        "KOSLI_API_TOKEN": "your-token",
+        "KOSLI_ORG": "your-org"
       }
     }
   }
 }
 ```
+
+### Other MCP clients
+
+The server communicates over stdio. Point any MCP-compatible client at the package via `npx -y @kosli/mcp-server` and set the `KOSLI_API_TOKEN` and `KOSLI_ORG` environment variables.
+
+### Local checkout
 
 If you're running from a local checkout instead:
 
@@ -60,8 +76,8 @@ If you're running from a local checkout instead:
       "command": "node",
       "args": ["/absolute/path/to/mcp-server/dist/index.js"],
       "env": {
-        "KOSLI_API_TOKEN": "${KOSLI_API_TOKEN}",
-        "KOSLI_ORG": "${KOSLI_ORG}"
+        "KOSLI_API_TOKEN": "your-token",
+        "KOSLI_ORG": "your-org"
       }
     }
   }
