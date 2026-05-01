@@ -34,7 +34,7 @@ The server reads configuration from environment variables:
 
 ## Wire up to an MCP client
 
-Once published, point your client at the package via `npx` — no install step needed:
+Point your client at the package via `npx` — no install step needed:
 
 ```json
 {
