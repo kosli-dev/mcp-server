@@ -22,11 +22,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kosli-dev/kosli-mcp-server.git"
+    "url": "git+https://github.com/kosli-dev/mcp-server.git"
   },
-  "homepage": "https://github.com/kosli-dev/kosli-mcp-server#readme",
+  "homepage": "https://github.com/kosli-dev/mcp-server#readme",
   "bugs": {
-    "url": "https://github.com/kosli-dev/kosli-mcp-server/issues"
+    "url": "https://github.com/kosli-dev/mcp-server/issues"
   },
   "keywords": [
     "kosli",
