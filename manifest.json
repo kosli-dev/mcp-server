@@ -1,0 +1,77 @@
+{
+  "manifest_version": "0.3",
+  "name": "kosli",
+  "display_name": "Kosli",
+  "version": "0.0.0-replaced-at-build-time",
+  "description": "Connect Claude to the Kosli API for change management, deployment tracking, and compliance evidence.",
+  "author": {
+    "name": "Kosli",
+    "url": "https://kosli.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kosli-dev/mcp-server.git"
+  },
+  "homepage": "https://kosli.com",
+  "documentation": "https://github.com/kosli-dev/mcp-server#readme",
+  "support": "https://github.com/kosli-dev/mcp-server/issues",
+  "icon": "assets/icon.png",
+  "license": "MIT",
+  "keywords": ["kosli", "compliance", "devops", "deployments", "environments", "change-management"],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "KOSLI_API_TOKEN": "${user_config.api_token}",
+        "KOSLI_ORG": "${user_config.org}",
+        "KOSLI_BASE_URL": "${user_config.base_url}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "search_actions",
+      "description": "Search for available Kosli API actions by natural-language query"
+    },
+    {
+      "name": "execute_read_action",
+      "description": "Execute a read-only (GET) Kosli API action"
+    },
+    {
+      "name": "execute_write_action",
+      "description": "Execute a write (POST, PUT, PATCH, DELETE) Kosli API action"
+    }
+  ],
+  "tools_generated": false,
+  "user_config": {
+    "api_token": {
+      "type": "string",
+      "title": "API Token",
+      "description": "Your Kosli API token (found at app.kosli.com under Settings → API Keys)",
+      "sensitive": true,
+      "required": true
+    },
+    "org": {
+      "type": "string",
+      "title": "Organization",
+      "description": "Your Kosli organization name",
+      "required": true
+    },
+    "base_url": {
+      "type": "string",
+      "title": "Base URL",
+      "description": "Kosli API base URL — EU: https://app.kosli.com, US: https://app.us.kosli.com, or your single-tenant endpoint",
+      "default": "https://app.kosli.com",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  }
+}

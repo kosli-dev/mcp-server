@@ -1,6 +1,6 @@
 {
   "name": "@kosli/mcp-server",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Model Context Protocol server for the Kosli API",
   "type": "module",
   "bin": {
@@ -18,6 +18,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate-catalog": "tsx scripts/generate-catalog.ts",
+    "pack:mcpb": "bash scripts/pack-mcpb.sh",
     "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
@@ -28,6 +29,7 @@
   "bugs": {
     "url": "https://github.com/kosli-dev/mcp-server/issues"
   },
+  "license": "MIT",
   "keywords": [
     "kosli",
     "mcp",

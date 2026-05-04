@@ -34,3 +34,6 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Pack .mcpb bundle (smoke test)
+        run: npm run pack:mcpb
