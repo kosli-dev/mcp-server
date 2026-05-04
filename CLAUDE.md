@@ -53,4 +53,17 @@ npm install
 npm run build      # tsc → dist/
 npm start          # runs dist/index.js over stdio
 npm run generate-catalog   # refresh src/catalog.json from OpenAPI
+npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
 ```
+
+## Releasing
+
+The version is managed in `package.json` only — `manifest.json` gets the version injected at build time by the pack script.
+
+To release:
+1. Bump the version in `package.json`.
+2. Commit (e.g. `chore: bump version to 0.3.0`).
+3. Tag: `git tag v0.3.0 && git push origin v0.3.0`.
+4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
+
+Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.

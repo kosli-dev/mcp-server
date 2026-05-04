@@ -5,7 +5,7 @@ on:
     tags: ['v*']
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -29,6 +29,15 @@ jobs:
       - name: Upgrade npm
         run: npm install -g npm@latest
 
+      - name: Verify tag matches package.json version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::Tag v${TAG} does not match package.json version ${PKG}"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: npm ci
 
@@ -40,3 +49,12 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --access public
+
+      - name: Pack .mcpb bundle
+        run: npm run pack:mcpb
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+        with:
+          files: '*.mcpb'
+          generate_release_notes: true

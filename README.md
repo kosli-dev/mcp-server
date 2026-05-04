@@ -30,7 +30,7 @@ The server reads configuration from environment variables:
 |----------|----------|---------|-------|
 | `KOSLI_API_TOKEN` | yes | — | Preferred. `KOSLI_API_KEY` is accepted as a fallback. |
 | `KOSLI_ORG` | yes | — | Default org used when a path param `org` is not supplied. |
-| `KOSLI_BASE_URL` | no | `https://app.kosli.com` | Override for self-hosted instances. |
+| `KOSLI_BASE_URL` | no | `https://app.kosli.com` | EU (default), US (`https://app.us.kosli.com`), or your single-tenant endpoint. |
 
 ## Wire up to an MCP client
 
@@ -39,12 +39,22 @@ The server reads configuration from environment variables:
 Run this from your project directory (or use `--scope user` for global):
 
 ```bash
-claude mcp add kosli -e KOSLI_API_TOKEN=your-token -e KOSLI_ORG=your-org -- npx -y @kosli/mcp-server
+claude mcp add kosli \
+  -e KOSLI_API_TOKEN=your-token \
+  -e KOSLI_ORG=your-org \
+  -- npx -y @kosli/mcp-server
 ```
 
-### Claude Desktop
+### Claude Desktop (Desktop Extension)
 
-Add the following to your `claude_desktop_config.json` (Settings → Developer → Edit Config):
+Download the latest `.mcpb` file from [Releases](https://github.com/kosli-dev/mcp-server/releases), then drag it into Claude Desktop or double-click to install. Claude Desktop will prompt you for your API token and organization. This is the recommended method for Claude Desktop as secrets are stored in the OS keychain rather than in a plain-text config file.
+
+> [!NOTE]
+> When installing from a `.mcpb` file, Claude Desktop shows a warning that the extension has not been verified by Anthropic. This is expected for any extension installed from a file rather than from the built-in directory. Sideloaded extensions also do not auto-update — you'll need to download and reinstall new versions manually. Both of these limitations go away once the extension is listed in Anthropic's [Connectors Directory](https://claude.com/docs/connectors/building/submission).
+
+### Claude Desktop (manual)
+
+Alternatively, add the following to your `claude_desktop_config.json` (Settings → Developer → Edit Config). This method auto-updates via `npx` on each restart, but stores secrets in plain text:
 
 ```json
 {
@@ -118,6 +128,7 @@ npm test             # run the test suite (vitest)
 npm run test:watch   # watch mode
 npm run build        # compile to dist/
 npm start            # run the built server over stdio
+npm run pack:mcpb    # build a .mcpb bundle for Claude Desktop
 ```
 
 ## Layout
