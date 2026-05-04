@@ -2,12 +2,13 @@
 
 A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the [Kosli](https://kosli.com) API to LLM clients (Claude Code, Claude Desktop, etc.).
 
-Rather than hand-coding a tool per endpoint, the server ships a catalog generated from Kosli's OpenAPI spec and exposes two generic tools:
+Rather than hand-coding a tool per endpoint, the server ships a catalog generated from Kosli's OpenAPI spec and exposes three generic tools:
 
 - **`search_actions`** — fuzzy-search the catalog for relevant API actions by natural-language query.
-- **`execute_action`** — invoke any action by ID with parameters (path, query, or body).
+- **`execute_read_action`** — invoke any GET action by ID (read-only, auto-allowed by MCP clients).
+- **`execute_write_action`** — invoke any POST/PUT/PATCH/DELETE action by ID (requires approval in MCP clients).
 
-This keeps the tool surface small and lets the catalog stay in sync with the Kosli API by regenerating.
+This keeps the tool surface small and lets the catalog stay in sync with the Kosli API by regenerating. MCP clients use the tool annotations to auto-allow reads while gating writes behind user approval.
 
 ## Requirements
 
@@ -30,7 +31,6 @@ The server reads configuration from environment variables:
 | `KOSLI_API_TOKEN` | yes | — | Preferred. `KOSLI_API_KEY` is accepted as a fallback. |
 | `KOSLI_ORG` | yes | — | Default org used when a path param `org` is not supplied. |
 | `KOSLI_BASE_URL` | no | `https://app.kosli.com` | Override for self-hosted instances. |
-| `KOSLI_READ_WRITE` | no | — | Set to `true` to enable write operations (POST, PUT, DELETE). The server is **read-only by default**. |
 
 ## Wire up to an MCP client
 
@@ -89,11 +89,11 @@ If you're running from a local checkout instead:
 Typical LLM flow:
 
 1. Call `search_actions` with a natural-language query (e.g. `"list environments"`) to discover action IDs and their parameter schemas.
-2. Call `execute_action` with the chosen `actionId` and a `params` object.
+2. Call `execute_read_action` (for GET actions) or `execute_write_action` (for POST/PUT/PATCH/DELETE) with the chosen `actionId` and a `params` object.
 
 The `org` path parameter defaults to `KOSLI_ORG` if not supplied. For `GET`/`DELETE`, non-path params become query parameters; for other methods they become the JSON body.
 
-`execute_action` accepts an optional `fields` array to request only specific top-level fields from each object in the response. This dramatically reduces response size and token usage:
+Both execute tools accept an optional `fields` array to request only specific top-level fields from each object in the response. This dramatically reduces response size and token usage:
 
 ```json
 {
