@@ -8,7 +8,6 @@ const config: Config = {
   apiKey: "test-key",
   org: "test-org",
   baseUrl: "https://app.kosli.com",
-  readOnly: true,
 };
 
 describe("executeAction", () => {
@@ -89,27 +88,51 @@ describe("executeAction", () => {
     expect(result).toEqual({ name: "prod", type: "ECS", tags: {} });
   });
 
-  it("blocks write operations in read-only mode", async () => {
+  it("rejects write action in GET mode", async () => {
     const mockFetch = vi.fn();
 
-    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch);
+    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch, "GET");
 
     expect(result).toEqual({
       error: true,
-      message: "Write operations are disabled by default. To allow PUT /policies/{org}, set the KOSLI_READ_WRITE=true environment variable and restart the MCP server.",
+      message: 'Action "put_policy_policies__org__put" is a PUT operation. Use execute_write_action instead.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
-  it("allows write operations when readOnly is false", async () => {
-    const writeConfig: Config = { ...config, readOnly: false };
+  it("rejects read action in WRITE mode", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(entries, config, "list_environments", {}, undefined, mockFetch, "WRITE");
+
+    expect(result).toEqual({
+      error: true,
+      message: 'Action "list_environments" is a GET operation. Use execute_read_action instead.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("allows GET action in GET mode", async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ environments: [] }),
+    });
+
+    const result = await executeAction(entries, config, "list_environments", {}, undefined, mockFetch, "GET");
+
+    expect(result).toEqual({ environments: [] });
+    expect(mockFetch).toHaveBeenCalledOnce();
+  });
+
+  it("allows write action in WRITE mode", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
       json: () => Promise.resolve({ policy: "created" }),
     });
 
-    const result = await executeAction(entries, writeConfig, "put_policy_policies__org__put", {}, undefined, mockFetch);
+    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch, "WRITE");
 
     expect(result).toEqual({ policy: "created" });
     expect(mockFetch).toHaveBeenCalledOnce();

@@ -29,6 +29,8 @@ function isErrorResult(value: unknown): boolean {
   );
 }
 
+export type ToolMode = "GET" | "WRITE";
+
 export async function executeAction(
   catalog: CatalogEntry[],
   config: Config,
@@ -36,16 +38,24 @@ export async function executeAction(
   params: Record<string, unknown>,
   fields?: string[],
   fetchFn: FetchFn = globalThis.fetch,
+  mode?: ToolMode,
 ): Promise<unknown> {
   const entry = catalog.find((e) => e.id === actionId);
   if (!entry) {
     return { error: true, message: `Unknown action: ${actionId}` };
   }
 
-  if (config.readOnly && entry.method !== "GET") {
+  if (mode === "GET" && entry.method !== "GET") {
     return {
       error: true,
-      message: `Write operations are disabled by default. To allow ${entry.method} ${entry.path}, set the KOSLI_READ_WRITE=true environment variable and restart the MCP server.`,
+      message: `Action "${actionId}" is a ${entry.method} operation. Use execute_write_action instead.`,
+    };
+  }
+
+  if (mode === "WRITE" && entry.method === "GET") {
+    return {
+      error: true,
+      message: `Action "${actionId}" is a GET operation. Use execute_read_action instead.`,
     };
   }
 
