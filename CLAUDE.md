@@ -15,6 +15,12 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - **`src/config.ts`** loads env vars. `KOSLI_API_TOKEN` is preferred; `KOSLI_API_KEY` is a backwards-compat fallback.
 - Read/write separation is handled via MCP tool annotations: `execute_read_action` has `readOnlyHint: true` (auto-allowed), `execute_write_action` has `destructiveHint: true` (requires user approval in MCP clients).
 
+## Distribution
+
+- **npm** (`npx -y @kosli/mcp-server`) — works with Claude Code, Claude Desktop, Cursor, and any MCP client. Auto-updates on restart.
+- **`.mcpb` bundle** — one-click install for Claude Desktop. Secrets stored in OS keychain. Built by `npm run pack:mcpb` and attached to GitHub Releases.
+- **`manifest.json`** defines the Desktop Extension metadata (user config UI, icon, etc.). Its `version` field is a placeholder — injected from `package.json` at pack time.
+
 ## Conventions
 
 - Commit messages and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/) format (e.g. `feat:`, `fix:`, `docs:`, `ci:`, `refactor:`, `test:`, `chore:`).
@@ -45,6 +51,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Don't commit `dist/` or `node_modules/` (see `.gitignore`).
 - Don't pull in an HTTP client library — `globalThis.fetch` is sufficient and is injectable for tests.
 - Don't throw on HTTP errors inside `KosliClient`; return the error-shape object.
+- Don't manually edit the `version` in `manifest.json` — it's replaced at build time from `package.json`.
 
 ## Build & run
 
