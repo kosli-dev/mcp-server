@@ -17,6 +17,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 
 ## Conventions
 
+- Commit messages and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/) format (e.g. `feat:`, `fix:`, `docs:`, `ci:`, `refactor:`, `test:`, `chore:`).
 - ESM only (`"type": "module"`, `NodeNext` resolution). Relative imports must use `.js` extensions even though the source is `.ts`.
 - TypeScript `strict: true`. Don't weaken it.
 - The `org` path parameter falls back to `config.org` (from `KOSLI_ORG`). Preserve this in `KosliClient.buildUrl`.
