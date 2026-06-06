@@ -1015,6 +1015,32 @@
     "searchText": "get environment diff get diff between to snapshots get env-diff org envdiff"
   },
   {
+    "id": "environment_policy_schema_v1",
+    "method": "GET",
+    "path": "/schemas/environment-policy/v1",
+    "summary": "Environment policy schema v1",
+    "description": "Return the JSON Schema for the environment policy YAML format (v1).",
+    "tags": [
+      "Schemas"
+    ],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "environment policy schema v1 return the json schema for the environment policy yaml format (v1). get schemas environment-policy v1 schemas"
+  },
+  {
+    "id": "flow_template_schema_v1",
+    "method": "GET",
+    "path": "/schemas/flow-template/v1",
+    "summary": "Flow template schema v1",
+    "description": "Return the JSON Schema for the flow template YAML format (v1).",
+    "tags": [
+      "Schemas"
+    ],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "flow template schema v1 return the json schema for the flow template yaml format (v1). get schemas flow-template v1 schemas"
+  },
+  {
     "id": "get_action",
     "method": "GET",
     "path": "/actions/{org}/{action_number}",
