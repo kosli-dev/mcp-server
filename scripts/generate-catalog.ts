@@ -3,6 +3,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { CatalogEntry, ActionParam, RequestBodyParam } from "../src/types.js";
 import { resolveRefs } from "./resolve-refs.js";
+import { formatJsonCompact } from "./format-json.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OPENAPI_URL = "https://app.kosli.com/api/v2/openapi.json";
@@ -127,7 +128,7 @@ async function main() {
 
   entries.sort((a, b) => a.id.localeCompare(b.id));
 
-  writeFileSync(OUTPUT_PATH, JSON.stringify(entries, null, 2) + "\n");
+  writeFileSync(OUTPUT_PATH, formatJsonCompact(entries) + "\n");
   console.log(`Generated ${entries.length} catalog entries -> ${OUTPUT_PATH}`);
 }
 
