@@ -2,6 +2,8 @@ import { writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { CatalogEntry, ActionParam, RequestBodyParam } from "../src/types.js";
+import { resolveRefs } from "./resolve-refs.js";
+import { formatJsonCompact } from "./format-json.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OPENAPI_URL = "https://app.kosli.com/api/v2/openapi.json";
@@ -59,7 +61,10 @@ function buildSearchText(entry: Pick<CatalogEntry, "summary" | "description" | "
   return parts.join(" ").toLowerCase();
 }
 
-function extractRequestBodyParams(requestBody: OpenAPIRequestBody | undefined): RequestBodyParam[] | null {
+function extractRequestBodyParams(
+  requestBody: OpenAPIRequestBody | undefined,
+  schemas: Record<string, unknown>,
+): RequestBodyParam[] | null {
   if (!requestBody?.content) return null;
 
   const contentType = Object.keys(requestBody.content)[0];
@@ -70,7 +75,7 @@ function extractRequestBodyParams(requestBody: OpenAPIRequestBody | undefined): 
     name: "body",
     required: requestBody.required ?? false,
     description: `Request body (${contentType})`,
-    schema,
+    schema: resolveRefs(schema, schemas) as Record<string, unknown>,
   }];
 }
 
@@ -82,6 +87,7 @@ async function main() {
   }
 
   const spec: OpenAPISpec = await response.json();
+  const schemas = spec.components?.schemas ?? {};
   const entries: CatalogEntry[] = [];
 
   for (const [path, methods] of Object.entries(spec.paths)) {
@@ -99,10 +105,10 @@ async function main() {
         in: p.in as ActionParam["in"],
         required: p.required ?? false,
         description: p.description ?? "",
-        schema: p.schema,
+        schema: p.schema ? (resolveRefs(p.schema, schemas) as Record<string, unknown>) : p.schema,
       }));
 
-      const requestBody = extractRequestBodyParams(operation.requestBody);
+      const requestBody = extractRequestBodyParams(operation.requestBody, schemas);
 
       const entry: CatalogEntry = {
         id,
@@ -122,7 +128,7 @@ async function main() {
 
   entries.sort((a, b) => a.id.localeCompare(b.id));
 
-  writeFileSync(OUTPUT_PATH, JSON.stringify(entries, null, 2) + "\n");
+  writeFileSync(OUTPUT_PATH, formatJsonCompact(entries) + "\n");
   console.log(`Generated ${entries.length} catalog entries -> ${OUTPUT_PATH}`);
 }
 

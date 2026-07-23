@@ -54,7 +54,7 @@ describe("searchActions", () => {
   it("includes hints when a matching hint exists", () => {
     const results = searchActions(entries, "policy", 10, hints as ActionHints);
 
-    const policy = results.find((r) => r.id === "put_policy_policies__org__put");
+    const policy = results.find((r) => r.id === "put_policy");
     expect(policy).toBeDefined();
     expect(policy!.hints).toEqual({
       schemaUrl: "https://docs.kosli.com/schemas/policy/v1.json",

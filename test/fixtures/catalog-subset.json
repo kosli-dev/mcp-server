@@ -83,7 +83,7 @@
     "searchText": "list snapshots get snapshots env_name org"
   },
   {
-    "id": "put_policy_policies__org__put",
+    "id": "put_policy",
     "method": "PUT",
     "path": "/policies/{org}",
     "summary": "Create or update policy",
