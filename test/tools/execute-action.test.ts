@@ -91,11 +91,11 @@ describe("executeAction", () => {
   it("rejects write action in GET mode", async () => {
     const mockFetch = vi.fn();
 
-    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch, "GET");
+    const result = await executeAction(entries, config, "put_policy", {}, undefined, mockFetch, "GET");
 
     expect(result).toEqual({
       error: true,
-      message: 'Action "put_policy_policies__org__put" is a PUT operation. Use execute_write_action instead.',
+      message: 'Action "put_policy" is a PUT operation. Use execute_write_action instead.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -132,7 +132,7 @@ describe("executeAction", () => {
       json: () => Promise.resolve({ policy: "created" }),
     });
 
-    const result = await executeAction(entries, config, "put_policy_policies__org__put", {}, undefined, mockFetch, "WRITE");
+    const result = await executeAction(entries, config, "put_policy", {}, undefined, mockFetch, "WRITE");
 
     expect(result).toEqual({ policy: "created" });
     expect(mockFetch).toHaveBeenCalledOnce();
