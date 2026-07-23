@@ -5,16 +5,9 @@
     "path": "/environments/{org}",
     "summary": "List environments",
     "description": "List all environments in an organization.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" }
     ],
     "requestBody": null,
     "searchText": "list environments get environments org"
@@ -25,22 +18,10 @@
     "path": "/environments/{org}/{env_name}",
     "summary": "Get environment",
     "description": "Get details of a specific environment.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      },
-      {
-        "name": "env_name",
-        "in": "path",
-        "required": true,
-        "description": "Environment name"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "env_name", "in": "path", "required": true, "description": "Environment name" }
     ],
     "requestBody": null,
     "searchText": "get environment get environments env_name org"
@@ -51,16 +32,9 @@
     "path": "/flows/{org}",
     "summary": "List flows",
     "description": "List all flows in an organization.",
-    "tags": [
-      "Flows"
-    ],
+    "tags": ["Flows"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" }
     ],
     "requestBody": null,
     "searchText": "list flows get flows org"
@@ -71,28 +45,11 @@
     "path": "/trails/{org}/{flow_name}/{trail_name}",
     "summary": "Get trail",
     "description": "Get details of a specific trail.",
-    "tags": [
-      "Trails"
-    ],
+    "tags": ["Trails"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      },
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "Flow name"
-      },
-      {
-        "name": "trail_name",
-        "in": "path",
-        "required": true,
-        "description": "Trail name"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "flow_name", "in": "path", "required": true, "description": "Flow name" },
+      { "name": "trail_name", "in": "path", "required": true, "description": "Trail name" }
     ],
     "requestBody": null,
     "searchText": "get trail get trails flow_name trail_name org"
@@ -103,22 +60,10 @@
     "path": "/search/{org}/sha/{search_value}",
     "summary": "Search artifacts by SHA or fingerprint",
     "description": "Search for artifacts by commit SHA or fingerprint.",
-    "tags": [
-      "Search"
-    ],
+    "tags": ["Search"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      },
-      {
-        "name": "search_value",
-        "in": "path",
-        "required": true,
-        "description": "SHA or fingerprint to search for"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "search_value", "in": "path", "required": true, "description": "SHA or fingerprint to search for" }
     ],
     "requestBody": null,
     "searchText": "search artifacts by sha or fingerprint get search sha search_value org"
@@ -129,22 +74,10 @@
     "path": "/snapshots/{org}/{env_name}",
     "summary": "List snapshots",
     "description": "List snapshots for an environment.",
-    "tags": [
-      "Snapshots"
-    ],
+    "tags": ["Snapshots"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "Organization name"
-      },
-      {
-        "name": "env_name",
-        "in": "path",
-        "required": true,
-        "description": "Environment name"
-      }
+      { "name": "org", "in": "path", "required": true, "description": "Organization name" },
+      { "name": "env_name", "in": "path", "required": true, "description": "Environment name" }
     ],
     "requestBody": null,
     "searchText": "list snapshots get snapshots env_name org"
@@ -155,98 +88,12 @@
     "path": "/policies/{org}",
     "summary": "Create or update policy",
     "description": "Create or update a Policy in an organization.",
-    "tags": [
-      "Policies"
-    ],
+    "tags": ["Policies"],
     "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
+      { "name": "org", "in": "path", "required": true, "description": "" }
     ],
     "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (multipart/form-data)",
-        "schema": {
-          "properties": {
-            "payload": {
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~]*$",
-                  "title": "Name",
-                  "examples": [
-                    "production-policy"
-                  ]
-                },
-                "description": {
-                  "type": "string",
-                  "title": "Description",
-                  "default": "",
-                  "examples": [
-                    "some description"
-                  ]
-                },
-                "type": {
-                  "type": "string",
-                  "const": "env",
-                  "title": "Type",
-                  "default": "env"
-                },
-                "comment": {
-                  "type": "string",
-                  "title": "Comment",
-                  "default": "",
-                  "examples": [
-                    "describe what you changed"
-                  ]
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "name"
-              ],
-              "title": "PolicyPutInput",
-              "examples": [
-                {
-                  "comment": "Initial version",
-                  "description": "Production environment policy",
-                  "name": "production-policy",
-                  "type": "env"
-                }
-              ],
-              "description": "Policy metadata in JSON format"
-            },
-            "policy_file": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "contentMediaType": "application/octet-stream"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Policy File",
-              "description": "The YAML policy file to upload (max size: 10MB)"
-            }
-          },
-          "type": "object",
-          "required": [
-            "payload"
-          ],
-          "title": "Body_put_policy"
-        }
-      }
+      { "name": "body", "required": true, "description": "Request body (multipart/form-data)" }
     ],
     "searchText": "create or update policy create or update a policy in an organization. put policies org policies"
   }
