@@ -198,3 +198,97 @@ describe("pickFields", () => {
     ]);
   });
 });
+
+describe("request body unwrapping", () => {
+  const jsonBody = { identifier: "ctrl-1", name: "Control 1" };
+
+  function mockFetchOk() {
+    return vi.fn().mockResolvedValue({
+      ok: true,
+      status: 201,
+      json: () => Promise.resolve({ created: true }),
+    });
+  }
+
+  it("unwraps params nested under a body key for JSON write actions", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "post_control", { body: jsonBody }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/controls/test-org"),
+      expect.objectContaining({ body: JSON.stringify(jsonBody) }),
+    );
+  });
+
+  it("still accepts body fields spread at the top level", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "post_control", { ...jsonBody }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/controls/test-org"),
+      expect.objectContaining({ body: JSON.stringify(jsonBody) }),
+    );
+  });
+
+  it("unwraps when path params accompany the body key", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "post_control", { org: "other-org", body: jsonBody }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/controls/other-org"),
+      expect.objectContaining({ body: JSON.stringify(jsonBody) }),
+    );
+  });
+
+  it("does not unwrap when an undeclared sibling key is present", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "post_control", { body: jsonBody, extra: 1 }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ body: JSON.stringify({ body: jsonBody, extra: 1 }) }),
+    );
+  });
+
+  it("does not unwrap when the request body schema declares a body property", async () => {
+    const entry: CatalogEntry = {
+      id: "post_with_body_prop",
+      method: "POST",
+      path: "/things/{org}",
+      summary: "Create a thing",
+      description: "",
+      tags: [],
+      parameters: [{ name: "org", in: "path", required: true, description: "" }],
+      requestBody: [{
+        name: "body",
+        required: true,
+        description: "Request body (application/json)",
+        schema: { type: "object", properties: { body: { type: "string" } } },
+      }],
+      searchText: "create a thing",
+    };
+    const mockFetch = mockFetchOk();
+
+    await executeAction([entry], config, "post_with_body_prop", { body: { body: "text" } }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ body: JSON.stringify({ body: { body: "text" } }) }),
+    );
+  });
+
+  it("leaves non-object body values alone", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "post_control", { body: "not-an-object" }, undefined, mockFetch, "WRITE");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ body: JSON.stringify({ body: "not-an-object" }) }),
+    );
+  });
+});
