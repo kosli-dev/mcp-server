@@ -83,7 +83,36 @@
     "searchText": "list snapshots get snapshots env_name org"
   },
   {
-    "id": "put_policy_policies__org__put",
+    "id": "post_control",
+    "method": "POST",
+    "path": "/controls/{org}",
+    "summary": "Create a control",
+    "description": "Create a control in an organization.",
+    "tags": ["Controls"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "" }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "properties": {
+            "identifier": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["identifier", "name"]
+        }
+      }
+    ],
+    "searchText": "create a control post controls org controls"
+  },
+  {
+    "id": "put_policy",
     "method": "PUT",
     "path": "/policies/{org}",
     "summary": "Create or update policy",
