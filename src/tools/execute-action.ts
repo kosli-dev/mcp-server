@@ -31,6 +31,31 @@ function isErrorResult(value: unknown): boolean {
 
 export type ToolMode = "GET" | "WRITE";
 
+/**
+ * The catalog advertises an action's request body as a parameter named
+ * "body", so callers often send `params: { body: {...} }` even though the
+ * client spreads top-level params into the request body. Unwrap that shape
+ * when it's unambiguous: the entry takes a request body, nothing it declares
+ * is genuinely called "body", and every sibling key is a declared parameter.
+ */
+function unwrapBodyParam(
+  entry: CatalogEntry,
+  params: Record<string, unknown>,
+): Record<string, unknown> {
+  const body = params.body;
+  if (body === null || typeof body !== "object" || Array.isArray(body)) return params;
+  if (!entry.requestBody) return params;
+  if (entry.parameters.some((p) => p.name === "body")) return params;
+  const schema = entry.requestBody[0]?.schema;
+  const properties = schema?.properties;
+  if (properties && typeof properties === "object" && "body" in properties) return params;
+  const declared = new Set(entry.parameters.map((p) => p.name));
+  const siblings = Object.keys(params).filter((k) => k !== "body");
+  if (!siblings.every((k) => declared.has(k))) return params;
+  const { body: _unwrapped, ...rest } = params;
+  return { ...rest, ...(body as Record<string, unknown>) };
+}
+
 export async function executeAction(
   catalog: CatalogEntry[],
   config: Config,
@@ -60,7 +85,7 @@ export async function executeAction(
   }
 
   const client = new KosliClient(config, fetchFn);
-  const result = await client.execute(entry, params);
+  const result = await client.execute(entry, unwrapBodyParam(entry, params));
 
   // Never strip error shapes — pickFields would reduce them to {}
   // and hide the failure from the LLM.
