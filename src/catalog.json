@@ -69,29 +69,21 @@
     "path": "/controls/{org}/{identifier}/archive",
     "summary": "Archive a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -391,19 +383,14 @@
     "path": "/builds/{org}/statistics",
     "summary": "Build frequency statistics",
     "description": "Build-frequency series for a repo within a time window.\n\nReturns one timestamp per build (deduplicated by fingerprint) plus the\nresolved window bounds and a count. Daily bucketing and the median are\ncomputed client-side.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
-    "tags": [
-      "Builds"
-    ],
+    "tags": ["Builds"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "repo_id",
@@ -411,14 +398,7 @@
         "required": false,
         "description": "Filter by external VCS repo ID",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by external VCS repo ID",
           "title": "Repo Id"
         }
@@ -429,14 +409,7 @@
         "required": false,
         "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
           "title": "Repo Name"
         }
@@ -447,14 +420,7 @@
         "required": false,
         "description": "Filter by the repo's internal id (the `id` in the repo response). The stable identifier: unaffected by repo renames or a missing external VCS id.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by the repo's internal id (the `id` in the repo response). The stable identifier: unaffected by repo renames or a missing external VCS id.",
           "title": "Repo Inner Id"
         }
@@ -465,14 +431,7 @@
         "required": false,
         "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
           "title": "Start Ts"
         }
@@ -483,14 +442,7 @@
         "required": false,
         "description": "Include builds created at or before this timestamp. Defaults to now",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "Include builds created at or before this timestamp. Defaults to now",
           "title": "End Ts"
         }
@@ -1261,39 +1213,6 @@
     "path": "/service-accounts/{org}",
     "summary": "Create a service account",
     "description": "Create a new service account in the organization. API keys are minted\nseparately via the `/{name}/api-keys` endpoint.",
-    "tags": [
-      "Service Accounts"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (application/json)",
-        "schema": {
-          "$ref": "#/components/schemas/ServiceAccountPostInput"
-        }
-      }
-    ],
-    "searchText": "create a service account create a new service account in the organization. api keys are minted\nseparately via the `/{name}/api-keys` endpoint. post service-accounts org service accounts"
-  },
-  {
-    "id": "create_service_account_api_key",
-    "method": "POST",
-    "path": "/service-accounts/{org}",
-    "summary": "Create a service account",
-    "description": "Create a new service account in the organization. API keys are minted\nseparately via the `/{name}/api-keys` endpoint.",
     "tags": ["Service Accounts"],
     "parameters": [
       {
@@ -1640,43 +1559,6 @@
         "required": true,
         "description": "",
         "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "delete a service account remove a service account from the organization. delete service-accounts org name service accounts"
-  },
-  {
-    "id": "delete_service_account",
-    "method": "DELETE",
-    "path": "/service-accounts/{org}/{name}",
-    "summary": "Delete a service account",
-    "description": "Remove a service account from the organization.",
-    "tags": [
-      "Service Accounts"
-    ],
-    "parameters": [
-      {
-        "name": "name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 64,
-          "pattern": "^[a-zA-Z0-9\\-]+$",
-          "title": "Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
       }
     ],
     "requestBody": null,
@@ -2217,11 +2099,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{5,64}$",
-          "title": "Fingerprint"
-        }
+        "schema": {"type":"string","pattern":"^[a-f0-9]{5,64}$","title":"Fingerprint"}
       },
       {
         "name": "org",
@@ -2308,9 +2186,7 @@
     "path": "/attestations/{org}",
     "summary": "List attestations",
     "description": "Get a paginated list of attestations for an organization based on filters\nprovided as query parameters.",
-    "tags": [
-      "Attestation"
-    ],
+    "tags": ["Attestation"],
     "parameters": [
       {
         "name": "org",
@@ -2336,14 +2212,7 @@
         "required": false,
         "description": "Filter by exact attestation name. Cannot be combined with name_regex.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by exact attestation name. Cannot be combined with name_regex.",
           "title": "Name"
         }
@@ -2354,14 +2223,7 @@
         "required": false,
         "description": "Filter by attestation name (substring regex match)",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by attestation name (substring regex match)",
           "title": "Name Regex"
         }
@@ -2372,17 +2234,7 @@
         "required": false,
         "description": "Filter by flow name. Repeat the parameter to match several flows.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter by flow name. Repeat the parameter to match several flows.",
           "title": "Flow"
         }
@@ -2393,46 +2245,10 @@
         "required": false,
         "description": "Filter by attestation type. Use built-in types (e.g. 'junit', 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter by attestation type. Use built-in types (e.g. 'junit', 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
           "title": "Type"
         }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "environment coverage for a control **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get controls org identifier coverage controls"
-  },
-  {
-    "id": "get_control_decision",
-    "method": "GET",
-    "path": "/controls/{org}/{identifier}/decisions/{decision_id}",
-    "summary": "Get a single decision for a control",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": ["Controls"],
-    "parameters": [
-      {
-        "name": "identifier",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Identifier"}
-      },
-      {
-        "name": "decision_id",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Decision Id"}
       },
       {
         "name": "is_compliant",
@@ -2440,14 +2256,7 @@
         "required": false,
         "description": "Filter by compliance state. Omit to include both compliant and non-compliant.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"boolean"},{"type":"null"}],
           "description": "Filter by compliance state. Omit to include both compliant and non-compliant.",
           "title": "Is Compliant"
         }
@@ -2458,14 +2267,7 @@
         "required": false,
         "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
         "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"integer"},{"type":"null"}],
           "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
           "title": "From Timestamp"
         }
@@ -2476,14 +2278,7 @@
         "required": false,
         "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
         "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"integer"},{"type":"null"}],
           "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
           "title": "To Timestamp"
         }
@@ -2494,14 +2289,7 @@
         "required": false,
         "description": "Cursor for the next page. Use the token from a previous response's _links.next; omit for the first page.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Cursor for the next page. Use the token from a previous response's _links.next; omit for the first page.",
           "title": "After"
         }
@@ -2512,16 +2300,7 @@
         "required": false,
         "description": "How many results to return per page of response (max 100)",
         "schema": {
-          "anyOf": [
-            {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"integer","maximum":100,"minimum":1},{"type":"null"}],
           "description": "How many results to return per page of response (max 100)",
           "default": 20,
           "title": "Per Page"
@@ -2537,9 +2316,7 @@
     "path": "/artifacts/{org}/{flow_name}/{fingerprint}/audit_package",
     "summary": "Get artifact audit package",
     "description": "Get audit package for an artifact.",
-    "tags": [
-      "Artifacts"
-    ],
+    "tags": ["Artifacts"],
     "parameters": [
       {
         "name": "flow_name",
@@ -2557,11 +2334,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{5,64}$",
-          "title": "Fingerprint"
-        }
+        "schema": {"type":"string","pattern":"^[a-f0-9]{5,64}$","title":"Fingerprint"}
       },
       {
         "name": "org",
@@ -2580,19 +2353,14 @@
     "path": "/controls/{org}/{identifier}",
     "summary": "Get a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "org",
@@ -2611,19 +2379,14 @@
     "path": "/controls/{org}/{identifier}/coverage",
     "summary": "Environment coverage for a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "org",
@@ -2665,14 +2428,7 @@
         "required": false,
         "description": "Filter environments by name (case-insensitive substring)",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter environments by name (case-insensitive substring)",
           "title": "Search"
         }
@@ -2683,14 +2439,7 @@
         "required": false,
         "description": "Filter by coverage state: true (covered) or false (not covered)",
         "schema": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"boolean"},{"type":"null"}],
           "description": "Filter by coverage state: true (covered) or false (not covered)",
           "title": "Covered"
         }
@@ -2705,39 +2454,28 @@
     "path": "/controls/{org}/{identifier}/decisions/{decision_id}",
     "summary": "Get a single decision for a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "decision_id",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Decision Id"
-        }
+        "schema": {"type":"string","title":"Decision Id"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -2749,39 +2487,28 @@
     "path": "/controls/{org}/{identifier}/versions/{version_number}",
     "summary": "Get a specific version of a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "version_number",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "integer",
-          "title": "Version Number"
-        }
+        "schema": {"type":"integer","title":"Version Number"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -2793,29 +2520,21 @@
     "path": "/custom-attestation-types/{org}/{custom_attestation_type_name}",
     "summary": "Get custom attestation type",
     "description": "Get a custom attestation type.",
-    "tags": [
-      "Custom Attestation Types"
-    ],
+    "tags": ["Custom Attestation Types"],
     "parameters": [
       {
         "name": "custom_attestation_type_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Custom Attestation Type Name"
-        }
+        "schema": {"type":"string","title":"Custom Attestation Type Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "version",
@@ -2823,14 +2542,7 @@
         "required": false,
         "description": "Version of the custom attestation type",
         "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"integer"},{"type":"null"}],
           "description": "Version of the custom attestation type",
           "title": "Version"
         }
@@ -2845,19 +2557,14 @@
     "path": "/custom-attestation-types/{org}",
     "summary": "List custom attestation types",
     "description": "List all custom attestation types for an org.",
-    "tags": [
-      "Custom Attestation Types"
-    ],
+    "tags": ["Custom Attestation Types"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -2869,9 +2576,7 @@
     "path": "/deployments/{org}/{env_name}/{fingerprint}",
     "summary": "Get Deployment",
     "description": "Get a single deployment by environment and fingerprint.",
-    "tags": [
-      "Deployments"
-    ],
+    "tags": ["Deployments"],
     "parameters": [
       {
         "name": "env_name",
@@ -2885,10 +2590,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Fingerprint"
-        }
+        "schema": {"type":"string","title":"Fingerprint"}
       },
       {
         "name": "org",
@@ -2907,29 +2609,21 @@
     "path": "/environments/{org}/{env_name}/deployment_frequency",
     "summary": "Get deployment frequency",
     "description": "Get deployment frequency for a specific flow in an environment.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "flow_id",
@@ -2952,29 +2646,21 @@
     "path": "/environments/{org}/{env_name}/auditlog",
     "summary": "Get environment audit log",
     "description": "Get audit log (as a CSV file) for an environment.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "from_timestamp",
@@ -2982,14 +2668,7 @@
         "required": false,
         "description": "From timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "From timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
           "title": "From Timestamp"
         }
@@ -3000,14 +2679,7 @@
         "required": false,
         "description": "To timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "To timestamp filter. Takes a UNIX timestamp. e.g. from_timestamp=1675167540",
           "title": "To Timestamp"
         }
@@ -3018,14 +2690,7 @@
         "required": false,
         "description": "Event types filter. Can be one of started, exited, changed. e.g. event_types=started,exited",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Event types filter. Can be one of started, exited, changed. e.g. event_types=started,exited",
           "title": "Event Types"
         }
@@ -3036,14 +2701,7 @@
         "required": false,
         "description": "Flow names filter as comma separated list. Use 'no provenance' to include artifacts without provenance.e.g. flow_names=server,web,no provenance",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Flow names filter as comma separated list. Use 'no provenance' to include artifacts without provenance.e.g. flow_names=server,web,no provenance",
           "title": "Flow Names"
         }
@@ -3054,14 +2712,7 @@
         "required": false,
         "description": "Repo names filter as comma separated list. e.g. repo_names=repo1,repo2",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Repo names filter as comma separated list. e.g. repo_names=repo1,repo2",
           "title": "Repo Names"
         }
@@ -3076,19 +2727,14 @@
     "path": "/environments/{org}/{env_name}/events",
     "summary": "List environment events",
     "description": "Get events log for an environment.\n\n**Response Headers:**\n\n* `X-Total-Count`: Total number of events available\n* `X-Per-Page`: Number of events per page\n* `X-Current-Page`: Current page number\n* `X-Total-Pages`: Total number of pages\n* `Link`: Pagination links (first, prev, next, last) when applicable\n\n**Pagination Links Format:**\n```\n<url?page=1&per_page=15>; rel=\"first\",\n<url?page=2&per_page=15>; rel=\"prev\",\n<url?page=4&per_page=15>; rel=\"next\",\n<url?page=10&per_page=15>; rel=\"last\"\n```\n\n**Note:** The Link header is only included when there are multiple pages.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
@@ -3103,14 +2749,7 @@
         "required": false,
         "description": "Deprecated, use 'start' and 'end' instead. Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW'",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Deprecated, use 'start' and 'end' instead. Expression to specify the interval of snapshots to query.\nMust be two snapshot expressions separated by '..'\nie: '5..10', or '~5..NOW'",
           "deprecated": true,
           "title": "Interval"
@@ -3161,17 +2800,7 @@
         "required": false,
         "description": "Filter events by repo name. Can be repeated for multiple repos, e.g. repo_name=repo1&repo_name=repo2",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter events by repo name. Can be repeated for multiple repos, e.g. repo_name=repo1&repo_name=repo2",
           "title": "Repo Name"
         }
@@ -3182,14 +2811,7 @@
         "required": false,
         "description": "The start of the interval as a UNIX timestamp. When provided, this takes precedence over the 'start' parameter. e.g. start_ts=1719638400",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "The start of the interval as a UNIX timestamp. When provided, this takes precedence over the 'start' parameter. e.g. start_ts=1719638400",
           "title": "Start Ts"
         }
@@ -3200,14 +2822,7 @@
         "required": false,
         "description": "The end of the interval as a UNIX timestamp. When provided, this takes precedence over the 'end' parameter. e.g. end_ts=1719638400",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "The end of the interval as a UNIX timestamp. When provided, this takes precedence over the 'end' parameter. e.g. end_ts=1719638400",
           "title": "End Ts"
         }
@@ -3246,29 +2861,21 @@
     "path": "/environments/{org}/{env_name}",
     "summary": "Get environment",
     "description": "Get an environment for an organization.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -3280,19 +2887,381 @@
     "path": "/organizations/{org}/environments_notifications/{notification_number}",
     "summary": "Get environment notification",
     "description": "Get a specific environments-notification for an org.",
-    "tags": [
-      "Organizations"
-    ],
+    "tags": ["Organizations"],
     "parameters": [
       {
         "name": "notification_number",
         "in": "path",
         "required": true,
         "description": "",
+        "schema": {"type":"integer","title":"Notification Number"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get environment notification get a specific environments-notification for an org. get organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "get_environment_notifications",
+    "method": "GET",
+    "path": "/organizations/{org}/environments_notifications",
+    "summary": "List environment notifications",
+    "description": "List environments-notifications for an org.",
+    "tags": ["Organizations"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list environment notifications list environments-notifications for an org. get organizations org environments_notifications organizations"
+  },
+  {
+    "id": "get_flow",
+    "method": "GET",
+    "path": "/flows/{org}/{flow_name}",
+    "summary": "Get flow",
+    "description": "Get a flow for an organization.",
+    "tags": ["Flows"],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Flow Name"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get flow get a flow for an organization. get flows org flow_name flows"
+  },
+  {
+    "id": "get_flow_attestations",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}",
+    "summary": "List flow attestations",
+    "description": "Get all attestations for a flow for a given time span.",
+    "tags": ["Attestation"],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Flow Name"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
         "schema": {
-          "type": "integer",
-          "title": "Notification Number"
+          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
         }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page of response",
+        "schema": {
+          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "description": "How many results to return per page of response",
+          "default": 20,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "from_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
+        "schema": {
+          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
+          "title": "From Timestamp"
+        }
+      },
+      {
+        "name": "to_timestamp",
+        "in": "query",
+        "required": false,
+        "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
+        "schema": {
+          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
+          "title": "To Timestamp"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list flow attestations get all attestations for a flow for a given time span. get attestations org flow_name attestation"
+  },
+  {
+    "id": "get_flows",
+    "method": "GET",
+    "path": "/flows/{org}",
+    "summary": "List flows",
+    "description": "List flows for an organization.",
+    "tags": ["Flows"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "search_by_name",
+        "in": "query",
+        "required": false,
+        "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+          "title": "Search By Name"
+        }
+      },
+      {
+        "name": "case_sensitive",
+        "in": "query",
+        "required": false,
+        "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
+        "schema": {
+          "type": "boolean",
+          "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
+          "default": true,
+          "title": "Case Sensitive"
+        }
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "The page number of response",
+        "schema": {
+          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "description": "The page number of response",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
+        "schema": {
+          "anyOf": [{"type":"integer","maximum":100,"minimum":1},{"type":"null"}],
+          "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list flows list flows for an organization. get flows org flows"
+  },
+  {
+    "id": "get_latest_artifact_commit",
+    "method": "GET",
+    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/latest_commit",
+    "summary": "Get latest artifact commit",
+    "description": "Get the latest git commit of the artifact.",
+    "tags": ["Artifacts"],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "fingerprint",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","pattern":"^[a-f0-9]{5,64}$","title":"Fingerprint"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "branch",
+        "in": "query",
+        "required": false,
+        "description": "The branch to get the commit from",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "The branch to get the commit from",
+          "title": "Branch"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get latest artifact commit get the latest git commit of the artifact. get artifacts org flow_name fingerprint latest_commit artifacts"
+  },
+  {
+    "id": "get_organization",
+    "method": "GET",
+    "path": "/organizations/{org}",
+    "summary": "Get organization",
+    "description": "Get a specific org.",
+    "tags": ["Organizations"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get organization get a specific org. get organizations org organizations"
+  },
+  {
+    "id": "get_policy",
+    "method": "GET",
+    "path": "/policies/{org}/{policy_name}",
+    "summary": "Get policy",
+    "description": "Get a Policy in an organization.",
+    "tags": ["Policies"],
+    "parameters": [
+      {
+        "name": "policy_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Policy Name"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get policy get a policy in an organization. get policies org policy_name policies"
+  },
+  {
+    "id": "get_repo",
+    "method": "GET",
+    "path": "/repos/{org}/{repo_name}",
+    "summary": "Get a repo",
+    "description": "Get a repo by name, or unambiguously by its internal `id`.\n\nReturns the repo's details, including its internal `id`, which is required to\ntag the repo via the generic tags endpoint (PATCH /tags/{org}/repo/{id}).\n\nIf multiple repos share the same name across different VCS providers and\nneither `id` nor `provider` is given, returns a 400 listing the providers to\nchoose from.",
+    "tags": ["Repos"],
+    "parameters": [
+      {
+        "name": "repo_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Repo Name"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "provider",
+        "in": "query",
+        "required": false,
+        "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+        "schema": {
+          "anyOf": [
+            {
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "bitbucket_cloud",
+                "bitbucket_dc",
+                "azure-devops",
+                "azure_devops_services",
+                "azure_devops_server",
+                "circleci",
+                "git",
+                "subversion"
+              ],
+              "type": "string"
+            },
+            {"type":"null"}
+          ],
+          "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+          "title": "Provider"
+        }
+      },
+      {
+        "name": "id",
+        "in": "query",
+        "required": false,
+        "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
+          "title": "Id"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get a repo get a repo by name, or unambiguously by its internal `id`.\n\nreturns the repo's details, including its internal `id`, which is required to\ntag the repo via the generic tags endpoint (patch /tags/{org}/repo/{id}).\n\nif multiple repos share the same name across different vcs providers and\nneither `id` nor `provider` is given, returns a 400 listing the providers to\nchoose from. get repos org repo_name repos"
+  },
+  {
+    "id": "get_repo_deployment_statistics",
+    "method": "GET",
+    "path": "/repos/{org}/{repo}/deployment-statistics",
+    "summary": "Deployment frequency and lead-time statistics for a repo",
+    "description": "Per-environment deployment-frequency and lead-time series for a repo,\nidentified by its internal `id` (the `{repo}` path segment).\n\nReturns one entry per non-logical environment the repo has been deployed to\n(respecting the env filter), each with its raw `deployed_at` and\n`lead_time_seconds` series plus the shared window bounds. Daily bucketing,\nmedian and percentiles are computed client-side.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
+    "tags": ["Repos"],
+    "parameters": [
+      {
+        "name": "repo",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Repo"}
       },
       {
         "name": "org",
@@ -3313,19 +3282,29 @@
           "default": [],
           "title": "Env"
         }
+      },
+      {
+        "name": "start_ts",
+        "in": "query",
+        "required": false,
+        "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
+        "schema": {
+          "anyOf": [{"type":"number"},{"type":"null"}],
+          "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
+          "title": "Start Ts"
+        }
+      },
+      {
+        "name": "end_ts",
+        "in": "query",
+        "required": false,
+        "description": "Include deployments at or before this timestamp. Defaults to now",
+        "schema": {
+          "anyOf": [{"type":"number"},{"type":"null"}],
+          "description": "Include deployments at or before this timestamp. Defaults to now",
+          "title": "End Ts"
+        }
       }
-    ],
-    "requestBody": null,
-    "searchText": "get environment notification get a specific environments-notification for an org. get organizations org environments_notifications notification_number organizations"
-  },
-  {
-    "id": "get_environment_notifications",
-    "method": "GET",
-    "path": "/organizations/{org}/environments_notifications",
-    "summary": "List environment notifications",
-    "description": "List environments-notifications for an org.",
-    "tags": [
-      "Organizations"
     ],
     "requestBody": null,
     "searchText": "deployment frequency and lead-time statistics for a repo per-environment deployment-frequency and lead-time series for a repo,\nidentified by its internal `id` (the `{repo}` path segment).\n\nreturns one entry per non-logical environment the repo has been deployed to\n(respecting the env filter), each with its raw `deployed_at` and\n`lead_time_seconds` series plus the shared window bounds. daily bucketing,\nmedian and percentiles are computed client-side.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get repos org repo deployment-statistics repos"
@@ -3338,6 +3317,79 @@
     "description": "Get the live status of artifacts from a repository across all environments.\n\nReturns a `RepoLiveStatusResponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit SHA, and start timestamp.\n\nRepo names are not unique within an org, so pass `id` to resolve an exact repo.\nOtherwise, if multiple repos share the same name across different VCS providers, use the\n`provider` parameter to disambiguate; without either, the most recently created match is used.",
     "tags": ["Repos"],
     "parameters": [
+      {
+        "name": "repo_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Repo Name"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "provider",
+        "in": "query",
+        "required": false,
+        "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+        "schema": {
+          "anyOf": [
+            {
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "bitbucket_cloud",
+                "bitbucket_dc",
+                "azure-devops",
+                "azure_devops_services",
+                "azure_devops_server",
+                "circleci",
+                "git",
+                "subversion"
+              ],
+              "type": "string"
+            },
+            {"type":"null"}
+          ],
+          "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
+          "title": "Provider"
+        }
+      },
+      {
+        "name": "id",
+        "in": "query",
+        "required": false,
+        "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
+          "title": "Id"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get live artifacts for a repo get the live status of artifacts from a repository across all environments.\n\nreturns a `repolivestatusresponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit sha, and start timestamp.\n\nrepo names are not unique within an org, so pass `id` to resolve an exact repo.\notherwise, if multiple repos share the same name across different vcs providers, use the\n`provider` parameter to disambiguate; without either, the most recently created match is used. get repos org live-artifacts repo_name repos"
+  },
+  {
+    "id": "get_search",
+    "method": "GET",
+    "path": "/search/{org}/sha/{search_value}",
+    "summary": "Search artifacts by SHA or fingerprint",
+    "description": "Get artifacts that match fingerprint or commit-sha.",
+    "tags": ["Search"],
+    "parameters": [
+      {
+        "name": "search_value",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Search Value"}
+      },
       {
         "name": "org",
         "in": "path",
@@ -3445,744 +3497,6 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list environment notifications list environments-notifications for an org. get organizations org environments_notifications organizations"
-  },
-  {
-    "id": "get_flow",
-    "method": "GET",
-    "path": "/flows/{org}/{flow_name}",
-    "summary": "Get flow",
-    "description": "Get a flow for an organization.",
-    "tags": [
-      "Flows"
-    ],
-    "parameters": [
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get flow get a flow for an organization. get flows org flow_name flows"
-  },
-  {
-    "id": "get_flow_attestations",
-    "method": "GET",
-    "path": "/attestations/{org}/{flow_name}",
-    "summary": "List flow attestations",
-    "description": "Get all attestations for a flow for a given time span.",
-    "tags": [
-      "Attestation"
-    ],
-    "parameters": [
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "The page number of response",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The page number of response",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "How many results to return per page of response",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "How many results to return per page of response",
-          "default": 20,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "from_timestamp",
-        "in": "query",
-        "required": false,
-        "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
-          "title": "From Timestamp"
-        }
-      },
-      {
-        "name": "to_timestamp",
-        "in": "query",
-        "required": false,
-        "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
-          "title": "To Timestamp"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list flow attestations get all attestations for a flow for a given time span. get attestations org flow_name attestation"
-  },
-  {
-    "id": "get_flows",
-    "method": "GET",
-    "path": "/flows/{org}",
-    "summary": "List flows",
-    "description": "List flows for an organization.",
-    "tags": [
-      "Flows"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "search_by_name",
-        "in": "query",
-        "required": false,
-        "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
-          "title": "Search By Name"
-        }
-      },
-      {
-        "name": "case_sensitive",
-        "in": "query",
-        "required": false,
-        "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
-        "schema": {
-          "type": "boolean",
-          "description": "Whether the search_by_name filter is case sensitive. Defaults to true.",
-          "default": true,
-          "title": "Case Sensitive"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "The page number of response",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer",
-              "minimum": 1
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The page number of response",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
-          "title": "Per Page"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list flows list flows for an organization. get flows org flows"
-  },
-  {
-    "id": "get_latest_artifact_commit",
-    "method": "GET",
-    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/latest_commit",
-    "summary": "Get latest artifact commit",
-    "description": "Get the latest git commit of the artifact.",
-    "tags": [
-      "Artifacts"
-    ],
-    "parameters": [
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
-          "title": "Flow Name"
-        }
-      },
-      {
-        "name": "fingerprint",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{5,64}$",
-          "title": "Fingerprint"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "branch",
-        "in": "query",
-        "required": false,
-        "description": "The branch to get the commit from",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The branch to get the commit from",
-          "title": "Branch"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get latest artifact commit get the latest git commit of the artifact. get artifacts org flow_name fingerprint latest_commit artifacts"
-  },
-  {
-    "id": "get_organization",
-    "method": "GET",
-    "path": "/organizations/{org}",
-    "summary": "Get organization",
-    "description": "Get a specific org.",
-    "tags": [
-      "Organizations"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get organization get a specific org. get organizations org organizations"
-  },
-  {
-    "id": "get_policy",
-    "method": "GET",
-    "path": "/policies/{org}/{policy_name}",
-    "summary": "Get policy",
-    "description": "Get a Policy in an organization.",
-    "tags": [
-      "Policies"
-    ],
-    "parameters": [
-      {
-        "name": "policy_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Policy Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get policy get a policy in an organization. get policies org policy_name policies"
-  },
-  {
-    "id": "get_repo",
-    "method": "GET",
-    "path": "/repos/{org}/{repo_name}",
-    "summary": "Get a repo",
-    "description": "Get a repo by name, or unambiguously by its internal `id`.\n\nReturns the repo's details, including its internal `id`, which is required to\ntag the repo via the generic tags endpoint (PATCH /tags/{org}/repo/{id}).\n\nIf multiple repos share the same name across different VCS providers and\nneither `id` nor `provider` is given, returns a 400 listing the providers to\nchoose from.",
-    "tags": [
-      "Repos"
-    ],
-    "parameters": [
-      {
-        "name": "repo_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Repo Name"
-        }
-      },
-      {
-        "name": "fingerprint",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "provider",
-        "in": "query",
-        "required": false,
-        "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
-        "schema": {
-          "anyOf": [
-            {
-              "enum": [
-                "github",
-                "gitlab",
-                "bitbucket",
-                "azure-devops",
-                "circleci"
-              ],
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
-          "title": "Provider"
-        }
-      },
-      {
-        "name": "id",
-        "in": "query",
-        "required": false,
-        "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
-          "title": "Id"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get a repo get a repo by name, or unambiguously by its internal `id`.\n\nreturns the repo's details, including its internal `id`, which is required to\ntag the repo via the generic tags endpoint (patch /tags/{org}/repo/{id}).\n\nif multiple repos share the same name across different vcs providers and\nneither `id` nor `provider` is given, returns a 400 listing the providers to\nchoose from. get repos org repo_name repos"
-  },
-  {
-    "id": "get_repo_deployment_statistics",
-    "method": "GET",
-    "path": "/repos/{org}/{repo}/deployment-statistics",
-    "summary": "Deployment frequency and lead-time statistics for a repo",
-    "description": "Per-environment deployment-frequency and lead-time series for a repo,\nidentified by its internal `id` (the `{repo}` path segment).\n\nReturns one entry per non-logical environment the repo has been deployed to\n(respecting the env filter), each with its raw `deployed_at` and\n`lead_time_seconds` series plus the shared window bounds. Daily bucketing,\nmedian and percentiles are computed client-side.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
-    "tags": [
-      "Repos"
-    ],
-    "parameters": [
-      {
-        "name": "repo",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Repo"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "env",
-        "in": "query",
-        "required": false,
-        "description": "Filter by environment name. Repeat to select several; omit for all environments the repo has been deployed to.",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Filter by environment name. Repeat to select several; omit for all environments the repo has been deployed to.",
-          "default": [],
-          "title": "Env"
-        }
-      },
-      {
-        "name": "start_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
-          "title": "Start Ts"
-        }
-      },
-      {
-        "name": "end_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include deployments at or before this timestamp. Defaults to now",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include deployments at or before this timestamp. Defaults to now",
-          "title": "End Ts"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "deployment frequency and lead-time statistics for a repo per-environment deployment-frequency and lead-time series for a repo,\nidentified by its internal `id` (the `{repo}` path segment).\n\nreturns one entry per non-logical environment the repo has been deployed to\n(respecting the env filter), each with its raw `deployed_at` and\n`lead_time_seconds` series plus the shared window bounds. daily bucketing,\nmedian and percentiles are computed client-side.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get repos org repo deployment-statistics repos"
-  },
-  {
-    "id": "get_repo_live_artifacts",
-    "method": "GET",
-    "path": "/repos/{org}/live-artifacts/{repo_name}",
-    "summary": "Get live artifacts for a repo",
-    "description": "Get the live status of artifacts from a repository across all environments.\n\nReturns a `RepoLiveStatusResponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit SHA, and start timestamp.\n\nRepo names are not unique within an org, so pass `id` to resolve an exact repo.\nOtherwise, if multiple repos share the same name across different VCS providers, use the\n`provider` parameter to disambiguate; without either, the most recently created match is used.",
-    "tags": [
-      "Repos"
-    ],
-    "parameters": [
-      {
-        "name": "repo_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Repo Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "provider",
-        "in": "query",
-        "required": false,
-        "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
-        "schema": {
-          "anyOf": [
-            {
-              "enum": [
-                "github",
-                "gitlab",
-                "bitbucket",
-                "azure-devops",
-                "circleci"
-              ],
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "VCS provider (e.g. github, gitlab, bitbucket, azure-devops, circleci). Required when multiple repos share the same name across providers.",
-          "title": "Provider"
-        }
-      },
-      {
-        "name": "id",
-        "in": "query",
-        "required": false,
-        "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "The repo's internal id (returned as `id` in the repo response). If given, this unambiguously identifies the repo and 'provider' is ignored.",
-          "title": "Id"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get live artifacts for a repo get the live status of artifacts from a repository across all environments.\n\nreturns a `repolivestatusresponse` object that includes:\n- `_embedded.environments`: environments that currently have running artifacts from this repo\n- `_embedded.artifacts`: the corresponding artifacts for those environments\n- `live_artifacts`: a flattened view of currently running artifacts, including each artifact's\n  compliance status, fingerprint, commit sha, and start timestamp.\n\nrepo names are not unique within an org, so pass `id` to resolve an exact repo.\notherwise, if multiple repos share the same name across different vcs providers, use the\n`provider` parameter to disambiguate; without either, the most recently created match is used. get repos org live-artifacts repo_name repos"
-  },
-  {
-    "id": "get_search",
-    "method": "GET",
-    "path": "/search/{org}/sha/{search_value}",
-    "summary": "Search artifacts by SHA or fingerprint",
-    "description": "Get artifacts that match fingerprint or commit-sha.",
-    "tags": [
-      "Search"
-    ],
-    "parameters": [
-      {
-        "name": "search_value",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Search Value"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "search artifacts by sha or fingerprint get artifacts that match fingerprint or commit-sha. get search org sha search_value search"
-  },
-  {
-    "id": "get_service_account",
-    "method": "GET",
-    "path": "/service-accounts/{org}/{name}",
-    "summary": "Get a service account",
-    "description": "Get a single service account by name.",
-    "tags": [
-      "Service Accounts"
-    ],
-    "parameters": [
-      {
-        "name": "name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 64,
-          "pattern": "^[a-zA-Z0-9\\-]+$",
-          "title": "Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get a service account get a single service account by name. get service-accounts org name service accounts"
-  },
-  {
-    "id": "get_service_account_api_key",
-    "method": "GET",
-    "path": "/service-accounts/{org}/{name}/api-keys/{key_id}",
-    "summary": "Get an API key for a service account",
-    "description": "Get a single active API key for a service account.",
-    "tags": [
-      "Service Accounts"
-    ],
-    "parameters": [
-      {
-        "name": "name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Name"
-        }
-      },
-      {
-        "name": "key_id",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Key Id"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "get an api key for a service account get a single active api key for a service account. get service-accounts org name api-keys key_id service accounts"
-  },
-  {
-    "id": "get_snapshot",
-    "method": "GET",
-    "path": "/snapshots/{org}/{env_name}/{snapshot_expression}",
-    "summary": "Get snapshot",
-    "description": "Get a snapshot for an environment.\n\n`snapshot_expression` can be specified as follows:\n- `N`: the Nth snapshot, counting from 1. Negative values count from the latest snapshot i.e. -1 is the latest snapshot.\n    example: 42\n- `~N`: the Nth snapshot behind the latest, at the time of the request\n    example: ~5\n- `@{YYYY-MM-DDTHH:MM:SS}`: the snapshot at specific moment in time in UTC\n    example: @{2023-10-02T12:00:00}\n- `@{N.<hours|days|weeks|months>.ago}`: the snapshot at a time relative to the time of the request. N is a positive integer.\n    example: @{2.hours.ago}\n- `@{now}`: the snapshot at the time of the request\n    example: @{now}",
-    "tags": [
-      "Snapshots"
-    ],
-    "parameters": [
-      {
-        "name": "env_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
-      },
-      {
-        "name": "snapshot_expression",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Snapshot Expression"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": null,
     "searchText": "get snapshot get a snapshot for an environment.\n\n`snapshot_expression` can be specified as follows:\n- `n`: the nth snapshot, counting from 1. negative values count from the latest snapshot i.e. -1 is the latest snapshot.\n    example: 42\n- `~n`: the nth snapshot behind the latest, at the time of the request\n    example: ~5\n- `@{yyyy-mm-ddthh:mm:ss}`: the snapshot at specific moment in time in utc\n    example: @{2023-10-02t12:00:00}\n- `@{n.<hours|days|weeks|months>.ago}`: the snapshot at a time relative to the time of the request. n is a positive integer.\n    example: @{2.hours.ago}\n- `@{now}`: the snapshot at the time of the request\n    example: @{now} get snapshots org env_name snapshot_expression snapshots"
   },
   {
@@ -4191,39 +3505,28 @@
     "path": "/trails/{org}/{flow_name}/{trail_name}",
     "summary": "Get trail",
     "description": "Get a Trail for a Flow in an organization.",
-    "tags": [
-      "Trails"
-    ],
+    "tags": ["Trails"],
     "parameters": [
       {
         "name": "flow_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Flow Name"
-        }
+        "schema": {"type":"string","title":"Flow Name"}
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Trail Name"
-        }
+        "schema": {"type":"string","title":"Trail Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -4235,49 +3538,35 @@
     "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/{attestation_name}",
     "summary": "Get trail attestation",
     "description": "",
-    "tags": [
-      "Attestation"
-    ],
+    "tags": ["Attestation"],
     "parameters": [
       {
         "name": "flow_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Flow Name"
-        }
+        "schema": {"type":"string","title":"Flow Name"}
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Trail Name"
-        }
+        "schema": {"type":"string","title":"Trail Name"}
       },
       {
         "name": "attestation_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Attestation Name"
-        }
+        "schema": {"type":"string","title":"Attestation Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -4289,9 +3578,7 @@
     "path": "/user/default-org",
     "summary": "Get default organization",
     "description": "Get the default org for the current user.",
-    "tags": [
-      "User"
-    ],
+    "tags": ["User"],
     "parameters": [],
     "requestBody": null,
     "searchText": "get default organization get the default org for the current user. get user default-org user"
@@ -4302,29 +3589,21 @@
     "path": "/environments/{org}/{env_name}/join",
     "summary": "Add environment to logical environment",
     "description": "Join the given physical environment to this Logical environment",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": [
@@ -4333,7 +3612,17 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "$ref": "#/components/schemas/JoinPhysicalToLogicalPutInput"
+          "properties": {
+            "physical_env_name": {
+              "type": "string",
+              "title": "Physical Env Name",
+              "description": "Physical environment name"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["physical_env_name"],
+          "title": "JoinPhysicalToLogicalPutInput"
         }
       }
     ],
@@ -4345,29 +3634,21 @@
     "path": "/environments/{org}/{env_name}/report/K8S",
     "summary": "Report K8S environment",
     "description": "Process a report for a K8S environment.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": [
@@ -4376,7 +3657,110 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "$ref": "#/components/schemas/K8SReport"
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "K8S",
+              "title": "Type",
+              "description": "Environment type",
+              "default": "K8S"
+            },
+            "artifacts": {
+              "items": {
+                "properties": {
+                  "podName": {"type":"string","title":"Podname","description":"Name of pod"},
+                  "namespace": {
+                    "type": "string",
+                    "title": "Namespace",
+                    "description": "Namespace of cluster"
+                  },
+                  "digests": {
+                    "additionalProperties": {"type":"string","pattern":"^[a-f0-9]{64}$"},
+                    "type": "object",
+                    "title": "Digests",
+                    "description": "Image name to sha256 fingerprint mapping"
+                  },
+                  "creationTimestamp": {
+                    "type": "integer",
+                    "title": "Creationtimestamp",
+                    "description": "Creation time stamp for the pod in UTC"
+                  },
+                  "owners": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "properties": {
+                            "apiVersion": {
+                              "type": "string",
+                              "title": "Apiversion",
+                              "description": "API version of the owner"
+                            },
+                            "kind": {
+                              "type": "string",
+                              "title": "Kind",
+                              "description": "Kind of the owner"
+                            },
+                            "name": {
+                              "type": "string",
+                              "title": "Name",
+                              "description": "Name of the owner"
+                            },
+                            "uid": {"type":"string","title":"Uid","description":"UID of the owner"},
+                            "controller": {
+                              "anyOf": [{"type":"boolean"},{"type":"null"}],
+                              "title": "Controller",
+                              "description": "Whether the owner is a controller"
+                            },
+                            "blockOwnerDeletion": {
+                              "anyOf": [{"type":"boolean"},{"type":"null"}],
+                              "title": "Blockownerdeletion",
+                              "description": "Whether to block owner deletion"
+                            }
+                          },
+                          "additionalProperties": true,
+                          "type": "object",
+                          "required": ["apiVersion","kind","name","uid"],
+                          "title": "K8SOwner",
+                          "description": "Owner reference for a K8S pod"
+                        },
+                        "type": "array"
+                      },
+                      {"type":"null"}
+                    ],
+                    "title": "Owners",
+                    "description": "Owner references for the pod"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": ["podName","namespace","digests","creationTimestamp"],
+                "title": "K8SArtifact",
+                "description": "Individual artifact (pod) in a K8S report"
+              },
+              "type": "array",
+              "title": "Artifacts",
+              "description": "all artifacts in the report"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["artifacts"],
+          "title": "K8SReport",
+          "description": "K8S report containing pod artifacts",
+          "examples": [
+            {
+              "artifacts": [
+                {
+                  "creationTimestamp": 1632122962,
+                  "digests": {
+                    "acme/hadroncollider:1.1.1": "c84295fa0722ab01c7e6e6472fbe6369cf40b1b302cf04bb06d97c820ce621a7"
+                  },
+                  "namespace": "default",
+                  "podName": "my-pod-abc123"
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -4388,29 +3772,21 @@
     "path": "/environments/{org}/{env_name}/report/lambda",
     "summary": "Report Lambda environment",
     "description": "Process a report for a Lambda environment.",
-    "tags": [
-      "Environments"
-    ],
+    "tags": ["Environments"],
     "parameters": [
       {
         "name": "env_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
+        "schema": {"type":"string","title":"Env Name"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": [
@@ -4419,7 +3795,57 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "$ref": "#/components/schemas/LambdaReport"
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "lambda",
+              "title": "Type",
+              "description": "Environment type",
+              "default": "lambda"
+            },
+            "artifacts": {
+              "items": {
+                "properties": {
+                  "digests": {
+                    "additionalProperties": {"type":"string","pattern":"^[a-f0-9]{64}$"},
+                    "type": "object",
+                    "title": "Digests",
+                    "description": "Function name to sha256 fingerprint mapping"
+                  },
+                  "creationTimestamp": {
+                    "type": "integer",
+                    "title": "Creationtimestamp",
+                    "description": "Creation time stamp for the function in UTC"
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": ["digests","creationTimestamp"],
+                "title": "LambdaArtifact",
+                "description": "Individual artifact in a Lambda report"
+              },
+              "type": "array",
+              "title": "Artifacts",
+              "description": "all artifacts in the report"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["artifacts"],
+          "title": "LambdaReport",
+          "description": "Lambda report containing artifacts",
+          "examples": [
+            {
+              "artifacts": [
+                {
+                  "creationTimestamp": 1632122962,
+                  "digests": {
+                    "my-lambda-function": "c84295fa0722ab01c7e6e6472fbe6369cf40b1b302cf04bb06d97c820ce621a7"
+                  }
+                }
+              ]
+            }
+          ]
         }
       }
     ],
@@ -4431,19 +3857,14 @@
     "path": "/actions/{org}",
     "summary": "List actions",
     "description": "List actions for an org.",
-    "tags": [
-      "Actions"
-    ],
+    "tags": ["Actions"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -4455,19 +3876,14 @@
     "path": "/allowlists/{org}",
     "summary": "List allowlist",
     "description": "List Allowlist records in an organization.",
-    "tags": [
-      "Allowlists"
-    ],
+    "tags": ["Allowlists"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -4479,9 +3895,7 @@
     "path": "/artifacts/{org}/{flow_name}/{fingerprint}/approvals",
     "summary": "List artifact approvals",
     "description": "List approvals for an artifact.",
-    "tags": [
-      "Artifacts"
-    ],
+    "tags": ["Artifacts"],
     "parameters": [
       {
         "name": "flow_name",
@@ -4499,21 +3913,14 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{5,64}$",
-          "title": "Fingerprint"
-        }
+        "schema": {"type":"string","pattern":"^[a-f0-9]{5,64}$","title":"Fingerprint"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -4525,19 +3932,14 @@
     "path": "/artifacts/{org}",
     "summary": "List artifacts",
     "description": "List artifacts in organization. Can be filtered by flow name or repo name.\n\n- The result is paginated.\n- The list of artifacts is sorted by creation time in descending order.",
-    "tags": [
-      "Artifacts"
-    ],
+    "tags": ["Artifacts"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "flow_name",
@@ -4545,15 +3947,7 @@
         "required": false,
         "description": "The name of the flow to list artifacts from",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"},{"type":"null"}],
           "description": "The name of the flow to list artifacts from",
           "title": "Flow Name"
         }
@@ -4564,14 +3958,7 @@
         "required": false,
         "description": "The name of the repo to list artifacts from",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "The name of the repo to list artifacts from",
           "title": "Repo Name"
         }
@@ -4610,19 +3997,14 @@
     "path": "/attestations/{org}/list_attestations_for_criteria",
     "summary": "List attestations for criteria",
     "description": "List attestations matching a search criteria within an organization.\n\nThis endpoint returns a dictionary mapping commit SHAs to lists of attestations.\nEach attestation contains metadata about compliance, timing, and type-specific data.\n\n`commit_list` is required; it scopes the search to a specific set of commits.\n`attestation_type`, `attestation_name`, and `flow_name` further narrow results\nwithin that commit set but cannot be used on their own.\n\n## Usage Examples\n\n### Get all attestations for a list of commits\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6\n```\n\n### Narrow by flow and attestation type\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&flow_name=production-flow&attestation_type=snyk\n```\n\n### Narrow by attestation name\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_name=manual-test\n```\n\n### Narrow by custom attestation type\n```\nGET /attestations/my-org/list_attestations_for_criteria?commit_list=ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6&attestation_type=custom:security-scan\n```",
-    "tags": [
-      "Attestation"
-    ],
+    "tags": ["Attestation"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "flow_name",
@@ -4630,14 +4012,7 @@
         "required": false,
         "description": "The flow name to search for attestations in",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "The flow name to search for attestations in",
           "title": "Flow Name"
         }
@@ -4649,16 +4024,8 @@
         "description": "The commit list that the attestations are associated with",
         "schema": {
           "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "pattern": "^[a-f0-9]{40}$"
-              }
-            },
-            {
-              "type": "null"
-            }
+            {"type":"array","items":{"type":"string","pattern":"^[a-f0-9]{40}$"}},
+            {"type":"null"}
           ],
           "description": "The commit list that the attestations are associated with",
           "title": "Commit List"
@@ -4670,14 +4037,7 @@
         "required": false,
         "description": "The attestation name to search for",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "The attestation name to search for",
           "title": "Attestation Name"
         }
@@ -4688,14 +4048,7 @@
         "required": false,
         "description": "The attestation ID to search for. Not yet supported on this endpoint — currently ignored.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "The attestation ID to search for. Not yet supported on this endpoint — currently ignored.",
           "title": "Attestation Id"
         }
@@ -4706,14 +4059,7 @@
         "required": false,
         "description": "The attestation type to search for. Use built-in types (e.g., 'junit') or 'custom:<name>' for custom types.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "The attestation type to search for. Use built-in types (e.g., 'junit') or 'custom:<name>' for custom types.",
           "title": "Attestation Type"
         }
@@ -4727,20 +4073,15 @@
     "method": "GET",
     "path": "/membership-audit-log/{org}",
     "summary": "List membership/role change history for an org",
-    "description": "**Beta** — the Audit log feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Audit Log"
-    ],
+    "description": "",
+    "tags": ["Audit Log"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       },
       {
         "name": "page",
@@ -4775,14 +4116,7 @@
         "required": false,
         "description": "Filter by affected user or actor (name substring)",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by affected user or actor (name substring)",
           "title": "Search"
         }
@@ -4794,12 +4128,8 @@
         "description": "Filter by event type: added, changed, or removed",
         "schema": {
           "anyOf": [
-            {
-              "$ref": "#/components/schemas/AuditEventType"
-            },
-            {
-              "type": "null"
-            }
+            {"type":"string","enum":["added","changed","removed"],"title":"AuditEventType"},
+            {"type":"null"}
           ],
           "description": "Filter by event type: added, changed, or removed",
           "title": "Event Type"
@@ -4811,17 +4141,7 @@
         "required": false,
         "description": "Filter by new role. Can be repeated.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter by new role. Can be repeated.",
           "title": "Role"
         }
@@ -4832,17 +4152,7 @@
         "required": false,
         "description": "Filter by source (app/scim/invitation/script). Repeatable.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter by source (app/scim/invitation/script). Repeatable.",
           "title": "Source"
         }
@@ -4853,14 +4163,7 @@
         "required": false,
         "description": "Only events at or after this unix timestamp",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "Only events at or after this unix timestamp",
           "title": "From Timestamp"
         }
@@ -4871,14 +4174,7 @@
         "required": false,
         "description": "Only events at or before this unix timestamp",
         "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"number"},{"type":"null"}],
           "description": "Only events at or before this unix timestamp",
           "title": "To Timestamp"
         }
@@ -4889,7 +4185,9 @@
         "required": false,
         "description": "Column to sort by",
         "schema": {
-          "$ref": "#/components/schemas/AuditSortBy",
+          "type": "string",
+          "enum": ["when","user","role","changed_by","source"],
+          "title": "AuditSortBy",
           "description": "Column to sort by",
           "default": "when"
         }
@@ -4900,501 +4198,16 @@
         "required": false,
         "description": "Sort direction",
         "schema": {
-          "$ref": "#/components/schemas/SortDir",
+          "type": "string",
+          "enum": ["asc","desc"],
+          "title": "SortDir",
           "description": "Sort direction",
           "default": "desc"
         }
       }
     ],
     "requestBody": null,
-    "searchText": "list membership/role change history for an org **beta** — the audit log feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get membership-audit-log org audit log"
-  },
-  {
-    "id": "list_builds",
-    "method": "GET",
-    "path": "/builds/{org}",
-    "summary": "List Builds",
-    "description": "List builds for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
-    "tags": [
-      "Builds"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "Number of builds per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 50,
-          "minimum": 0,
-          "description": "Number of builds per page",
-          "default": 15,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "repo_id",
-        "in": "query",
-        "required": false,
-        "description": "Filter by external VCS repo ID",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by external VCS repo ID",
-          "title": "Repo Id"
-        }
-      },
-      {
-        "name": "repo_name",
-        "in": "query",
-        "required": false,
-        "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by repo name (e.g. 'cyber-dojo/differ')",
-          "title": "Repo Name"
-        }
-      },
-      {
-        "name": "repo_inner_id",
-        "in": "query",
-        "required": false,
-        "description": "Filter by the repo's internal id (the `id` in the repo response). The stable identifier: unaffected by repo renames or a missing external VCS id.",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by the repo's internal id (the `id` in the repo response). The stable identifier: unaffected by repo renames or a missing external VCS id.",
-          "title": "Repo Inner Id"
-        }
-      },
-      {
-        "name": "start_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include builds created at or after this timestamp. Defaults to 28 days before end_ts",
-          "title": "Start Ts"
-        }
-      },
-      {
-        "name": "end_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include builds created at or before this timestamp. Defaults to now",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include builds created at or before this timestamp. Defaults to now",
-          "title": "End Ts"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list builds list builds for an organization.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get builds org builds"
-  },
-  {
-    "id": "list_control_decisions",
-    "method": "GET",
-    "path": "/controls/{org}/{identifier}/decisions",
-    "summary": "List decisions for a control",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
-    "parameters": [
-      {
-        "name": "identifier",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "Number of decisions per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 100,
-          "minimum": 1,
-          "description": "Number of decisions per page",
-          "default": 15,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "is_compliant",
-        "in": "query",
-        "required": false,
-        "description": "Filter by compliance status",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by compliance status",
-          "title": "Is Compliant"
-        }
-      },
-      {
-        "name": "from_timestamp",
-        "in": "query",
-        "required": false,
-        "description": "Filter decisions recorded at or after this Unix timestamp",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter decisions recorded at or after this Unix timestamp",
-          "title": "From Timestamp"
-        }
-      },
-      {
-        "name": "to_timestamp",
-        "in": "query",
-        "required": false,
-        "description": "Filter decisions recorded at or before this Unix timestamp",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter decisions recorded at or before this Unix timestamp",
-          "title": "To Timestamp"
-        }
-      },
-      {
-        "name": "flow_id",
-        "in": "query",
-        "required": false,
-        "description": "Filter decisions to these flows. Can be repeated, e.g. flow_id=<id1>&flow_id=<id2>",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter decisions to these flows. Can be repeated, e.g. flow_id=<id1>&flow_id=<id2>",
-          "title": "Flow Id"
-        }
-      },
-      {
-        "name": "sort_direction",
-        "in": "query",
-        "required": false,
-        "description": "Sort by decision time: desc (newest first) or asc (oldest first)",
-        "schema": {
-          "$ref": "#/components/schemas/SortDirection",
-          "description": "Sort by decision time: desc (newest first) or asc (oldest first)",
-          "default": "desc"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list decisions for a control **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get controls org identifier decisions controls"
-  },
-  {
-    "id": "list_control_tag_choices",
-    "method": "GET",
-    "path": "/controls/{org}/tags",
-    "summary": "List distinct tag key/value pairs for an org's controls",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list distinct tag key/value pairs for an org's controls **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get controls org tags controls"
-  },
-  {
-    "id": "list_control_versions",
-    "method": "GET",
-    "path": "/controls/{org}/{identifier}/versions",
-    "summary": "List versions of a control",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
-    "parameters": [
-      {
-        "name": "identifier",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "Number of versions per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 100,
-          "minimum": 1,
-          "description": "Number of versions per page",
-          "default": 15,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "sort_direction",
-        "in": "query",
-        "required": false,
-        "description": "Sort direction by version number",
-        "schema": {
-          "$ref": "#/components/schemas/SortDirection",
-          "description": "Sort direction by version number",
-          "default": "desc"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list versions of a control **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get controls org identifier versions controls"
-  },
-  {
-    "id": "list_controls",
-    "method": "GET",
-    "path": "/controls/{org}",
-    "summary": "List controls",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "Number of controls per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 100,
-          "minimum": 1,
-          "description": "Number of controls per page",
-          "default": 15,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "sort_direction",
-        "in": "query",
-        "required": false,
-        "description": "Sort direction",
-        "schema": {
-          "$ref": "#/components/schemas/SortDirection",
-          "description": "Sort direction",
-          "default": "asc"
-        }
-      },
-      {
-        "name": "search",
-        "in": "query",
-        "required": false,
-        "description": "Filter by name or identifier (case-insensitive substring match on either field)",
-        "schema": {
-          "anyOf": [
-            {"type":"string","enum":["added","changed","removed"],"title":"AuditEventType"},
-            {"type":"null"}
-          ],
-          "description": "Filter by name or identifier (case-insensitive substring match on either field)",
-          "title": "Search"
-        }
-      },
-      {
-        "name": "tag",
-        "in": "query",
-        "required": false,
-        "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=framework or tag=framework:finos-sdlc",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=framework or tag=framework:finos-sdlc",
-          "title": "Tag"
-        }
-      },
-      {
-        "name": "archived",
-        "in": "query",
-        "required": false,
-        "description": "Return archived controls when true",
-        "schema": {
-          "type": "boolean",
-          "description": "Return archived controls when true",
-          "default": false,
-          "title": "Archived"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list controls **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get controls org controls"
+    "searchText": "list membership/role change history for an org  get membership-audit-log org audit log"
   },
   {
     "id": "list_builds",
@@ -6082,104 +4895,7 @@
     "searchText": "list environments list environments of an organization. get environments org environments"
   },
   {
-    "id": "list_env_deployments",
-    "method": "GET",
-    "path": "/environments/{org}/{env_name}/deployments",
-    "summary": "List deployments for an environment",
-    "description": "List deployments for a single environment within a time range, newest first.",
-    "tags": [
-      "Environments"
-    ],
-    "parameters": [
-      {
-        "name": "env_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Env Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "from",
-        "in": "query",
-        "required": false,
-        "description": "Start of time range, ISO-8601 (Default: 30 days ago)",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Start of time range, ISO-8601 (Default: 30 days ago)",
-          "title": "From"
-        }
-      },
-      {
-        "name": "to",
-        "in": "query",
-        "required": false,
-        "description": "End of time range, ISO-8601 (Default: now)",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "End of time range, ISO-8601 (Default: now)",
-          "title": "To"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "page_size",
-        "in": "query",
-        "required": false,
-        "description": "Deployments per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 100,
-          "minimum": 1,
-          "description": "Deployments per page",
-          "default": 50,
-          "title": "Page Size"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list deployments for an environment list deployments for a single environment within a time range, newest first. get environments org env_name deployments environments"
-  },
-  {
-    "id": "list_envs",
+    "id": "list_policies",
     "method": "GET",
     "path": "/policies/{org}",
     "summary": "List policies",
@@ -6301,204 +5017,70 @@
         "schema": {"type":"string","title":"Org"}
       },
       {
-        "name": "name",
+        "name": "provider",
         "in": "query",
         "required": false,
-        "description": "Filter by name (case-insensitive substring match)",
+        "description": "Scope to repos with this VCS provider.",
         "schema": {
           "anyOf": [
             {
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "bitbucket_cloud",
+                "bitbucket_dc",
+                "azure-devops",
+                "azure_devops_services",
+                "azure_devops_server",
+                "circleci",
+                "git",
+                "subversion"
+              ],
               "type": "string"
             },
-            {
-              "type": "null"
-            }
+            {"type":"null"}
           ],
-          "description": "Filter by name (case-insensitive substring match)",
-          "title": "Name"
+          "description": "Scope to repos with this VCS provider.",
+          "title": "Provider"
         }
       },
       {
-        "name": "type",
+        "name": "vcs_instance",
         "in": "query",
         "required": false,
-        "description": "Filter by environment type. Can be repeated, e.g. type=K8S&type=ECS",
+        "description": "Scope to repos with this VCS instance/host.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/EnvironmentTypeFilter"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by environment type. Can be repeated, e.g. type=K8S&type=ECS",
-          "title": "Type"
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Scope to repos with this VCS instance/host.",
+          "title": "Vcs Instance"
+        }
+      },
+      {
+        "name": "namespace",
+        "in": "query",
+        "required": false,
+        "description": "Scope to repos nested under this '/'-separated namespace prefix, e.g. platform/backend. The returned namespace_values are the distinct values one level below this prefix.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Scope to repos nested under this '/'-separated namespace prefix, e.g. platform/backend. The returned namespace_values are the distinct values one level below this prefix.",
+          "title": "Namespace"
         }
       },
       {
         "name": "tag",
         "in": "query",
         "required": false,
-        "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:platform",
+        "description": "Scope to repos matching this tag key or key:value. Can be repeated.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:platform",
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
+          "description": "Scope to repos matching this tag key or key:value. Can be repeated.",
           "title": "Tag"
         }
       }
     ],
     "requestBody": null,
-    "searchText": "list environments list environments of an organization. get environments org environments"
-  },
-  {
-    "id": "list_policies",
-    "method": "GET",
-    "path": "/policies/{org}",
-    "summary": "List policies",
-    "description": "List Policies in an organization.",
-    "tags": [
-      "Policies"
-    ],
-    "parameters": [
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list policies list policies in an organization. get policies org policies"
-  },
-  {
-    "id": "list_repo_deployments",
-    "method": "GET",
-    "path": "/repos/{org}/{repo}/deployments",
-    "summary": "List deployments for a repo",
-    "description": "List deployments for a repo, identified by its internal `id` (the `{repo}`\npath segment), newest first.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts.",
-    "tags": [
-      "Repos"
-    ],
-    "parameters": [
-      {
-        "name": "repo",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Repo"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      },
-      {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "description": "Page number",
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Page number",
-          "default": 1,
-          "title": "Page"
-        }
-      },
-      {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "description": "Number of deployments per page",
-        "schema": {
-          "type": "integer",
-          "maximum": 50,
-          "minimum": 0,
-          "description": "Number of deployments per page",
-          "default": 15,
-          "title": "Per Page"
-        }
-      },
-      {
-        "name": "env",
-        "in": "query",
-        "required": false,
-        "description": "Filter by environment name. Repeat to select several; omit for all environments the repo has been deployed to.",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Filter by environment name. Repeat to select several; omit for all environments the repo has been deployed to.",
-          "default": [],
-          "title": "Env"
-        }
-      },
-      {
-        "name": "start_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include deployments at or after this timestamp. Defaults to 28 days before end_ts",
-          "title": "Start Ts"
-        }
-      },
-      {
-        "name": "end_ts",
-        "in": "query",
-        "required": false,
-        "description": "Include deployments at or before this timestamp. Defaults to now",
-        "schema": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Include deployments at or before this timestamp. Defaults to now",
-          "title": "End Ts"
-        }
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list deployments for a repo list deployments for a repo, identified by its internal `id` (the `{repo}`\npath segment), newest first.\n\n- end_ts defaults to now.\n- start_ts defaults to 28 days before end_ts. get repos org repo deployments repos"
+    "searchText": "list repo filter options list the distinct facet values (providers, vcs instances, and namespace\nvalues) across the organization's repos, scoped by the given filters.\n\nused to populate the repos faceted filters. each facet reflects every\nfilter except its own dimension, so alternative values stay visible (e.g.\nthe returned `providers` list isn't narrowed by the `provider` filter\nitself). `namespace_values` cascades: it returns the values one level below\n`namespace`, so drilling into a namespace reveals the next level.\n\ndeclared before the \"/{org}/{repo_name}\" route so the literal\n\"filter-options\" segment is not captured as a repo name. get repos org filter-options repos"
   },
   {
     "id": "list_repo_tag_choices",
@@ -6506,9 +5088,7 @@
     "path": "/repos/{org}/tags",
     "summary": "List repo tag choices",
     "description": "List the distinct tag key/value pairs across the organization's repos.\n\nUsed to populate the repos tag filter. Declared before the \"/{org}/{repo_name}\"\nroute so the literal \"tags\" segment is not captured as a repo name.",
-    "tags": [
-      "Repos"
-    ],
+    "tags": ["Repos"],
     "parameters": [
       {
         "name": "org",
@@ -6526,10 +5106,8 @@
     "method": "GET",
     "path": "/repos/{org}",
     "summary": "List repos",
-    "description": "List repos for an organization.\n\nRepos are paginated.\n- The response includes pagination information and the list of repos.\n- The list of repos is sorted by the repo name; sort_direction selects the\n  direction (asc = A–Z, the default; desc = Z–A).\n- Optional filters: name (exact match), search (case-insensitive substring\n  match on the name), provider (VCS provider), repo_id (external repo ID),\n  and tag (key or key:value, repeatable).\n- name and search are mutually exclusive; providing both returns a 400.\n- repo_id is the stronger identifier as names of repos can change. So if repo_id is provided, name is ignored.\n\nRepos are captured when attestations include a reference to a repo.\nThis happens automatically when using Kosli CLI v2.11.35 or higher.",
-    "tags": [
-      "Repos"
-    ],
+    "description": "List repos for an organization.\n\nRepos are paginated.\n- The response includes pagination information and the list of repos.\n- The list of repos is sorted by the repo name; sort_direction selects the\n  direction (asc = A–Z, the default; desc = Z–A).\n- Optional filters: name (exact match), search (case-insensitive substring\n  match on the name), provider (VCS provider), repo_id (external repo ID),\n  vcs_instance (VCS host, exact match), namespace (namespace prefix), and\n  tag (key or key:value, repeatable).\n- name and search are mutually exclusive; providing both returns a 400.\n- repo_id is the stronger identifier as names of repos can change. So if repo_id is provided, name is ignored.\n\nRepos are captured when attestations include a reference to a repo.\nThis happens automatically when using Kosli CLI v2.11.35 or higher.",
+    "tags": ["Repos"],
     "parameters": [
       {
         "name": "org",
@@ -6571,14 +5149,7 @@
         "required": false,
         "description": "Filter by repo name (exact match). This is ignored if repo_id is provided. Returns empty list if no match. Mutually exclusive with search.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by repo name (exact match). This is ignored if repo_id is provided. Returns empty list if no match. Mutually exclusive with search.",
           "title": "Name"
         }
@@ -6589,14 +5160,7 @@
         "required": false,
         "description": "Filter by repo name (case-insensitive substring match). Mutually exclusive with name.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"string"},{"type":"null"}],
           "description": "Filter by repo name (case-insensitive substring match). Mutually exclusive with name.",
           "title": "Search"
         }
@@ -6642,12 +5206,36 @@
         }
       },
       {
+        "name": "vcs_instance",
+        "in": "query",
+        "required": false,
+        "description": "Filter by VCS instance/host (exact match), e.g. gitlab.company.com.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Filter by VCS instance/host (exact match), e.g. gitlab.company.com.",
+          "title": "Vcs Instance"
+        }
+      },
+      {
+        "name": "namespace",
+        "in": "query",
+        "required": false,
+        "description": "Filter by namespace prefix, as a '/'-separated path, e.g. platform/backend. Matches repos nested anywhere under that path.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Filter by namespace prefix, as a '/'-separated path, e.g. platform/backend. Matches repos nested anywhere under that path.",
+          "title": "Namespace"
+        }
+      },
+      {
         "name": "sort_direction",
         "in": "query",
         "required": false,
         "description": "Sort direction by repo name: asc (A–Z, default) or desc (Z–A).",
         "schema": {
-          "$ref": "#/components/schemas/SortDirection",
+          "type": "string",
+          "enum": ["asc","desc"],
+          "title": "SortDirection",
           "description": "Sort direction by repo name: asc (A–Z, default) or desc (Z–A).",
           "default": "asc"
         }
@@ -6658,24 +5246,14 @@
         "required": false,
         "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:security.",
         "schema": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
           "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:security.",
           "title": "Tag"
         }
       }
     ],
     "requestBody": null,
-    "searchText": "list repos list repos for an organization.\n\nrepos are paginated.\n- the response includes pagination information and the list of repos.\n- the list of repos is sorted by the repo name; sort_direction selects the\n  direction (asc = a–z, the default; desc = z–a).\n- optional filters: name (exact match), search (case-insensitive substring\n  match on the name), provider (vcs provider), repo_id (external repo id),\n  and tag (key or key:value, repeatable).\n- name and search are mutually exclusive; providing both returns a 400.\n- repo_id is the stronger identifier as names of repos can change. so if repo_id is provided, name is ignored.\n\nrepos are captured when attestations include a reference to a repo.\nthis happens automatically when using kosli cli v2.11.35 or higher. get repos org repos"
+    "searchText": "list repos list repos for an organization.\n\nrepos are paginated.\n- the response includes pagination information and the list of repos.\n- the list of repos is sorted by the repo name; sort_direction selects the\n  direction (asc = a–z, the default; desc = z–a).\n- optional filters: name (exact match), search (case-insensitive substring\n  match on the name), provider (vcs provider), repo_id (external repo id),\n  vcs_instance (vcs host, exact match), namespace (namespace prefix), and\n  tag (key or key:value, repeatable).\n- name and search are mutually exclusive; providing both returns a 400.\n- repo_id is the stronger identifier as names of repos can change. so if repo_id is provided, name is ignored.\n\nrepos are captured when attestations include a reference to a repo.\nthis happens automatically when using kosli cli v2.11.35 or higher. get repos org repos"
   },
   {
     "id": "list_service_account_api_keys",
@@ -6709,19 +5287,14 @@
     "path": "/service-accounts/{org}",
     "summary": "List service accounts in an organization",
     "description": "List all service accounts in the organization.",
-    "tags": [
-      "Service Accounts"
-    ],
+    "tags": ["Service Accounts"],
     "parameters": [
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -6807,9 +5380,7 @@
     "path": "/attestations/system-attestation-types",
     "summary": "List system attestation types",
     "description": "List all registered system attestation types with their per-version attestation_data schemas.",
-    "tags": [
-      "Attestation"
-    ],
+    "tags": ["Attestation"],
     "parameters": [],
     "requestBody": null,
     "searchText": "list system attestation types list all registered system attestation types with their per-version attestation_data schemas. get attestations system-attestation-types attestation"
@@ -6952,10 +5523,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Resource Id"
-        }
+        "schema": {"type":"string","title":"Resource Id"}
       },
       {
         "name": "resource_type",
@@ -7015,9 +5583,7 @@
     "path": "/controls/{org}",
     "summary": "Create a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "org",
@@ -7033,7 +5599,19 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "$ref": "#/components/schemas/ControlPostInput"
+          "properties": {
+            "identifier": {"type":"string","maxLength":256,"title":"Identifier"},
+            "name": {"type":"string","title":"Name"},
+            "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
+            "links": {
+              "anyOf": [{"additionalProperties":{"type":"string"},"type":"object"},{"type":"null"}],
+              "title": "Links"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["identifier","name"],
+          "title": "ControlPostInput"
         }
       }
     ],
@@ -9629,102 +8207,6 @@
     "searchText": "update a control **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. put controls org identifier controls"
   },
   {
-    "id": "post_system_attestation",
-    "method": "POST",
-    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/system",
-    "summary": "Attest system",
-    "description": "Add a system attestation to a trail.",
-    "tags": [
-      "Attestation"
-    ],
-    "parameters": [
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Flow Name"
-        }
-      },
-      {
-        "name": "trail_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Trail Name"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (multipart/form-data)",
-        "schema": {
-          "$ref": "#/components/schemas/Body_post_system_attestation"
-        }
-      }
-    ],
-    "searchText": "attest system add a system attestation to a trail. post attestations org flow_name trail trail_name system attestation"
-  },
-  {
-    "id": "put_control",
-    "method": "PUT",
-    "path": "/controls/{org}/{identifier}",
-    "summary": "Update a control",
-    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
-    "parameters": [
-      {
-        "name": "identifier",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
-      }
-    ],
-    "requestBody": [
-      {
-        "name": "body",
-        "required": true,
-        "description": "Request body (application/json)",
-        "schema": {
-          "$ref": "#/components/schemas/ControlPutInput"
-        }
-      }
-    ],
-    "searchText": "update a control **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. put controls org identifier controls"
-  },
-  {
     "id": "put_environment_notifications",
     "method": "PUT",
     "path": "/organizations/{org}/environments_notifications",
@@ -10277,29 +8759,21 @@
     "path": "/controls/{org}/{identifier}/unarchive",
     "summary": "Unarchive a control",
     "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
-    "tags": [
-      "Controls"
-    ],
+    "tags": ["Controls"],
     "parameters": [
       {
         "name": "identifier",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Identifier"
-        }
+        "schema": {"type":"string","title":"Identifier"}
       },
       {
         "name": "org",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {
-          "type": "string",
-          "title": "Org"
-        }
+        "schema": {"type":"string","title":"Org"}
       }
     ],
     "requestBody": null,
@@ -10515,25 +8989,10 @@
     "path": "/service-accounts/{org}/{name}",
     "summary": "Update a service account",
     "description": "Update a service account's description and/or privilege. Sending\n`description: null` clears the description; omitting the field leaves\nit unchanged.",
-    "tags": [
-      "Service Accounts"
-    ],
+    "tags": ["Service Accounts"],
     "parameters": [
       {
         "name": "name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 64,
-          "pattern": "^[a-zA-Z0-9\\-]+$",
-          "title": "Name"
-        }
-      },
-      {
-        "name": "org",
         "in": "path",
         "required": true,
         "description": "",
@@ -10559,7 +9018,21 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "$ref": "#/components/schemas/ServiceAccountPatchInput"
+          "properties": {
+            "description": {
+              "anyOf": [{"type":"string","maxLength":512},{"type":"null"}],
+              "title": "Description"
+            },
+            "privilege": {
+              "anyOf": [
+                {"type":"string","enum":["admin","member","snapshotter","reader"]},
+                {"type":"null"}
+              ],
+              "title": "Privilege"
+            }
+          },
+          "type": "object",
+          "title": "ServiceAccountPatchInput"
         }
       }
     ],
