@@ -3,13 +3,13 @@
 A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the [Kosli](https://kosli.com) API to LLM clients (Claude Code, Claude Desktop, etc.).
 
 > [!WARNING]
-> **This server is in beta.** Tool names, parameters, and behaviour may change between releases. Pin a version if you need stability.
+> **This server is in beta.** Tool names, parameters, and behaviour may change between releases. If you need stability, pin a version — e.g. `npx -y @kosli/mcp-server@0.4.0` instead of `npx -y @kosli/mcp-server`.
 
 Rather than hand-coding a tool per endpoint, the server ships a catalog generated from Kosli's OpenAPI spec and exposes three generic tools:
 
 - **`search_actions`** — fuzzy-search the catalog for relevant API actions by natural-language query.
 - **`execute_read_action`** — invoke any GET action by ID (read-only, auto-allowed by MCP clients).
-- **`execute_write_action`** — invoke any POST/PUT/PATCH/DELETE action by ID (requires approval in MCP clients).
+- **`execute_write_action`** — invoke any POST/PUT/PATCH/DELETE action by ID (requires approval in MCP clients — see [the caution under Usage](#usage)).
 
 This keeps the tool surface small and lets the catalog stay in sync with the Kosli API by regenerating. MCP clients use the tool annotations to auto-allow reads while gating writes behind user approval.
 
