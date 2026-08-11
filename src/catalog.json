@@ -838,7 +838,9 @@
             "description": {"type":"string","title":"Description"},
             "include_scaling": {
               "anyOf": [{"type":"boolean"},{"type":"null"}],
-              "title": "Include Scaling"
+              "title": "Include Scaling",
+              "description": "This field is deprecated and will be removed in a future version. Scaling events can be turned off but no longer turned on, so a request to enable them is ignored. A new environment is always created with them off.",
+              "deprecated": true
             },
             "require_provenance": {
               "anyOf": [{"type":"boolean"},{"type":"null"}],
@@ -3084,6 +3086,28 @@
           "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
           "title": "Per Page"
         }
+      },
+      {
+        "name": "space_id",
+        "in": "query",
+        "required": false,
+        "description": "Filter by space ID. Can be repeated for OR semantics, e.g. space_id=a&space_id=b",
+        "schema": {
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
+          "description": "Filter by space ID. Can be repeated for OR semantics, e.g. space_id=a&space_id=b",
+          "title": "Space Id"
+        }
+      },
+      {
+        "name": "tag",
+        "in": "query",
+        "required": false,
+        "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:platform",
+        "schema": {
+          "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
+          "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:platform",
+          "title": "Tag"
+        }
       }
     ],
     "requestBody": null,
@@ -3888,43 +3912,6 @@
     ],
     "requestBody": null,
     "searchText": "list allowlist list allowlist records in an organization. get allowlists org allowlists"
-  },
-  {
-    "id": "list_artifact_approvals",
-    "method": "GET",
-    "path": "/artifacts/{org}/{flow_name}/{fingerprint}/approvals",
-    "summary": "List artifact approvals",
-    "description": "List approvals for an artifact.",
-    "tags": ["Artifacts"],
-    "parameters": [
-      {
-        "name": "flow_name",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
-          "title": "Flow Name"
-        }
-      },
-      {
-        "name": "fingerprint",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","pattern":"^[a-f0-9]{5,64}$","title":"Fingerprint"}
-      },
-      {
-        "name": "org",
-        "in": "path",
-        "required": true,
-        "description": "",
-        "schema": {"type":"string","title":"Org"}
-      }
-    ],
-    "requestBody": null,
-    "searchText": "list artifact approvals list approvals for an artifact. get artifacts org flow_name fingerprint approvals artifacts"
   },
   {
     "id": "list_artifacts",
@@ -8812,7 +8799,9 @@
             "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
             "include_scaling": {
               "anyOf": [{"type":"boolean"},{"type":"null"}],
-              "title": "Include Scaling"
+              "title": "Include Scaling",
+              "description": "This field is deprecated and will be removed in a future version. Scaling events can be turned off but no longer turned on, so a request to enable them is ignored.",
+              "deprecated": true
             },
             "included_environments": {
               "anyOf": [{"items":{"type":"string"},"type":"array"},{"type":"null"}],
