@@ -2,11 +2,14 @@
 
 A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the [Kosli](https://kosli.com) API to LLM clients (Claude Code, Claude Desktop, etc.).
 
+> [!WARNING]
+> **This server is in beta.** Tool names, parameters, and behaviour may change between releases. If you need stability, pin a version — e.g. `npx -y @kosli/mcp-server@0.4.0` instead of `npx -y @kosli/mcp-server`.
+
 Rather than hand-coding a tool per endpoint, the server ships a catalog generated from Kosli's OpenAPI spec and exposes three generic tools:
 
 - **`search_actions`** — fuzzy-search the catalog for relevant API actions by natural-language query.
 - **`execute_read_action`** — invoke any GET action by ID (read-only, auto-allowed by MCP clients).
-- **`execute_write_action`** — invoke any POST/PUT/PATCH/DELETE action by ID (requires approval in MCP clients).
+- **`execute_write_action`** — invoke any POST/PUT/PATCH/DELETE action by ID (requires approval in MCP clients — see [the caution under Usage](#usage)).
 
 This keeps the tool surface small and lets the catalog stay in sync with the Kosli API by regenerating. MCP clients use the tool annotations to auto-allow reads while gating writes behind user approval.
 
@@ -100,6 +103,9 @@ Typical LLM flow:
 
 1. Call `search_actions` with a natural-language query (e.g. `"list environments"`) to discover action IDs and their parameter schemas.
 2. Call `execute_read_action` (for GET actions) or `execute_write_action` (for POST/PUT/PATCH/DELETE) with the chosen `actionId` and a `params` object.
+
+> [!IMPORTANT]
+> `execute_write_action` creates, modifies, and deletes real resources in your Kosli organization. MCP clients gate these calls behind an approval prompt — read the action ID and parameters before approving. An LLM may select the wrong action, or the right action with the wrong parameters, and approval is the only checkpoint before the call is made. Treat deletions and anything touching service accounts or API keys with particular care.
 
 The `org` path parameter defaults to `KOSLI_ORG` if not supplied. For `GET`/`DELETE`, non-path params become query parameters; for other methods they become the JSON body.
 

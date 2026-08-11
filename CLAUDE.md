@@ -31,6 +31,15 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Responses are serialized with `JSON.stringify(result)` (compact, no pretty-printing) to minimize token usage. Don't revert to pretty-printing.
 - All API requests include `User-Agent: kosli-mcp-server` for server-side tracking. Preserve this header.
 
+## CI & repository rules
+
+- **`main` is protected by a ruleset**: `deletion`, `non_fast_forward`, `pull_request`, `required_signatures`. Every commit must be signed, including bot-generated ones — that's why `update-catalog.yml` passes `sign-commits: true` to `peter-evans/create-pull-request` (it commits via the GitHub API, which signs as `github-actions[bot]`). An unsigned commit cannot be merged, no matter how green CI is.
+- **Actions are pinned to full commit SHAs** with a trailing `# vX.Y.Z` comment, and every job runs `step-security/harden-runner` first. Keep both when adding jobs. Dependabot (`.github/dependabot.yml`) updates the pins weekly and preserves the comment; its PR titles are prefixed `ci:`/`chore:` to satisfy Conventional Commits.
+- **Four workflows**: `ci.yml` (build + test + `.mcpb` smoke test), `release.yml` (tags `v*`), `update-catalog.yml` (weekly catalog regeneration PR), `claude-review.yaml` (automated PR review).
+- **Fork PRs get no secrets.** The repo is public, so PRs from forks run without repository secrets and with a read-only token. Guard any job needing credentials with `github.event.pull_request.head.repo.full_name == github.repository`, or it will fail on every external contribution.
+- **`claude-review.yaml`** has three jobs, each guarded against forks first, then keyed on `pull_request.user.login`: Dependabot PRs, `update-catalog` PRs (`github-actions[bot]` on branch `chore/update-catalog`; catalog diff — removals need confirming against the live spec), and everything else. Auth is OIDC federation via org-wide `ANTHROPIC_*` variables, not secrets — which is why it also works on Dependabot-triggered runs. The action validates its own workflow file and skips with `"The workflow file must exist and have identical content to the version on the repository's default branch"` when it differs — so changes to this file can't be reviewed by themselves and take effect only after merge (observed on PR #33).
+- **Security reports don't go in public issues.** `SECURITY.md` points at security@kosli.com, and the issue-template config offers private vulnerability reporting. If you find a vulnerability — in this server or in the Kosli API — surface it there, not as an issue or PR comment.
+
 ## Testing
 
 - Vitest. Tests live under `test/` mirroring `src/`.
@@ -52,6 +61,8 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Don't pull in an HTTP client library — `globalThis.fetch` is sufficient and is injectable for tests.
 - Don't throw on HTTP errors inside `KosliClient`; return the error-shape object.
 - Don't manually edit the `version` in `manifest.json` — it's replaced at build time from `package.json`.
+- Don't add a `pull_request` job that uses secrets without the fork guard above.
+- Don't hand-edit `src/catalog.json`. It's generated; regenerate instead.
 
 ## Build & run
 
