@@ -48,7 +48,11 @@ jobs:
         run: npm test
 
       - name: Publish to npm
-        run: npm publish --access public
+        # Auth is npm Trusted Publishing (OIDC) — that is what id-token: write above
+        # is for, not provenance. Dropping it breaks publishing entirely.
+        # Trusted publishing already generates provenance on a public repo; passing
+        # --provenance makes it fail loudly rather than silently skip if that changes.
+        run: npm publish --access public --provenance
 
       - name: Pack .mcpb bundle
         run: npm run pack:mcpb
