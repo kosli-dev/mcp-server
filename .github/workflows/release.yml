@@ -48,7 +48,8 @@ jobs:
         run: npm test
 
       - name: Publish to npm
-        run: npm publish --access public
+        # --provenance requires a public repo and id-token: write (granted above).
+        run: npm publish --access public --provenance
 
       - name: Pack .mcpb bundle
         run: npm run pack:mcpb
