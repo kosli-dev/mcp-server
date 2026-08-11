@@ -48,7 +48,10 @@ jobs:
         run: npm test
 
       - name: Publish to npm
-        # --provenance requires a public repo and id-token: write (granted above).
+        # Auth is npm Trusted Publishing (OIDC) — that is what id-token: write above
+        # is for, not provenance. Don't drop it; publishing would break entirely.
+        # Trusted publishing generates provenance automatically on a public repo, so
+        # --provenance is redundant; kept explicit so the intent survives an auth change.
         run: npm publish --access public --provenance
 
       - name: Pack .mcpb bundle
