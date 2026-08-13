@@ -17,7 +17,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ['22', '24']
+        # '22.12' rather than '22': the dev toolchain (Vite 8, via vitest) needs
+        # >=22.12, and a bare '22' resolves to the latest 22.x, so the bottom of
+        # the supported range would never actually be tested.
+        node-version: ['22.12', '24']
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
