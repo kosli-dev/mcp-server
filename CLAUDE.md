@@ -76,10 +76,12 @@ npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
 
 ## Releasing
 
-The version is managed in `package.json` only — `manifest.json` gets the version injected at build time by the pack script.
+The version lives in two places that must move together: `package.json` and `VERSION` in `src/version.ts`. `manifest.json` gets the version injected at build time by the pack script, so leave its placeholder alone.
+
+`src/version.ts` is a literal rather than a read of `package.json` because `rootDir: "src"` rules out importing it, and `scripts/pack-mcpb.sh` strips `package.json` from the `.mcpb` bundle. `test/version.test.ts` fails if the two drift — that guard exists because the MCP server advertised `0.1.0` all the way to release 0.5.0.
 
 To release:
-1. Bump the version in `package.json`.
+1. Bump the version in `package.json` (`npm version <x> --no-git-tag-version`, which also updates `package-lock.json`) and in `src/version.ts`.
 2. Commit (e.g. `chore: bump version to 0.3.0`).
 3. Tag: `git tag v0.3.0 && git push origin v0.3.0`.
 4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
