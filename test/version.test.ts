@@ -18,6 +18,6 @@ describe("VERSION", () => {
   });
 
   it("is a plain semver string, safe to embed in a User-Agent header", () => {
-    expect(VERSION).toMatch(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
+    expect(VERSION).toMatch(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/);
   });
 });

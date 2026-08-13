@@ -17,7 +17,7 @@ const targetPath = new URL("src/version.ts", repoRoot);
 
 const { version } = JSON.parse(readFileSync(pkgPath, "utf8"));
 
-if (typeof version !== "string" || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
+if (typeof version !== "string" || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version)) {
   console.error(`sync-version: package.json has no usable version (got ${JSON.stringify(version)})`);
   process.exit(1);
 }
