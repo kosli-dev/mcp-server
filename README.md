@@ -15,7 +15,7 @@ This keeps the tool surface small and lets the catalog stay in sync with the Kos
 
 ## Requirements
 
-- Node.js ≥ 20
+- Node.js ≥ 22
 - A Kosli API token
 
 ## Install & build

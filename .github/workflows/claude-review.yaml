@@ -79,8 +79,11 @@ jobs:
                - `vitest` — config and test APIs across `test/`.
                - `typescript` — `strict: true` must not be weakened; ESM with `NodeNext` and
                  `.js` extensions on relative imports.
-               - `@types/node` — the package declares `engines: node >= 20`. Flag type
-                 definitions that assume a newer runtime than we support.
+               - `@types/node` — must track the Node floor declared in `package.json`
+                 `engines`, not the newest release. Read that floor from the repo rather
+                 than assuming it, then flag type definitions that assume a newer runtime.
+                 Dependabot is configured to ignore majors here; a major arriving anyway
+                 means the ignore rule broke.
                - GitHub Actions — every action is pinned to a full commit SHA with a trailing
                  version comment. Confirm the bump preserved that style, and read the action's
                  release notes for breaking input or behaviour changes.

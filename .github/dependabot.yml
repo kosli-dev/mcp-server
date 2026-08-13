@@ -17,3 +17,9 @@ updates:
     commit-message:
       prefix: 'chore'
       prefix-development: 'chore'
+    ignore:
+      # @types/node must track the Node floor in engines, not the newest release —
+      # otherwise tsc stops rejecting APIs that don't exist on the minimum runtime.
+      # Raise this deliberately when the floor moves.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
