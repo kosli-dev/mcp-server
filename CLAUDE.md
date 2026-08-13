@@ -29,7 +29,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - The `org` path parameter falls back to `config.org` (from `KOSLI_ORG`). Preserve this in `KosliClient.buildUrl`.
 - Errors from the Kosli API are returned as `{ error: true, status, statusText, message }` — not thrown. Tools stringify whatever they get. Keep this contract; the LLM handles the error object.
 - Responses are serialized with `JSON.stringify(result)` (compact, no pretty-printing) to minimize token usage. Don't revert to pretty-printing.
-- All API requests include `User-Agent: kosli-mcp-server` for server-side tracking. Preserve this header.
+- All API requests include `User-Agent: kosli-mcp-server/<version>` for server-side tracking, with the version coming from `VERSION` in `src/version.ts`. Preserve the header and keep the version in it — the backend uses it to tell releases apart.
 
 ## CI & repository rules
 
@@ -64,6 +64,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Don't manually edit the `version` in `manifest.json` — it's replaced at build time from `package.json`.
 - Don't add a `pull_request` job that uses secrets without the fork guard above.
 - Don't hand-edit `src/catalog.json`. It's generated; regenerate instead.
+- Don't hand-edit `src/version.ts`. It's generated from `package.json` by `scripts/sync-version.mjs` — bump with `npm version <x> --no-git-tag-version`, or run `npm run sync-version` to repair it.
 
 ## Build & run
 
@@ -77,12 +78,26 @@ npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
 
 ## Releasing
 
-The version is managed in `package.json` only — `manifest.json` gets the version injected at build time by the pack script.
+**`package.json` is the source of truth for the version.** Everything else derives from it:
+
+- `src/version.ts` — **generated** by `scripts/sync-version.mjs`. Never edit it by hand. It exists because the shipped code can't read `package.json`: `rootDir: "src"` rules out importing it, and `scripts/pack-mcpb.sh` strips it from the `.mcpb` bundle. It supplies both the `User-Agent` and the version the MCP server advertises to clients.
+- `package-lock.json` — updated by `npm version`.
+- `manifest.json` — injected by the pack script at build time. Leave its placeholder alone.
+
+Bump with `npm version`, never by editing `package.json` directly:
+
+```bash
+npm version patch --no-git-tag-version   # or minor / major / an explicit 0.6.0
+```
+
+npm's `version` lifecycle hook runs `sync-version` and stages `src/version.ts`, so `package.json`, `package-lock.json`, and `src/version.ts` all move together in one command. `--no-git-tag-version` is required here: `main` needs a PR, so the commit and tag happen separately, after review.
+
+If a version does get edited by hand, `npm run sync-version` repairs `src/version.ts`. `test/version.test.ts` fails when the two drift — that guard exists because the MCP server advertised `0.1.0` all the way to release 0.5.0.
 
 To release:
-1. Bump the version in `package.json`.
-2. Commit (e.g. `chore: bump version to 0.3.0`).
-3. Tag: `git tag v0.3.0 && git push origin v0.3.0`.
-4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
+1. `npm version <x> --no-git-tag-version` on a branch.
+2. Commit (e.g. `chore: bump version to 0.3.0`) and open a PR — `main` is protected, so the bump can't be pushed directly.
+3. After merge, tag the merge commit on `main`: `git tag -a v0.3.0 -m "v0.3.0" && git push origin v0.3.0`. `tag.gpgSign` makes annotated tags signed.
+4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm with provenance, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
 
 Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.

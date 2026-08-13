@@ -1,4 +1,5 @@
 import type { CatalogEntry, Config } from "../types.js";
+import { VERSION } from "../version.js";
 
 export interface ErrorResponse {
   error: true;
@@ -90,7 +91,7 @@ export class KosliClient {
     const isMultipart = getRequestContentType(entry) === "multipart/form-data";
     const baseHeaders: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
-      "User-Agent": "kosli-mcp-server",
+      "User-Agent": `kosli-mcp-server/${VERSION}`,
     };
     // For multipart, let fetch set Content-Type with the generated boundary.
     if (!isMultipart) {

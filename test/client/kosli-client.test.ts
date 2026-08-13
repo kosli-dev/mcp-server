@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { VERSION } from "../../src/version.js";
 import { KosliClient } from "../../src/client/kosli-client.js";
 import type { CatalogEntry, Config } from "../../src/types.js";
 
@@ -103,7 +104,7 @@ describe("KosliClient", () => {
         method: "GET",
         headers: expect.objectContaining({
           Authorization: "Bearer test-api-key",
-          "User-Agent": "kosli-mcp-server",
+          "User-Agent": `kosli-mcp-server/${VERSION}`,
         }),
       }),
     );
@@ -214,7 +215,7 @@ describe("KosliClient", () => {
       // Auth and User-Agent still applied.
       expect(init.headers).toMatchObject({
         Authorization: "Bearer test-api-key",
-        "User-Agent": "kosli-mcp-server",
+        "User-Agent": `kosli-mcp-server/${VERSION}`,
       });
 
       const form = init.body as FormData;

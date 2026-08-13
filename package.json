@@ -18,6 +18,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate-catalog": "tsx scripts/generate-catalog.ts",
+    "sync-version": "node scripts/sync-version.mjs",
+    "version": "npm run sync-version && git add src/version.ts package.json package-lock.json",
     "pack:mcpb": "bash scripts/pack-mcpb.sh",
     "prepublishOnly": "npm run build && npm test"
   },

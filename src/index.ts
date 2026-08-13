@@ -8,13 +8,14 @@ import { executeAction } from "./tools/execute-action.js";
 import catalog from "./catalog.json" with { type: "json" };
 import hints from "./hints.json" with { type: "json" };
 import type { CatalogEntry, ActionHints } from "./types.js";
+import { VERSION } from "./version.js";
 
 const entries = catalog as CatalogEntry[];
 const config = loadConfig();
 
 const server = new McpServer({
   name: "kosli",
-  version: "0.1.0",
+  version: VERSION,
 });
 
 server.registerTool(
