@@ -76,14 +76,26 @@ npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
 
 ## Releasing
 
-The version lives in two places that must move together: `package.json` and `VERSION` in `src/version.ts`. `manifest.json` gets the version injected at build time by the pack script, so leave its placeholder alone.
+**`package.json` is the source of truth for the version.** Everything else derives from it:
 
-`src/version.ts` is a literal rather than a read of `package.json` because `rootDir: "src"` rules out importing it, and `scripts/pack-mcpb.sh` strips `package.json` from the `.mcpb` bundle. `test/version.test.ts` fails if the two drift — that guard exists because the MCP server advertised `0.1.0` all the way to release 0.5.0.
+- `src/version.ts` — **generated** by `scripts/sync-version.mjs`. Never edit it by hand. It exists because the shipped code can't read `package.json`: `rootDir: "src"` rules out importing it, and `scripts/pack-mcpb.sh` strips it from the `.mcpb` bundle. It supplies both the `User-Agent` and the version the MCP server advertises to clients.
+- `package-lock.json` — updated by `npm version`.
+- `manifest.json` — injected by the pack script at build time. Leave its placeholder alone.
+
+Bump with `npm version`, never by editing `package.json` directly:
+
+```bash
+npm version patch --no-git-tag-version   # or minor / major / an explicit 0.6.0
+```
+
+npm's `version` lifecycle hook runs `sync-version` and stages `src/version.ts`, so `package.json`, `package-lock.json`, and `src/version.ts` all move together in one command. `--no-git-tag-version` is required here: `main` needs a PR, so the commit and tag happen separately, after review.
+
+If a version does get edited by hand, `npm run sync-version` repairs `src/version.ts`. `test/version.test.ts` fails when the two drift — that guard exists because the MCP server advertised `0.1.0` all the way to release 0.5.0.
 
 To release:
-1. Bump the version in `package.json` (`npm version <x> --no-git-tag-version`, which also updates `package-lock.json`) and in `src/version.ts`.
-2. Commit (e.g. `chore: bump version to 0.3.0`).
-3. Tag: `git tag v0.3.0 && git push origin v0.3.0`.
-4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
+1. `npm version <x> --no-git-tag-version` on a branch.
+2. Commit (e.g. `chore: bump version to 0.3.0`) and open a PR — `main` is protected, so the bump can't be pushed directly.
+3. After merge, tag the merge commit on `main`: `git tag -a v0.3.0 -m "v0.3.0" && git push origin v0.3.0`. `tag.gpgSign` makes annotated tags signed.
+4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm with provenance, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
 
 Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.
