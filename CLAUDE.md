@@ -29,7 +29,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - The `org` path parameter falls back to `config.org` (from `KOSLI_ORG`). Preserve this in `KosliClient.buildUrl`.
 - Errors from the Kosli API are returned as `{ error: true, status, statusText, message }` — not thrown. Tools stringify whatever they get. Keep this contract; the LLM handles the error object.
 - Responses are serialized with `JSON.stringify(result)` (compact, no pretty-printing) to minimize token usage. Don't revert to pretty-printing.
-- All API requests include `User-Agent: kosli-mcp-server` for server-side tracking. Preserve this header.
+- All API requests include `User-Agent: kosli-mcp-server/<version>` for server-side tracking, with the version coming from `VERSION` in `src/version.ts`. Preserve the header and keep the version in it — the backend uses it to tell releases apart.
 
 ## CI & repository rules
 
@@ -63,6 +63,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Don't manually edit the `version` in `manifest.json` — it's replaced at build time from `package.json`.
 - Don't add a `pull_request` job that uses secrets without the fork guard above.
 - Don't hand-edit `src/catalog.json`. It's generated; regenerate instead.
+- Don't hand-edit `src/version.ts`. It's generated from `package.json` by `scripts/sync-version.mjs` — bump with `npm version <x> --no-git-tag-version`, or run `npm run sync-version` to repair it.
 
 ## Build & run
 
