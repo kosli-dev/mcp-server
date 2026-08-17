@@ -3045,10 +3045,10 @@
         "name": "search_by_name",
         "in": "query",
         "required": false,
-        "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+        "description": "Return flows that contain the given string in their name. Matched literally, so '-prod' finds the flows whose name ends in '-prod'.",
         "schema": {
           "anyOf": [{"type":"string"},{"type":"null"}],
-          "description": "Return flows that contain the given string in their name. Only alphanumeric characters and '-' are allowed.",
+          "description": "Return flows that contain the given string in their name. Matched literally, so '-prod' finds the flows whose name ends in '-prod'.",
           "title": "Search By Name"
         }
       },
@@ -3085,6 +3085,32 @@
           "anyOf": [{"type":"integer","maximum":100,"minimum":1},{"type":"null"}],
           "description": "How many results to return per page. When omitted, all flows are returned as a plain list (no pagination envelope).",
           "title": "Per Page"
+        }
+      },
+      {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "description": "Sort field",
+        "schema": {
+          "type": "string",
+          "enum": ["name","latest_activity"],
+          "title": "FlowSortField",
+          "description": "Sort field",
+          "default": "name"
+        }
+      },
+      {
+        "name": "sort_direction",
+        "in": "query",
+        "required": false,
+        "description": "Sort direction",
+        "schema": {
+          "type": "string",
+          "enum": ["asc","desc"],
+          "title": "SortDirection",
+          "description": "Sort direction",
+          "default": "asc"
         }
       },
       {
@@ -5900,6 +5926,26 @@
                   ],
                   "title": "Evaluator",
                   "default": {"content_type":"default"}
+                },
+                "summary": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "properties": {
+                          "name": {"type":"string","title":"Name"},
+                          "expression": {"type":"string","title":"Expression"}
+                        },
+                        "additionalProperties": false,
+                        "type": "object",
+                        "required": ["name","expression"],
+                        "title": "SummaryExpression",
+                        "description": "A named JQ expression that extracts a display value from attestation data."
+                      },
+                      "type": "array"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Summary"
                 }
               },
               "additionalProperties": false,
@@ -5910,7 +5956,8 @@
                 {
                   "description": "A person that is over 21 year",
                   "evaluator": {"content_type":"jq","rules":[".age > 21"]},
-                  "name": "person-over-21"
+                  "name": "person-over-21",
+                  "summary": [{"expression":".age","name":"Age"}]
                 }
               ],
               "description": "Custom attestation description in JSON format"
