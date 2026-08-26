@@ -602,6 +602,13 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
+          "allOf": [
+            {"anyOf":[{"required":["git_commit"]},{"required":["git_commit_info"]}]},
+            {
+              "if": {"required":["trail_name","template_reference_name"]},
+              "then": {"not":{"required":["template"]}}
+            }
+          ],
           "properties": {
             "trail_name": {
               "anyOf": [
@@ -615,7 +622,7 @@
               "title": "Template Reference Name"
             },
             "fingerprint": {"type":"string","pattern":"^[a-f0-9]{64}$","title":"Fingerprint"},
-            "filename": {"type":"string","title":"Filename"},
+            "filename": {"type":"string","minLength":1,"title":"Filename"},
             "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
             "git_commit": {
               "anyOf": [{"type":"string","pattern":"^[a-f0-9]{40}$"},{"type":"null"}],
@@ -776,7 +783,10 @@
               "title": "External Urls"
             },
             "annotations": {
-              "anyOf": [{"additionalProperties":true,"type":"object"},{"type":"null"}],
+              "anyOf": [
+                {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
+                {"type":"null"}
+              ],
               "title": "Annotations"
             },
             "user_data": {
@@ -839,7 +849,7 @@
             "include_scaling": {
               "anyOf": [{"type":"boolean"},{"type":"null"}],
               "title": "Include Scaling",
-              "description": "This field is deprecated and will be removed in a future version. Scaling events can be turned off but no longer turned on, so a request to enable them is ignored. A new environment is always created with them off.",
+              "description": "This field is deprecated and will be removed in a future version. Scaling events are no longer recorded, so this field is ignored.",
               "deprecated": true
             },
             "require_provenance": {
@@ -891,7 +901,11 @@
           "properties": {
             "data_json": {
               "properties": {
-                "name": {"type":"string","title":"Name"},
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+                  "title": "Name"
+                },
                 "description": {"type":"string","title":"Description"},
                 "visibility": {
                   "anyOf": [{"type":"string","enum":["public","private"]},{"type":"null"}],
@@ -952,7 +966,6 @@
             "targets": {
               "items": {
                 "anyOf": [
-                  {"additionalProperties":true,"type":"object"},
                   {
                     "properties": {
                       "type": {"type":"string","const":"SLACK","title":"Type","default":"SLACK"},
@@ -964,7 +977,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "context": {
                         "anyOf": [
                           {
@@ -998,7 +1011,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "payload_version": {
                         "type": "string",
                         "const": "1.0",
@@ -1032,6 +1045,33 @@
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","enum":["SLACK","EMAIL","WEBHOOK"],"title":"Type"},
+                      "config": {"additionalProperties":true,"type":"object","title":"Config"},
+                      "context": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "channel_id": {"type":"string","title":"Channel Id"},
+                              "channel_name": {"type":"string","title":"Channel Name"},
+                              "team_id": {"type":"string","title":"Team Id"}
+                            },
+                            "additionalProperties": false,
+                            "type": "object",
+                            "required": ["channel_id","channel_name","team_id"],
+                            "title": "SlackAppContext"
+                          },
+                          {"type":"null"}
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": ["type","config"],
+                    "title": "NestedConfigActionTarget",
+                    "description": "The pre-v2 target shape, with the type's own fields nested under `config`.\n\nStill sent by the Slack app and by older callers, so it stays part of the\npublished contract instead of being accepted as an untyped object."
                   }
                 ]
               },
@@ -1097,7 +1137,6 @@
             "targets": {
               "items": {
                 "anyOf": [
-                  {"additionalProperties":true,"type":"object"},
                   {
                     "properties": {
                       "type": {"type":"string","const":"SLACK","title":"Type","default":"SLACK"},
@@ -1109,7 +1148,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "context": {
                         "anyOf": [
                           {
@@ -1143,7 +1182,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "payload_version": {
                         "type": "string",
                         "const": "1.0",
@@ -1177,6 +1216,33 @@
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","enum":["SLACK","EMAIL","WEBHOOK"],"title":"Type"},
+                      "config": {"additionalProperties":true,"type":"object","title":"Config"},
+                      "context": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "channel_id": {"type":"string","title":"Channel Id"},
+                              "channel_name": {"type":"string","title":"Channel Name"},
+                              "team_id": {"type":"string","title":"Team Id"}
+                            },
+                            "additionalProperties": false,
+                            "type": "object",
+                            "required": ["channel_id","channel_name","team_id"],
+                            "title": "SlackAppContext"
+                          },
+                          {"type":"null"}
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": ["type","config"],
+                    "title": "NestedConfigActionTarget",
+                    "description": "The pre-v2 target shape, with the type's own fields nested under `config`.\n\nStill sent by the Slack app and by older callers, so it stays part of the\npublished contract instead of being accepted as an untyped object."
                   }
                 ]
               },
@@ -1335,7 +1401,7 @@
           "properties": {
             "data_json": {
               "properties": {
-                "name": {"type":"string","title":"Name"},
+                "name": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\-_.~]*$","title":"Name"},
                 "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
                 "git_commit_info": {
                   "anyOf": [
@@ -3755,7 +3821,12 @@
                               "title": "Name",
                               "description": "Name of the owner"
                             },
-                            "uid": {"type":"string","title":"Uid","description":"UID of the owner"},
+                            "uid": {
+                              "type": "string",
+                              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                              "title": "Uid",
+                              "description": "UID of the owner"
+                            },
                             "controller": {
                               "anyOf": [{"type":"boolean"},{"type":"null"}],
                               "title": "Controller",
@@ -5613,7 +5684,12 @@
         "description": "Request body (application/json)",
         "schema": {
           "properties": {
-            "identifier": {"type":"string","maxLength":256,"title":"Identifier"},
+            "identifier": {
+              "type": "string",
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z0-9\\-._~]+$",
+              "title": "Identifier"
+            },
             "name": {"type":"string","title":"Name"},
             "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
             "links": {
@@ -5668,6 +5744,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -5802,7 +5895,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -6017,6 +6110,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -6151,7 +6261,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -6247,6 +6357,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -6381,7 +6508,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -6497,6 +6624,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -6631,7 +6775,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -6661,6 +6805,7 @@
                     "title": "JUnitResult"
                   },
                   "type": "array",
+                  "minItems": 1,
                   "title": "Junit Results"
                 }
               },
@@ -6747,6 +6892,23 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
+          "allOf": [
+            {
+              "if": {
+                "properties": {"target_artifacts":{"minItems":1}},
+                "required": ["target_artifacts","artifact_fingerprint"]
+              },
+              "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+            },
+            {
+              "if": {
+                "not": {"required":["artifact_fingerprint"]},
+                "properties": {"target_artifacts":{"minItems":1}},
+                "required": ["target_artifacts"]
+              },
+              "then": {"required":["git_commit_info"]}
+            }
+          ],
           "properties": {
             "attestation_name": {
               "type": "string",
@@ -6872,7 +7034,7 @@
             },
             "annotations": {
               "anyOf": [
-                {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                 {"type":"null"}
               ],
               "title": "Annotations"
@@ -6948,6 +7110,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -7082,7 +7261,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -7101,9 +7280,9 @@
                   "title": "Git Provider"
                 },
                 "pull_requests": {
-                  "items": {
-                    "anyOf": [
-                      {
+                  "anyOf": [
+                    {
+                      "items": {
                         "properties": {
                           "url": {"type":"string","title":"Url"},
                           "state": {"type":"string","title":"State"},
@@ -7124,7 +7303,10 @@
                         "required": ["url","state","merge_commit"],
                         "title": "FoundPullRequestV1"
                       },
-                      {
+                      "type": "array"
+                    },
+                    {
+                      "items": {
                         "properties": {
                           "url": {"type":"string","title":"Url"},
                           "state": {"type":"string","title":"State"},
@@ -7231,10 +7413,10 @@
                           "commits"
                         ],
                         "title": "FoundPullRequestV2"
-                      }
-                    ]
-                  },
-                  "type": "array",
+                      },
+                      "type": "array"
+                    }
+                  ],
                   "title": "Pull Requests"
                 }
               },
@@ -7346,6 +7528,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -7480,7 +7679,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -7718,6 +7917,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -7852,7 +8068,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -8017,6 +8233,23 @@
         "schema": {
           "properties": {
             "data_json": {
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts","artifact_fingerprint"]
+                  },
+                  "then": {"properties":{"target_artifacts":{"maxItems":1}}}
+                },
+                {
+                  "if": {
+                    "not": {"required":["artifact_fingerprint"]},
+                    "properties": {"target_artifacts":{"minItems":1}},
+                    "required": ["target_artifacts"]
+                  },
+                  "then": {"required":["git_commit_info"]}
+                }
+              ],
               "properties": {
                 "attestation_name": {
                   "type": "string",
@@ -8151,7 +8384,7 @@
                 },
                 "annotations": {
                   "anyOf": [
-                    {"patternProperties":{"^[A-Za-z0-9_-]+$":{"type":"string"}},"type":"object"},
+                    {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
                     {"type":"null"}
                   ],
                   "title": "Annotations"
@@ -8272,7 +8505,6 @@
             "targets": {
               "items": {
                 "anyOf": [
-                  {"additionalProperties":true,"type":"object"},
                   {
                     "properties": {
                       "type": {"type":"string","const":"SLACK","title":"Type","default":"SLACK"},
@@ -8284,7 +8516,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "context": {
                         "anyOf": [
                           {
@@ -8318,7 +8550,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "payload_version": {
                         "type": "string",
                         "const": "1.0",
@@ -8352,6 +8584,33 @@
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","enum":["SLACK","EMAIL","WEBHOOK"],"title":"Type"},
+                      "config": {"additionalProperties":true,"type":"object","title":"Config"},
+                      "context": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "channel_id": {"type":"string","title":"Channel Id"},
+                              "channel_name": {"type":"string","title":"Channel Name"},
+                              "team_id": {"type":"string","title":"Team Id"}
+                            },
+                            "additionalProperties": false,
+                            "type": "object",
+                            "required": ["channel_id","channel_name","team_id"],
+                            "title": "SlackAppContext"
+                          },
+                          {"type":"null"}
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": ["type","config"],
+                    "title": "NestedConfigActionTarget",
+                    "description": "The pre-v2 target shape, with the type's own fields nested under `config`.\n\nStill sent by the Slack app and by older callers, so it stays part of the\npublished contract instead of being accepted as an untyped object."
                   }
                 ]
               },
@@ -8510,7 +8769,12 @@
         "description": "Request body (application/json)",
         "schema": {
           "properties": {
-            "new_name": {"type":"string","title":"New Name","description":"New environment name"}
+            "new_name": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$",
+              "title": "New Name",
+              "description": "New environment name"
+            }
           },
           "additionalProperties": false,
           "type": "object",
@@ -8550,7 +8814,13 @@
         "required": true,
         "description": "Request body (application/json)",
         "schema": {
-          "properties": {"new_name":{"type":"string","title":"New Name"}},
+          "properties": {
+            "new_name": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+              "title": "New Name"
+            }
+          },
           "type": "object",
           "required": ["new_name"],
           "title": "RenameFlow"
@@ -8847,7 +9117,7 @@
             "include_scaling": {
               "anyOf": [{"type":"boolean"},{"type":"null"}],
               "title": "Include Scaling",
-              "description": "This field is deprecated and will be removed in a future version. Scaling events can be turned off but no longer turned on, so a request to enable them is ignored.",
+              "description": "This field is deprecated and will be removed in a future version. Scaling events are no longer recorded, so this field is ignored.",
               "deprecated": true
             },
             "included_environments": {
@@ -8906,7 +9176,6 @@
             "targets": {
               "items": {
                 "anyOf": [
-                  {"additionalProperties":true,"type":"object"},
                   {
                     "properties": {
                       "type": {"type":"string","const":"SLACK","title":"Type","default":"SLACK"},
@@ -8918,7 +9187,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "context": {
                         "anyOf": [
                           {
@@ -8952,7 +9221,7 @@
                         "anyOf": [{"type":"number"},{"type":"null"}],
                         "title": "Last Failure At"
                       },
-                      "webhook": {"type":"string","title":"Webhook"},
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
                       "payload_version": {
                         "type": "string",
                         "const": "1.0",
@@ -8986,6 +9255,33 @@
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","enum":["SLACK","EMAIL","WEBHOOK"],"title":"Type"},
+                      "config": {"additionalProperties":true,"type":"object","title":"Config"},
+                      "context": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "channel_id": {"type":"string","title":"Channel Id"},
+                              "channel_name": {"type":"string","title":"Channel Name"},
+                              "team_id": {"type":"string","title":"Team Id"}
+                            },
+                            "additionalProperties": false,
+                            "type": "object",
+                            "required": ["channel_id","channel_name","team_id"],
+                            "title": "SlackAppContext"
+                          },
+                          {"type":"null"}
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": ["type","config"],
+                    "title": "NestedConfigActionTarget",
+                    "description": "The pre-v2 target shape, with the type's own fields nested under `config`.\n\nStill sent by the Slack app and by older callers, so it stays part of the\npublished contract instead of being accepted as an untyped object."
                   }
                 ]
               },
