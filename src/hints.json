@@ -1,11 +1,11 @@
 {
-  "put_policy": {
+  "create_or_update_policy": {
     "schemaUrl": "https://docs.kosli.com/schemas/policy/v1.json",
     "example": {
       "policy_file": "_schema: https://docs.kosli.com/schemas/policy/v1\nartifacts:\n  provenance:\n    required: true\n"
     }
   },
-  "create_flow_with_template": {
+  "create_or_update_flow_with_template": {
     "schemaUrl": "https://docs.kosli.com/schemas/flow-template.json",
     "example": {
       "template_file": "version: 1\ntrail:\n  attestations:\n    - name: pull-request\n      type: pull_request\n  artifacts:\n    - name: backend\n      attestations:\n        - name: unit-tests\n          type: junit\n"

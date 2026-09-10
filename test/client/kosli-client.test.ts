@@ -41,7 +41,7 @@ const getTrailEntry: CatalogEntry = {
 };
 
 const putPolicyEntry: CatalogEntry = {
-  id: "put_policy",
+  id: "create_or_update_policy",
   method: "PUT",
   path: "/policies/{org}",
   summary: "Create or update policy",
