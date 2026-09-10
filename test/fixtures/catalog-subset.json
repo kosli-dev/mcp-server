@@ -55,7 +55,7 @@
     "searchText": "get trail get trails flow_name trail_name org"
   },
   {
-    "id": "search_artifacts_by_sha",
+    "id": "search_artifacts",
     "method": "GET",
     "path": "/search/{org}/sha/{search_value}",
     "summary": "Search artifacts by SHA or fingerprint",
@@ -83,7 +83,7 @@
     "searchText": "list snapshots get snapshots env_name org"
   },
   {
-    "id": "post_control",
+    "id": "create_control",
     "method": "POST",
     "path": "/controls/{org}",
     "summary": "Create a control",
@@ -112,7 +112,7 @@
     "searchText": "create a control post controls org controls"
   },
   {
-    "id": "put_policy",
+    "id": "create_or_update_policy",
     "method": "PUT",
     "path": "/policies/{org}",
     "summary": "Create or update policy",
