@@ -48,13 +48,13 @@ describe("searchActions", () => {
   it("matches on description keywords", () => {
     const results = searchActions(entries, "fingerprint");
 
-    expect(results.some((r) => r.id === "search_artifacts_by_sha")).toBe(true);
+    expect(results.some((r) => r.id === "search_artifacts")).toBe(true);
   });
 
   it("includes hints when a matching hint exists", () => {
     const results = searchActions(entries, "policy", 10, hints as ActionHints);
 
-    const policy = results.find((r) => r.id === "put_policy");
+    const policy = results.find((r) => r.id === "create_or_update_policy");
     expect(policy).toBeDefined();
     expect(policy!.hints).toEqual({
       schemaUrl: "https://docs.kosli.com/schemas/policy/v1.json",

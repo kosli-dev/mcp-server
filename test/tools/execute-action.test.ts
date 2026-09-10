@@ -91,11 +91,11 @@ describe("executeAction", () => {
   it("rejects write action in GET mode", async () => {
     const mockFetch = vi.fn();
 
-    const result = await executeAction(entries, config, "put_policy", {}, undefined, mockFetch, "GET");
+    const result = await executeAction(entries, config, "create_or_update_policy", {}, undefined, mockFetch, "GET");
 
     expect(result).toEqual({
       error: true,
-      message: 'Action "put_policy" is a PUT operation. Use execute_write_action instead.',
+      message: 'Action "create_or_update_policy" is a PUT operation. Use execute_write_action instead.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -132,7 +132,7 @@ describe("executeAction", () => {
       json: () => Promise.resolve({ policy: "created" }),
     });
 
-    const result = await executeAction(entries, config, "put_policy", {}, undefined, mockFetch, "WRITE");
+    const result = await executeAction(entries, config, "create_or_update_policy", {}, undefined, mockFetch, "WRITE");
 
     expect(result).toEqual({ policy: "created" });
     expect(mockFetch).toHaveBeenCalledOnce();
@@ -213,7 +213,7 @@ describe("request body unwrapping", () => {
   it("unwraps params nested under a body key for JSON write actions", async () => {
     const mockFetch = mockFetchOk();
 
-    await executeAction(entries, config, "post_control", { body: jsonBody }, undefined, mockFetch, "WRITE");
+    await executeAction(entries, config, "create_control", { body: jsonBody }, undefined, mockFetch, "WRITE");
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/controls/test-org"),
@@ -224,7 +224,7 @@ describe("request body unwrapping", () => {
   it("still accepts body fields spread at the top level", async () => {
     const mockFetch = mockFetchOk();
 
-    await executeAction(entries, config, "post_control", { ...jsonBody }, undefined, mockFetch, "WRITE");
+    await executeAction(entries, config, "create_control", { ...jsonBody }, undefined, mockFetch, "WRITE");
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/controls/test-org"),
@@ -235,7 +235,7 @@ describe("request body unwrapping", () => {
   it("unwraps when path params accompany the body key", async () => {
     const mockFetch = mockFetchOk();
 
-    await executeAction(entries, config, "post_control", { org: "other-org", body: jsonBody }, undefined, mockFetch, "WRITE");
+    await executeAction(entries, config, "create_control", { org: "other-org", body: jsonBody }, undefined, mockFetch, "WRITE");
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/controls/other-org"),
@@ -246,7 +246,7 @@ describe("request body unwrapping", () => {
   it("does not unwrap when an undeclared sibling key is present", async () => {
     const mockFetch = mockFetchOk();
 
-    await executeAction(entries, config, "post_control", { body: jsonBody, extra: 1 }, undefined, mockFetch, "WRITE");
+    await executeAction(entries, config, "create_control", { body: jsonBody, extra: 1 }, undefined, mockFetch, "WRITE");
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.anything(),
@@ -284,7 +284,7 @@ describe("request body unwrapping", () => {
   it("leaves non-object body values alone", async () => {
     const mockFetch = mockFetchOk();
 
-    await executeAction(entries, config, "post_control", { body: "not-an-object" }, undefined, mockFetch, "WRITE");
+    await executeAction(entries, config, "create_control", { body: "not-an-object" }, undefined, mockFetch, "WRITE");
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.anything(),

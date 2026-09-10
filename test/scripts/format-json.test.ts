@@ -32,7 +32,7 @@ describe("formatJsonCompact", () => {
 
   it("round-trips: output parses back to the input", () => {
     const value = {
-      id: "post_control",
+      id: "create_control",
       tags: ["Controls"],
       parameters: [
         { name: "org", in: "path", required: true, description: "d".repeat(150) },
