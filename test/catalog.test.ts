@@ -44,4 +44,121 @@ describe("catalog.json", () => {
 
     expect(offenders).toEqual([]);
   });
+
+  // executeAction reads an `org` inside a write's request body as the target
+  // org: unwrapBodyParam flattens the body over the top level, so the value
+  // moves into the path segment and leaves the payload. A body field genuinely
+  // called "org" and meaning something else would be hijacked that way.
+  it("never declares org as a request body property", () => {
+    const offenders = catalog
+      .filter((entry) => entry.requestBody?.some((body) => bodyFields(body.schema).includes("org")))
+      .map((entry) => entry.id);
+
+    expect(offenders).toEqual([]);
+  });
+});
+
+// The field names a request body contributes at its top level, which are the
+// ones unwrapBodyParam can turn into params — it flattens exactly one level, so
+// a field nested inside another object is not one of them. A schema can name
+// them directly, through `required`, or through composition, and the generator
+// copies composition through untouched (see scripts/resolve-refs.ts, and the
+// `allOf` already on create_artifact and post_override_attestation).
+//
+// `not` is deliberately not walked: a branch saying a field must be ABSENT does
+// not name it. Known limit: a `patternProperties` at a body root whose pattern
+// happens to admit "org" names the field by pattern rather than by name, so it
+// is not collected. The catalog's 22 uses all sit inside nested property
+// values, which are out of scope anyway.
+function bodyFields(schema: unknown): string[] {
+  if (schema === null || typeof schema !== "object") return [];
+  const node = schema as Record<string, unknown>;
+
+  const declared =
+    node.properties !== null && typeof node.properties === "object"
+      ? Object.keys(node.properties as Record<string, unknown>)
+      : [];
+
+  const composed = ["allOf", "anyOf", "oneOf", "if", "then", "else"].flatMap((keyword) => {
+    const branch = node[keyword];
+    return Array.isArray(branch) ? branch.flatMap(bodyFields) : bodyFields(branch);
+  });
+
+  // These map a trigger field to what it pulls in. Both halves name top-level
+  // fields: the key is the trigger, which is a field of the body by definition,
+  // and the value is either a schema or (draft-07 `dependencies`, and
+  // `dependentRequired`) a bare list of field names.
+  const dependent = ["dependentSchemas", "dependentRequired", "dependencies"].flatMap((keyword) => {
+    const branch = node[keyword];
+    if (branch === null || typeof branch !== "object" || Array.isArray(branch)) return [];
+    const map = branch as Record<string, unknown>;
+    return [...Object.keys(map), ...Object.values(map).flatMap(dependentFields)];
+  });
+
+  return [...declared, ...names(node.required), ...composed, ...dependent];
+}
+
+function dependentFields(value: unknown): string[] {
+  return Array.isArray(value) ? names(value) : bodyFields(value);
+}
+
+function names(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
+}
+
+// bodyFields decides whether the guard above can see a field at all. The walk
+// does run on today's catalog, but every name it reaches is already in the root
+// `properties`, so removing it changes no verdict and the suite stays green.
+// These tests pin each branch directly, so a later simplification cannot
+// silently revert the guard to reading `properties` alone.
+describe("bodyFields", () => {
+  it("collects properties declared directly", () => {
+    expect(bodyFields({ properties: { org: {}, flow_name: {} } })).toContain("org");
+  });
+
+  it("collects a name that only appears in required", () => {
+    expect(bodyFields({ anyOf: [{ required: ["org"] }] })).toContain("org");
+  });
+
+  it.each([
+    ["allOf", { allOf: [{ properties: { org: {} } }] }],
+    ["anyOf", { anyOf: [{ properties: { org: {} } }] }],
+    ["oneOf", { oneOf: [{ properties: { org: {} } }] }],
+    ["if", { if: { properties: { org: {} } } }],
+    ["then", { if: {}, then: { properties: { org: {} } } }],
+    ["else", { if: {}, else: { properties: { org: {} } } }],
+    ["nested composition", { allOf: [{ anyOf: [{ properties: { org: {} } }] }] }],
+    ["dependentSchemas", { dependentSchemas: { fingerprint: { properties: { org: {} } } } }],
+    ["dependentRequired", { dependentRequired: { fingerprint: ["org"] } }],
+    ["dependencies as a schema", { dependencies: { fingerprint: { properties: { org: {} } } } }],
+    ["dependencies as a name list", { dependencies: { fingerprint: ["org"] } }],
+    ["a dependency trigger key", { dependentRequired: { org: ["scope"] } }],
+  ])("collects a name reached through %s", (_label, schema) => {
+    expect(bodyFields(schema)).toContain("org");
+  });
+
+  it("does not collect a field nested inside another object", () => {
+    expect(bodyFields({ properties: { repo_info: { properties: { org: {} } } } })).not.toContain("org");
+  });
+
+  it("does not collect a field a not branch forbids", () => {
+    expect(bodyFields({ not: { required: ["org"] } })).not.toContain("org");
+  });
+
+  it("survives shapes the spec should never produce", () => {
+    const junk = {
+      properties: null,
+      required: [1, "org"],
+      anyOf: "not-an-array",
+      oneOf: [null, 5, []],
+      then: 7,
+      dependencies: ["not", "a", "map"],
+      dependentSchemas: { a: null, b: "text" },
+    };
+
+    expect(() => bodyFields(junk)).not.toThrow();
+    // "org" from required; "a" and "b" are dependency trigger keys, whose
+    // unusable values contribute nothing further.
+    expect(bodyFields(junk)).toEqual(["org", "a", "b"]);
+  });
 });

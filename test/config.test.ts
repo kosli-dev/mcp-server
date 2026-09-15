@@ -69,6 +69,20 @@ describe("loadConfig", () => {
     expect(() => loadConfig()).toThrow("KOSLI_ORG");
   });
 
+  it("throws when KOSLI_ORG is only whitespace", () => {
+    process.env.KOSLI_API_KEY = "test-key";
+    process.env.KOSLI_ORG = "   ";
+
+    expect(() => loadConfig()).toThrow("KOSLI_ORG");
+  });
+
+  it("trims KOSLI_ORG", () => {
+    process.env.KOSLI_API_KEY = "test-key";
+    process.env.KOSLI_ORG = "  test-org  ";
+
+    expect(loadConfig().org).toBe("test-org");
+  });
+
   it("throws when KOSLI_BASE_URL is not https", () => {
     process.env.KOSLI_API_KEY = "test-key";
     process.env.KOSLI_ORG = "test-org";
