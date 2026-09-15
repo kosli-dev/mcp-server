@@ -17,4 +17,31 @@ describe("catalog.json", () => {
     const ids = catalog.map((entry) => entry.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
+
+  // README names these four as the actions that reject an `org`. If the spec
+  // gains or loses one, update the README in the same PR as the regenerated
+  // catalog — otherwise the docs quietly start lying.
+  it("has exactly the four documented actions that take no org", () => {
+    const withoutOrg = catalog
+      .filter((entry) => !entry.parameters.some((p) => p.name === "org" && p.in === "path"))
+      .map((entry) => entry.id)
+      .sort();
+
+    expect(withoutOrg).toEqual([
+      "environment_policy_schema_v1",
+      "flow_template_schema_v1",
+      "get_user_default_org",
+      "list_system_attestation_types",
+    ]);
+  });
+
+  // buildUrl only fills `{org}` from a path parameter; an org arriving any
+  // other way would bypass the checks in executeAction.
+  it("never declares org as a query or header parameter", () => {
+    const offenders = catalog
+      .filter((entry) => entry.parameters.some((p) => p.name === "org" && p.in !== "path"))
+      .map((entry) => entry.id);
+
+    expect(offenders).toEqual([]);
+  });
 });

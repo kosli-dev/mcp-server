@@ -292,3 +292,287 @@ describe("request body unwrapping", () => {
     );
   });
 });
+
+describe("org selection", () => {
+  function mockFetchOk(body: unknown = { ok: true }) {
+    return vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve(body),
+    });
+  }
+
+  it("targets the org given as the org parameter", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "list_environments", {}, undefined, mockFetch, "GET", "cyber-dojo");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/cyber-dojo",
+      expect.anything(),
+    );
+  });
+
+  it("falls back to the configured org when none is given", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "list_environments", {}, undefined, mockFetch, "GET");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/test-org",
+      expect.anything(),
+    );
+  });
+
+  it("still accepts an org supplied inside params", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(entries, config, "list_environments", { org: "cyber-dojo" }, undefined, mockFetch, "GET");
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/cyber-dojo",
+      expect.anything(),
+    );
+  });
+
+  it("accepts the same org in both places", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "list_environments", { org: "cyber-dojo" },
+      undefined, mockFetch, "GET", "cyber-dojo",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/cyber-dojo",
+      expect.anything(),
+    );
+  });
+
+  it("rejects conflicting orgs without calling the API", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "list_environments", { org: "kosli-public" },
+      undefined, mockFetch, "GET", "cyber-dojo",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Conflicting orgs in one call: "cyber-dojo" and "kosli-public". The org parameter, params.org, and an org in the request body must agree — supply just one.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects a blank org rather than building a URL with a missing segment", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "list_environments", {},
+      undefined, mockFetch, "GET", "  ",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        "An empty org was given. Name an organization, or omit the org parameter to use the configured default.",
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects an org on an action that is not organization-scoped", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "get_user_default_org", {},
+      undefined, mockFetch, "GET", "cyber-dojo",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry without the org parameter.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("calls a non-org-scoped action when no org is given", async () => {
+    const mockFetch = mockFetchOk({ default_org_name: "test-org" });
+
+    const result = await executeAction(entries, config, "get_user_default_org", {}, undefined, mockFetch, "GET");
+
+    expect(result).toEqual({ default_org_name: "test-org" });
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/user/default-org",
+      expect.anything(),
+    );
+  });
+
+  it("trims a padded org rather than encoding the padding into the path", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "list_environments", {},
+      undefined, mockFetch, "GET", "  cyber-dojo  ",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/cyber-dojo",
+      expect.anything(),
+    );
+  });
+
+  it("applies the same trimming to an org supplied inside params", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "list_environments", { org: "  cyber-dojo  " },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/cyber-dojo",
+      expect.anything(),
+    );
+  });
+
+  it("rejects a blank org supplied inside params, rather than dropping the path segment", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "list_environments", { org: "" },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        "An empty org was given. Name an organization, or omit the org parameter to use the configured default.",
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("treats a null org in params as not supplied, as buildUrl does", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "list_environments", { org: null },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/test-org",
+      expect.anything(),
+    );
+  });
+
+  it("rejects an org nested in the request body that contradicts the org parameter", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "post_control",
+      { body: { org: "other-org", identifier: "ctrl-1" } },
+      undefined, mockFetch, "WRITE", "cyber-dojo",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Conflicting orgs in one call: "cyber-dojo" and "other-org". The org parameter, params.org, and an org in the request body must agree — supply just one.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects an org supplied only inside params for a non-org-scoped action", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "get_user_default_org", { org: "cyber-dojo" },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry without the org parameter.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects a request body org that contradicts params.org, with no org parameter", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "post_control",
+      { org: "approved-org", body: { org: "other-org", identifier: "ctrl-1" } },
+      undefined, mockFetch, "WRITE",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Conflicting orgs in one call: "approved-org" and "other-org". The org parameter, params.org, and an org in the request body must agree — supply just one.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects the same contradiction on the multipart write branch", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "put_policy",
+      { org: "approved-org", body: { org: "other-org", name: "policy-1" } },
+      undefined, mockFetch, "WRITE",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'Conflicting orgs in one call: "approved-org" and "other-org". The org parameter, params.org, and an org in the request body must agree — supply just one.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("targets the org on a multipart write without adding it as a form field", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "put_policy", { body: { name: "policy-1" } },
+      undefined, mockFetch, "WRITE", "cyber-dojo",
+    );
+
+    const [url, init] = mockFetch.mock.calls[0];
+    expect(url).toBe("https://app.kosli.com/api/v2/policies/cyber-dojo");
+    expect([...(init.body as FormData).keys()]).toEqual(["name"]);
+  });
+
+  it("drops a null org instead of forwarding it as a query parameter", async () => {
+    const mockFetch = mockFetchOk({ default_org_name: "test-org" });
+
+    await executeAction(
+      entries, config, "get_user_default_org", { org: null },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/user/default-org",
+      expect.anything(),
+    );
+  });
+
+  it("applies to writes, and the org does not leak into the request body", async () => {
+    const mockFetch = mockFetchOk({ created: true });
+    const body = { identifier: "ctrl-1", name: "Control 1" };
+
+    await executeAction(
+      entries, config, "post_control", { body },
+      undefined, mockFetch, "WRITE", "cyber-dojo",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/controls/cyber-dojo",
+      expect.objectContaining({ body: JSON.stringify(body) }),
+    );
+  });
+});

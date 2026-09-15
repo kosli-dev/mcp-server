@@ -125,5 +125,16 @@
       { "name": "body", "required": true, "description": "Request body (multipart/form-data)" }
     ],
     "searchText": "create or update policy create or update a policy in an organization. put policies org policies"
+  },
+  {
+    "id": "get_user_default_org",
+    "method": "GET",
+    "path": "/user/default-org",
+    "summary": "Get default organization",
+    "description": "Get the default org for the current user.",
+    "tags": ["User"],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "get default organization get the default org for the current user. get user default-org user"
   }
 ]

@@ -107,7 +107,34 @@ Typical LLM flow:
 > [!IMPORTANT]
 > `execute_write_action` creates, modifies, and deletes real resources in your Kosli organization. MCP clients gate these calls behind an approval prompt — read the action ID and parameters before approving. An LLM may select the wrong action, or the right action with the wrong parameters, and approval is the only checkpoint before the call is made. Treat deletions and anything touching service accounts or API keys with particular care.
 
-The `org` path parameter defaults to `KOSLI_ORG` if not supplied. For `GET`/`DELETE`, non-path params become query parameters; for other methods they become the JSON body.
+For `GET`/`DELETE`, non-path params become query parameters; for other methods they become the JSON body.
+
+### Working with more than one organization
+
+Both execute tools take an optional `org`, so a single running server can reach
+any organization your token has access to — useful when you are moving between
+orgs in one conversation rather than restarting the server for each:
+
+```json
+{ "actionId": "list_envs", "org": "cyber-dojo", "fields": ["name"] }
+```
+
+- Omit it and the call goes to `KOSLI_ORG`.
+- It applies to that one call. The next call goes back to `KOSLI_ORG`.
+- Surrounding whitespace is trimmed, and a blank org is rejected rather than
+  quietly producing a URL with the organization missing from it.
+- Four actions are not organization-scoped (`get_user_default_org`,
+  `list_system_attestation_types`, and the two `/schemas/...` actions). Passing
+  an org to one of those is rejected rather than ignored, whether it arrives as
+  `org` or inside `params`.
+- There are three ways to name an org in one call: this input, `params.org`, and
+  an `org` inside a write's request body. They must agree; two different names
+  are rejected rather than resolved, because the same tools perform writes and
+  the target is never guessed.
+- An org your token cannot reach comes back as the usual error object carrying
+  the API's status — `403` for both an org you are not a member of and one that
+  does not exist. Note that Kosli staff accounts can read any org, so a
+  successful read does not prove a write would be permitted.
 
 Both execute tools accept an optional `fields` array to request only specific top-level fields from each object in the response. This dramatically reduces response size and token usage:
 

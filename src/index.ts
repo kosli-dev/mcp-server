@@ -13,6 +13,11 @@ import { VERSION } from "./version.js";
 const entries = catalog as CatalogEntry[];
 const config = loadConfig();
 
+// Shared by both execute tools so the two can't drift apart.
+const ORG_INPUT = z.string().optional().describe(
+  `Kosli organization to run this call against, e.g. "cyber-dojo". Defaults to "${config.org}" (from KOSLI_ORG). It applies to this call only — the next call goes back to the default unless you set it again.`,
+);
+
 const server = new McpServer({
   name: "kosli",
   version: VERSION,
@@ -48,18 +53,19 @@ server.registerTool(
   "execute_read_action",
   {
     title: "Execute read action",
-    description: `Execute a read-only (GET) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. The 'org' parameter defaults to "${config.org}" — you do not need to supply it unless querying a different organization.`,
+    description: `Execute a read-only (GET) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. The call runs against the "${config.org}" organization unless you set 'org'.`,
     annotations: {
       readOnlyHint: true,
     },
     inputSchema: {
       actionId: z.string().describe("The action ID from search_actions results"),
+      org: ORG_INPUT,
       params: z.record(z.string(), z.unknown()).optional().default({}).describe("Parameters for the action (path params or query params)"),
       fields: z.array(z.string()).optional().describe("Only include these fields in each object of the response. Dramatically reduces response size. Example: [\"name\",\"compliant\",\"fingerprint\",\"reasons_for_incompliance\"]"),
     },
   },
-  async ({ actionId, params, fields }) => {
-    const result = await executeAction(entries, config, actionId, params, fields, undefined, "GET");
+  async ({ actionId, params, fields, org }) => {
+    const result = await executeAction(entries, config, actionId, params, fields, undefined, "GET", org);
     return {
       content: [
         {
@@ -75,19 +81,20 @@ server.registerTool(
   "execute_write_action",
   {
     title: "Execute write action",
-    description: `Execute a write (POST, PUT, PATCH, DELETE) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. The 'org' parameter defaults to "${config.org}" — you do not need to supply it unless querying a different organization.`,
+    description: `Execute a write (POST, PUT, PATCH, DELETE) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. The call runs against the "${config.org}" organization unless you set 'org' — check it before approving, the write lands in whichever org it names.`,
     annotations: {
       destructiveHint: true,
       readOnlyHint: false,
     },
     inputSchema: {
       actionId: z.string().describe("The action ID from search_actions results"),
+      org: ORG_INPUT,
       params: z.record(z.string(), z.unknown()).optional().default({}).describe("Parameters for the action (path params, query params, or body)"),
       fields: z.array(z.string()).optional().describe("Only include these fields in each object of the response. Dramatically reduces response size."),
     },
   },
-  async ({ actionId, params, fields }) => {
-    const result = await executeAction(entries, config, actionId, params, fields, undefined, "WRITE");
+  async ({ actionId, params, fields, org }) => {
+    const result = await executeAction(entries, config, actionId, params, fields, undefined, "WRITE", org);
     return {
       content: [
         {
