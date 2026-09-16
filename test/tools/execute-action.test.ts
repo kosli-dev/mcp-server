@@ -620,6 +620,25 @@ describe("org selection", () => {
     );
   });
 
+  // The org is a top-level input on a tool that performs writes, and it lands in
+  // a path segment. buildUrl percent-encodes it, so a slash-bearing value stays
+  // one segment instead of re-pointing the request at another endpoint.
+  // normalizeOrg deliberately does not reject this: the encoding is the defence,
+  // so pin it here rather than leaving it implicit two files away.
+  it("encodes an org rather than letting it rewrite the path", async () => {
+    const mockFetch = mockFetchOk();
+
+    await executeAction(
+      entries, config, "list_environments", {},
+      undefined, mockFetch, "GET", "../../user/default-org",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/environments/..%2F..%2Fuser%2Fdefault-org",
+      expect.anything(),
+    );
+  });
+
   it("applies to writes, and the org does not leak into the request body", async () => {
     const mockFetch = mockFetchOk({ created: true });
     const body = { identifier: "ctrl-1", name: "Control 1" };

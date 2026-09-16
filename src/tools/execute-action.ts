@@ -142,7 +142,9 @@ export async function executeAction(
   // Collect the org from every channel before deciding. `unwrapBodyParam`
   // flattens a write's request body over the top level, so params.org has to be
   // read before the unwrap and the body's org after it — otherwise the spread
-  // picks a winner and the disagreement is never seen.
+  // picks a winner and the disagreement is never seen. When the unwrap declines,
+  // `unwrapped` is `params` and the body's org is never read. That is correct:
+  // an unflattened body cannot reach the path, so there is nothing to check.
   const beforeUnwrap = normalizeOrg(params.org);
   const unwrapped = unwrapBodyParam(entry, params);
   const named = [...new Set(
