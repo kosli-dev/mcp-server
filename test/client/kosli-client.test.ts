@@ -5,9 +5,7 @@ import type { CatalogEntry, Config } from "../../src/types.js";
 
 const config: Config = {
   apiKey: "test-api-key",
-  org: "test-org",
   baseUrl: "https://app.kosli.com",
-  readOnly: true,
 };
 
 const listEnvEntry: CatalogEntry = {
@@ -89,14 +87,14 @@ describe("KosliClient", () => {
     client = new KosliClient(config, mockFetch);
   });
 
-  it("builds correct URL with org auto-injected", async () => {
+  it("fills the org path segment from params", async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       status: 200,
       json: () => Promise.resolve({ environments: [] }),
     });
 
-    await client.execute(listEnvEntry, {});
+    await client.execute(listEnvEntry, { org: "test-org" });
 
     expect(mockFetch).toHaveBeenCalledWith(
       "https://app.kosli.com/api/v2/environments/test-org",
@@ -118,6 +116,7 @@ describe("KosliClient", () => {
     });
 
     await client.execute(getTrailEntry, {
+      org: "test-org",
       flow_name: "my-flow",
       trail_name: "my-trail",
     });
@@ -128,19 +127,16 @@ describe("KosliClient", () => {
     );
   });
 
-  it("allows org override via params", async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: () => Promise.resolve({ environments: [] }),
-    });
+  // The client knows nothing about orgs: executeAction refuses a call that names
+  // none, and if that check were ever bypassed this must fail rather than pick.
+  it("has no org of its own to fall back on", async () => {
+    const mockFetch = vi.fn();
+    const client = new KosliClient(config, mockFetch);
 
-    await client.execute(listEnvEntry, { org: "other-org" });
+    const result = await client.execute(listEnvEntry, {});
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://app.kosli.com/api/v2/environments/other-org",
-      expect.anything(),
-    );
+    expect(result).toMatchObject({ error: true, message: expect.stringContaining("Missing required path parameter: org") });
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it("returns structured error on non-OK response", async () => {
@@ -151,7 +147,7 @@ describe("KosliClient", () => {
       json: () => Promise.resolve({ message: "Environment not found" }),
     });
 
-    const result = await client.execute(listEnvEntry, {});
+    const result = await client.execute(listEnvEntry, { org: "test-org" });
 
     expect(result).toEqual({
       error: true,
@@ -164,7 +160,7 @@ describe("KosliClient", () => {
   it("returns structured error on network failure without leaking raw error detail", async () => {
     mockFetch.mockRejectedValue(new Error("connect ECONNREFUSED 10.0.0.5:443"));
 
-    const result = await client.execute(listEnvEntry, {});
+    const result = await client.execute(listEnvEntry, { org: "test-org" });
 
     expect(result).toEqual({
       error: true,
@@ -177,7 +173,7 @@ describe("KosliClient", () => {
   });
 
   it("returns structured error on missing required path param (does not throw)", async () => {
-    const result = await client.execute(getTrailEntry, { flow_name: "my-flow" });
+    const result = await client.execute(getTrailEntry, { org: "test-org", flow_name: "my-flow" });
 
     expect(result).toEqual({
       error: true,
@@ -197,6 +193,7 @@ describe("KosliClient", () => {
       });
 
       await client.execute(putPolicyEntry, {
+        org: "test-org",
         name: "provenance",
         type: "env",
         policy_file: {
@@ -236,6 +233,7 @@ describe("KosliClient", () => {
       });
 
       await client.execute(putPolicyEntry, {
+        org: "test-org",
         policy_file: { filename: "x.txt", content: "hello" },
       });
 
@@ -251,6 +249,7 @@ describe("KosliClient", () => {
       });
 
       await client.execute(putPolicyEntry, {
+        org: "test-org",
         metadata: { owner: "security-team" },
       });
 
@@ -265,7 +264,7 @@ describe("KosliClient", () => {
         json: () => Promise.resolve({}),
       });
 
-      await client.execute(createFlowJsonEntry, { name: "my-flow" });
+      await client.execute(createFlowJsonEntry, { org: "test-org", name: "my-flow" });
 
       const [, init] = mockFetch.mock.calls[0];
       expect(init.body).toBe('{"name":"my-flow"}');

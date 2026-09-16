@@ -6,9 +6,12 @@ export function loadConfig(): Config {
     throw new Error("KOSLI_API_TOKEN (or KOSLI_API_KEY) environment variable is required");
   }
 
-  const org = process.env.KOSLI_ORG;
-  if (!org) {
-    throw new Error("KOSLI_ORG environment variable is required");
+  // Removed in favour of naming the org per call. Say so rather than letting a
+  // stale config turn into a refusal the user cannot connect to anything.
+  if (process.env.KOSLI_ORG) {
+    console.error(
+      "KOSLI_ORG is set but no longer used: the org is named per call now, and this value is ignored.",
+    );
   }
 
   const baseUrl = process.env.KOSLI_BASE_URL || "https://app.kosli.com";
@@ -24,5 +27,5 @@ export function loadConfig(): Config {
     );
   }
 
-  return { apiKey, org, baseUrl };
+  return { apiKey, baseUrl };
 }

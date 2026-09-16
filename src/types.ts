@@ -27,7 +27,6 @@ export interface CatalogEntry {
 
 export interface Config {
   apiKey: string;
-  org: string;
   baseUrl: string;
 }
 

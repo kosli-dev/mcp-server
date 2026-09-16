@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { loadConfig } from "../src/config.js";
 
 describe("loadConfig", () => {
@@ -15,18 +15,15 @@ describe("loadConfig", () => {
   it("loads valid config from env vars", () => {
     delete process.env.KOSLI_API_TOKEN;
     process.env.KOSLI_API_KEY = "test-key";
-    process.env.KOSLI_ORG = "test-org";
 
     const config = loadConfig();
 
     expect(config.apiKey).toBe("test-key");
-    expect(config.org).toBe("test-org");
     expect(config.baseUrl).toBe("https://app.kosli.com");
   });
 
   it("uses custom base URL when provided", () => {
     process.env.KOSLI_API_KEY = "test-key";
-    process.env.KOSLI_ORG = "test-org";
     process.env.KOSLI_BASE_URL = "https://staging.kosli.com";
 
     const config = loadConfig();
@@ -37,7 +34,6 @@ describe("loadConfig", () => {
   it("prefers KOSLI_API_TOKEN over KOSLI_API_KEY", () => {
     process.env.KOSLI_API_TOKEN = "token-value";
     process.env.KOSLI_API_KEY = "key-value";
-    process.env.KOSLI_ORG = "test-org";
 
     const config = loadConfig();
 
@@ -47,7 +43,6 @@ describe("loadConfig", () => {
   it("falls back to KOSLI_API_KEY when KOSLI_API_TOKEN is missing", () => {
     delete process.env.KOSLI_API_TOKEN;
     process.env.KOSLI_API_KEY = "key-value";
-    process.env.KOSLI_ORG = "test-org";
 
     const config = loadConfig();
 
@@ -55,23 +50,25 @@ describe("loadConfig", () => {
   });
 
   it("throws when both KOSLI_API_TOKEN and KOSLI_API_KEY are missing", () => {
-    process.env.KOSLI_ORG = "test-org";
     delete process.env.KOSLI_API_KEY;
     delete process.env.KOSLI_API_TOKEN;
 
     expect(() => loadConfig()).toThrow("KOSLI_API_TOKEN");
   });
 
-  it("throws when KOSLI_ORG is missing", () => {
+  it("says so when a stale KOSLI_ORG is still set", () => {
     process.env.KOSLI_API_KEY = "test-key";
-    delete process.env.KOSLI_ORG;
+    process.env.KOSLI_ORG = "left-over";
+    const warn = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    expect(() => loadConfig()).toThrow("KOSLI_ORG");
+    loadConfig();
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("KOSLI_ORG is set but no longer used"));
+    warn.mockRestore();
   });
 
   it("throws when KOSLI_BASE_URL is not https", () => {
     process.env.KOSLI_API_KEY = "test-key";
-    process.env.KOSLI_ORG = "test-org";
     process.env.KOSLI_BASE_URL = "http://evil.example.com";
 
     expect(() => loadConfig()).toThrow(/https/);
@@ -79,7 +76,6 @@ describe("loadConfig", () => {
 
   it("throws when KOSLI_BASE_URL is not a valid URL", () => {
     process.env.KOSLI_API_KEY = "test-key";
-    process.env.KOSLI_ORG = "test-org";
     process.env.KOSLI_BASE_URL = "not a url";
 
     expect(() => loadConfig()).toThrow(/not a valid URL/);

@@ -64,6 +64,24 @@ describe("searchActions", () => {
     });
   });
 
+  // The tool's own `org` input carries it. Advertising it here as well tells
+  // the model to put it in `params`.
+  it("does not advertise the org path parameter", () => {
+    const results = searchActions(entries, "get environment");
+
+    const env = results.find((r) => r.id === "get_environment");
+    expect(env!.parameters.map((p) => p.name)).toEqual(["env_name"]);
+  });
+
+  // PUT /user/{org} writes the org rather than running in it, so the caller has
+  // to choose it and search has to keep showing it.
+  it("keeps the org parameter where the org is the thing being written", () => {
+    const results = searchActions(entries, "set default organization");
+
+    const setDefault = results.find((r) => r.id === "set_user_default_org");
+    expect(setDefault!.parameters.map((p) => p.name)).toEqual(["org"]);
+  });
+
   it("omits hints field when no hint exists for an action", () => {
     const results = searchActions(entries, "environments", 10, hints as ActionHints);
 

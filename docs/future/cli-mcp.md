@@ -66,4 +66,4 @@ Until any of that is real, the API MCP (plus the multipart gap above, if it beco
 ## What explicitly doesn't carry over
 
 - The OpenAPI catalog generator — CLI commands don't correspond 1:1 to API endpoints (one CLI command often calls several endpoints plus local work).
-- The `org` fallback from env — the CLI has its own profile logic; don't double-configure.
+- Any notion of a configured org — the MCP server requires one per call, and the CLI has its own profile logic.
