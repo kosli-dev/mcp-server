@@ -99,7 +99,7 @@ function orgError(entry: CatalogEntry, named: string[]): string | undefined {
   // reporting it as a nameless org disagreeing with a real one would send the
   // caller to drop one of the two rather than to fix the bad value.
   if (named.includes("")) {
-    return "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.";
+    return "The org must be a single organization name, given as a non-empty string. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.";
   }
 
   if (named.length > 1) {

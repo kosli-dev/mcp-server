@@ -376,7 +376,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+        "The org must be a single organization name, given as a non-empty string. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -448,7 +448,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+        "The org must be a single organization name, given as a non-empty string. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -484,7 +484,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+        "The org must be a single organization name, given as a non-empty string. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -500,9 +500,30 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+        "The org must be a single organization name, given as a non-empty string. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  // A body-nested org is params.org after the unwrap, so it is a supported way
+  // to name the target rather than only something to cross-check. The other
+  // body-org tests pin that the value is READ: removing the post-unwrap read
+  // turns three of them red. None pinned that it is HONOURED. Keeping the
+  // cross-check while no longer using a body-only org as the target passed the
+  // whole suite before this test existed.
+  it("targets an org named only inside a write's request body", async () => {
+    const mockFetch = mockFetchOk({ created: true });
+
+    await executeAction(
+      entries, config, "post_control",
+      { body: { org: "cyber-dojo", identifier: "ctrl-1" } },
+      undefined, mockFetch, "WRITE",
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://app.kosli.com/api/v2/controls/cyber-dojo",
+      expect.objectContaining({ body: JSON.stringify({ identifier: "ctrl-1" }) }),
+    );
   });
 
   it("rejects an org nested in the request body that contradicts the org parameter", async () => {
