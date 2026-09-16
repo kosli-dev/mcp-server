@@ -125,5 +125,46 @@
       { "name": "body", "required": true, "description": "Request body (multipart/form-data)" }
     ],
     "searchText": "create or update policy create or update a policy in an organization. put policies org policies"
+  },
+  {
+    "id": "get_user_default_org",
+    "method": "GET",
+    "path": "/user/default-org",
+    "summary": "Get default organization",
+    "description": "Get the default org for the current user.",
+    "tags": ["User"],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "get default organization get the default org for the current user. get user default-org user"
+  },
+  {
+    "id": "set_user_default_org",
+    "method": "PUT",
+    "path": "/user/{org}",
+    "summary": "Set default organization",
+    "description": "Set a default org for the current user.",
+    "tags": ["User"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "" }
+    ],
+    "requestBody": null,
+    "searchText": "set default organization set a default org for the current user. put user org user"
+  },
+  {
+    "id": "create_artifact",
+    "method": "POST",
+    "path": "/artifacts/{org}/{flow_name}",
+    "summary": "Report artifact",
+    "description": "Report an artifact to a flow.",
+    "tags": ["Artifacts"],
+    "parameters": [
+      { "name": "org", "in": "path", "required": true, "description": "" },
+      { "name": "flow_name", "in": "path", "required": true, "description": "" }
+    ],
+    "requestBody": [
+      { "name": "body", "required": true, "description": "Request body (application/json)",
+        "schema": { "type": "object", "properties": { "fingerprint": { "type": "string" }, "trail_name": { "type": "string" } } } }
+    ],
+    "searchText": "report artifact post artifacts org flow_name artifacts"
   }
 ]

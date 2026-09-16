@@ -126,12 +126,7 @@ export class KosliClient {
     for (const param of entry.parameters) {
       if (param.in !== "path") continue;
 
-      let value: unknown;
-      if (param.name === "org") {
-        value = params.org ?? this.config.org;
-      } else {
-        value = params[param.name];
-      }
+      const value = params[param.name];
 
       if (value === undefined && param.required) {
         return {

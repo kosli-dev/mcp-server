@@ -1,4 +1,5 @@
 import type { ActionHint, ActionHints, CatalogEntry } from "../types.js";
+import { isOrgPathParam, orgIsTheArgument } from "../org.js";
 
 export interface SearchResult {
   id: string;
@@ -47,7 +48,12 @@ export function searchActions(
       path: entry.path,
       summary: entry.summary,
       tags: entry.tags,
-      parameters: entry.parameters,
+      // The tool's own `org` input carries it, so advertising it here as well
+      // only invites the model to put it in `params`. Except where the org is
+      // the thing being written, and belongs with the action's own arguments.
+      parameters: orgIsTheArgument(entry)
+        ? entry.parameters
+        : entry.parameters.filter((p) => !isOrgPathParam(p)),
       requestBody: entry.requestBody,
     };
     const hint = hints?.[entry.id];

@@ -17,4 +17,56 @@ describe("catalog.json", () => {
     const ids = catalog.map((entry) => entry.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
+
+  // The README names these four. Update both together when the spec moves.
+  it("has exactly the four documented actions that take no org", () => {
+    const withoutOrg = catalog
+      .filter((entry) => !entry.parameters.some((p) => p.name === "org" && p.in === "path"))
+      .map((entry) => entry.id)
+      .sort();
+
+    expect(withoutOrg).toEqual([
+      "get_environment_policy_schema_v1",
+      "get_flow_template_schema_v1",
+      "get_user_default_org",
+      "list_system_attestation_types",
+    ]);
+  });
+
+  it("never declares org as a query or header parameter", () => {
+    const offenders = catalog
+      .filter((entry) => entry.parameters.some((p) => p.name === "org" && p.in !== "path"))
+      .map((entry) => entry.id);
+
+    expect(offenders).toEqual([]);
+  });
+
+  // A write's request body is flattened over the top level, so a body field
+  // sharing a name with one of the action's own parameters would overwrite the
+  // caller's value. executeAction refuses such a call, which is only safe while
+  // no legitimate body declares one. Matched against the whole schema rather
+  // than its top-level properties, so a field behind an allOf still counts: a
+  // hit means read the catalog diff.
+  it("never names one of an action's own parameters anywhere in its request body schema", () => {
+    const offenders = catalog.flatMap((entry) => {
+      const schema = JSON.stringify((entry.requestBody ?? []).map((body) => body.schema ?? {}));
+      return entry.parameters
+        .filter((p) => schema.includes(`"${p.name}"`))
+        .map((p) => `${entry.id}.${p.name}`);
+    });
+
+    expect(offenders).toEqual([]);
+  });
+
+  // The blunt half of the same guard: "org" anywhere in a body schema, however
+  // it is nested, is worth a human look even when it is not a top-level field.
+  it("never mentions org in a request body schema", () => {
+    const offenders = catalog
+      .filter((entry) =>
+        entry.requestBody?.some((body) => JSON.stringify(body.schema ?? {}).includes('"org"')),
+      )
+      .map((entry) => entry.id);
+
+    expect(offenders).toEqual([]);
+  });
 });

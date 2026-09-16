@@ -26,7 +26,6 @@
       "args": ["${__dirname}/dist/index.js"],
       "env": {
         "KOSLI_API_TOKEN": "${user_config.api_token}",
-        "KOSLI_ORG": "${user_config.org}",
         "KOSLI_BASE_URL": "${user_config.base_url}"
       }
     }
@@ -52,12 +51,6 @@
       "title": "API Token",
       "description": "Your Kosli API token (found at app.kosli.com under Settings → API Keys)",
       "sensitive": true,
-      "required": true
-    },
-    "org": {
-      "type": "string",
-      "title": "Organization",
-      "description": "Your Kosli organization name",
       "required": true
     },
     "base_url": {
