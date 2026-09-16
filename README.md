@@ -121,8 +121,12 @@ orgs in one conversation rather than restarting the server for each:
 
 - Omit it and the call goes to `KOSLI_ORG`.
 - It applies to that one call. The next call goes back to `KOSLI_ORG`.
-- Surrounding whitespace is trimmed, and a blank org is rejected rather than
+- Surrounding whitespace is trimmed. A blank org is rejected rather than
   quietly producing a URL with the organization missing from it.
+- One org, named as a string. Anything else is rejected rather than coerced,
+  because coercion turns a value that is not a name into one that looks like a
+  name: `["cyber-dojo", "kosli-public"]` would request the org
+  `cyber-dojo,kosli-public`, and an org id would request an org called `1234`.
 - Four actions are not organization-scoped (`get_user_default_org`,
   `list_system_attestation_types`, and the two `/schemas/...` actions). Passing
   an org to one of those is rejected rather than ignored, whether it arrives as

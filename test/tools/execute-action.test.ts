@@ -376,7 +376,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "An empty org was given. Name an organization, or omit the org parameter to use the configured default.",
+        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -392,7 +392,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry without the org parameter.',
+        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry with no org in the org parameter, in params.org, or in the request body.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -448,7 +448,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "An empty org was given. Name an organization, or omit the org parameter to use the configured default.",
+        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -465,6 +465,44 @@ describe("org selection", () => {
       "https://app.kosli.com/api/v2/environments/test-org",
       expect.anything(),
     );
+  });
+
+  it.each([
+    ["a list of orgs", ["cyber-dojo", "kosli-public"]],
+    ["a single-element list", ["cyber-dojo"]],
+    ["an object", {}],
+    ["a number, which could name a real org", 1234],
+    ["a boolean", true],
+  ])("rejects %s in params rather than coercing it into the path", async (_label, org) => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "list_environments", { org },
+      undefined, mockFetch, "GET",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("reports the unusable value, not a disagreement, when a real org is named too", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "list_environments", { org: [] },
+      undefined, mockFetch, "GET", "cyber-dojo",
+    );
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.",
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it("rejects an org nested in the request body that contradicts the org parameter", async () => {
@@ -495,7 +533,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry without the org parameter.',
+        'Action "get_user_default_org" is not organization-scoped — it takes no org. Retry with no org in the org parameter, in params.org, or in the request body.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });

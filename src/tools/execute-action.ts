@@ -60,11 +60,19 @@ function unwrapBodyParam(
  * The org a call is aimed at, as it will actually be used: trimmed, and
  * `undefined` when nothing was supplied. `null` counts as nothing, matching
  * `KosliClient.buildUrl`, which falls back to `config.org` on a nullish
- * `params.org`.
+ * `params.org`. An empty string means "supplied, but unusable", which
+ * `orgError` turns into a rejection.
  */
 function normalizeOrg(value: unknown): string | undefined {
   if (value === undefined || value === null) return undefined;
-  return String(value).trim();
+  // Only a string can name an org. `params` is a record of `unknown`, so the
+  // model can put anything here, and coercing it would turn a value that is not
+  // a name into one that looks like a name: `["a", "b"]` reads as the org "a,b"
+  // and an org id reads as an org called "1234". Both would then pass the
+  // agreement check below as a single name. Hand back the unusable marker
+  // instead and let orgError say so.
+  if (typeof value !== "string") return "";
+  return value.trim();
 }
 
 /**
@@ -84,16 +92,19 @@ function orgError(entry: CatalogEntry, named: string[]): string | undefined {
   const takesOrg = entry.parameters.some((p) => p.name === "org" && p.in === "path");
   if (!takesOrg) {
     if (named.length === 0) return undefined;
-    return `Action "${entry.id}" is not organization-scoped — it takes no org. Retry without the org parameter.`;
+    return `Action "${entry.id}" is not organization-scoped — it takes no org. Retry with no org in the org parameter, in params.org, or in the request body.`;
+  }
+
+  // Before any disagreement: an unusable value is the thing to report, and
+  // reporting it as a nameless org disagreeing with a real one would send the
+  // caller to drop one of the two rather than to fix the bad value.
+  if (named.includes("")) {
+    return "The org must be a single non-empty organization name. Check the org parameter, params.org, and any org in the request body, or omit all of them to use the configured default.";
   }
 
   if (named.length > 1) {
     const quoted = named.map((o) => `"${o}"`).join(" and ");
     return `Conflicting orgs in one call: ${quoted}. The org parameter, params.org, and an org in the request body must agree — supply just one.`;
-  }
-
-  if (named[0] === "") {
-    return "An empty org was given. Name an organization, or omit the org parameter to use the configured default.";
   }
 
   return undefined;
