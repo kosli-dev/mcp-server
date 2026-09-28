@@ -12,7 +12,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -128,7 +128,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -154,7 +154,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -195,7 +199,7 @@
         "required": false,
         "description": "Filter by flow name",
         "schema": {
-          "anyOf": [{"type":"string"},{"type":"null"}],
+          "anyOf": [{"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"},{"type":"null"}],
           "description": "Filter by flow name",
           "title": "Flow Name"
         }
@@ -206,7 +210,7 @@
         "required": false,
         "description": "The name of the environment. Ignored if environment does not use policies.",
         "schema": {
-          "anyOf": [{"type":"string"},{"type":"null"}],
+          "anyOf": [{"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$"},{"type":"null"}],
           "description": "The name of the environment. Ignored if environment does not use policies.",
           "title": "Environment Name"
         }
@@ -239,7 +243,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -285,14 +289,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -436,7 +448,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -450,7 +462,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -534,14 +546,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -685,7 +705,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -699,7 +719,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -781,14 +801,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -932,7 +960,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -946,7 +974,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -982,7 +1010,6 @@
                         "title": "Issue Fields"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["issue_id","issue_url","issue_exists"],
                     "title": "JiraItem"
@@ -1048,14 +1075,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -1199,7 +1234,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -1213,7 +1248,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -1248,7 +1283,6 @@
                       "duration": {"type":"number","title":"Duration"},
                       "timestamp": {"anyOf":[{"type":"number"},{"type":"null"}],"title":"Timestamp"}
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["name","failures","errors","skipped","total","duration"],
                     "title": "JUnitResult"
@@ -1318,14 +1352,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -1469,7 +1511,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -1483,7 +1525,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -1531,7 +1573,6 @@
                             "title": "Approvers"
                           }
                         },
-                        "additionalProperties": false,
                         "type": "object",
                         "required": ["url","state","merge_commit"],
                         "title": "FoundPullRequestV1"
@@ -1574,7 +1615,6 @@
                                       "title": "Timestamp"
                                     }
                                   },
-                                  "additionalProperties": false,
                                   "type": "object",
                                   "required": ["username"],
                                   "title": "PullRequestApprover"
@@ -1634,7 +1674,6 @@
                             "title": "Commits"
                           }
                         },
-                        "additionalProperties": false,
                         "type": "object",
                         "required": [
                           "url",
@@ -1736,14 +1775,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -1887,7 +1934,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -1901,7 +1948,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -1933,7 +1980,6 @@
                         "name": {"type":"string","title":"Name"},
                         "version": {"type":"string","title":"Version"}
                       },
-                      "additionalProperties": false,
                       "type": "object",
                       "required": ["name","version"],
                       "title": "SnykTool"
@@ -2053,7 +2099,6 @@
                             "title": "High"
                           }
                         },
-                        "additionalProperties": false,
                         "type": "object",
                         "required": ["low_count","medium_count","high_count"],
                         "title": "ProjectScanResult"
@@ -2062,7 +2107,6 @@
                       "title": "Results"
                     }
                   },
-                  "additionalProperties": false,
                   "type": "object",
                   "required": ["tool","results"],
                   "title": "SnykResultsSummary"
@@ -2125,14 +2169,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -2276,7 +2328,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -2290,7 +2342,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -2441,14 +2493,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -2592,7 +2652,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -2606,7 +2666,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -2630,7 +2690,7 @@
                   ],
                   "title": "User Data"
                 },
-                "type_name": {"type":"string","enum":["decision"],"title":"Type Name"},
+                "type_name": {"type":"string","enum":["decision","sbom"],"title":"Type Name"},
                 "attestation_data": {
                   "type": "string",
                   "contentMediaType": "application/json",
@@ -2674,7 +2734,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -2700,7 +2764,7 @@
           "properties": {
             "trail_name": {
               "anyOf": [
-                {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\-_.~]*$"},
+                {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"},
                 {"type":"null"}
               ],
               "title": "Trail Name"
@@ -2853,7 +2917,7 @@
               "anyOf": [
                 {
                   "patternProperties": {
-                    "^[^=.]+$": {
+                    "^[^=.\\x00]+$": {
                       "properties": {
                         "href": {"type":"string","title":"Href"},
                         "fingerprint": {
@@ -2864,7 +2928,7 @@
                       "additionalProperties": false,
                       "type": "object",
                       "required": ["href"],
-                      "title": "ExternalAttachmentUrl"
+                      "title": "ExternalAttachmentUrlInput"
                     }
                   },
                   "type": "object"
@@ -2978,7 +3042,7 @@
                       },
                       "trail": {
                         "type": "string",
-                        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_.~]*$",
+                        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
                         "title": "Trail",
                         "description": "Name of the trail to evaluate"
                       }
@@ -3021,6 +3085,50 @@
               "type": "object",
               "title": "Params",
               "description": "Values the policy reads as `data.params`, not enforced against it"
+            },
+            "decision": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "control": {
+                      "type": "string",
+                      "maxLength": 256,
+                      "pattern": "^[a-zA-Z0-9\\-._~]+$",
+                      "title": "Control",
+                      "description": "Identifier of the control the decision answers"
+                    },
+                    "name": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9\\-_,]+$",
+                      "title": "Name",
+                      "description": "Attestation name the decision is recorded under, which is its slot in the trail"
+                    },
+                    "flow": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+                      "title": "Flow",
+                      "description": "Name of the flow the decision is recorded in"
+                    },
+                    "trail": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+                      "title": "Trail",
+                      "description": "Name of the trail the decision is recorded in"
+                    },
+                    "fingerprint": {
+                      "anyOf": [{"type":"string","pattern":"^[a-f0-9]{64}$"},{"type":"null"}],
+                      "title": "Fingerprint",
+                      "description": "Fingerprint of the artifact the decision is about. Absent, the decision is recorded against the trail itself"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": ["control","name","flow","trail"],
+                  "title": "DecisionInput"
+                },
+                {"type":"null"}
+              ],
+              "description": "Record the outcome as a decision against a control. Absent, the evaluation stands alone and writes nothing to a trail"
             }
           },
           "additionalProperties": false,
@@ -3244,7 +3352,7 @@
           "properties": {
             "name": {
               "type": "string",
-              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~/]*$",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~/]*$",
               "title": "Name",
               "examples": ["production-action"]
             },
@@ -3271,7 +3379,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3280,7 +3387,6 @@
                         ]
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "SlackActionTarget"
@@ -3304,7 +3410,6 @@
                         "default": "1.0"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "WebhookActionTarget"
@@ -3326,7 +3431,6 @@
                         "title": "Emails"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
@@ -3343,7 +3447,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3378,7 +3481,9 @@
                 ]
               },
               "type": "array",
-              "title": "Triggers"
+              "title": "Triggers",
+              "description": "The events that fire this action. Each value is shown in the UI under a different label:\n\n- `ON_STARTED_ARTIFACT` (Artifact Start): an artifact starts running in the environment.\n- `ON_EXITED_ARTIFACT` (Artifact Stop): an artifact stops running.\n- `ON_SCALED_ARTIFACT` (Artifact changed): a running artifact becomes compliant or non-compliant, or gains new provenance. It does not fire when an artifact starts, so it is not a deployment trigger. The name is historical; scaling events are no longer recorded.\n- `ON_ALLOWED_ARTIFACT` (Artifact allow-listing): an artifact is added to the allow-list.\n- `ON_COMPLIANT_ENV` (Environment becomes compliant): the environment as a whole flips to compliant.\n- `ON_NON_COMPLIANT_ENV` (Environment becomes non-compliant): the environment as a whole flips to non-compliant.",
+              "examples": [["ON_STARTED_ARTIFACT","ON_NON_COMPLIANT_ENV"]]
             }
           },
           "additionalProperties": false,
@@ -3415,7 +3520,7 @@
           "properties": {
             "name": {
               "type": "string",
-              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~/]*$",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~/]*$",
               "title": "Name",
               "examples": ["production-action"]
             },
@@ -3442,7 +3547,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3451,7 +3555,6 @@
                         ]
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "SlackActionTarget"
@@ -3475,7 +3578,6 @@
                         "default": "1.0"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "WebhookActionTarget"
@@ -3497,7 +3599,6 @@
                         "title": "Emails"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
@@ -3514,7 +3615,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3549,7 +3649,9 @@
                 ]
               },
               "type": "array",
-              "title": "Triggers"
+              "title": "Triggers",
+              "description": "The events that fire this action. Each value is shown in the UI under a different label:\n\n- `ON_STARTED_ARTIFACT` (Artifact Start): an artifact starts running in the environment.\n- `ON_EXITED_ARTIFACT` (Artifact Stop): an artifact stops running.\n- `ON_SCALED_ARTIFACT` (Artifact changed): a running artifact becomes compliant or non-compliant, or gains new provenance. It does not fire when an artifact starts, so it is not a deployment trigger. The name is historical; scaling events are no longer recorded.\n- `ON_ALLOWED_ARTIFACT` (Artifact allow-listing): an artifact is added to the allow-list.\n- `ON_COMPLIANT_ENV` (Environment becomes compliant): the environment as a whole flips to compliant.\n- `ON_NON_COMPLIANT_ENV` (Environment becomes non-compliant): the environment as a whole flips to non-compliant.",
+              "examples": [["ON_STARTED_ARTIFACT","ON_NON_COMPLIANT_ENV"]]
             }
           },
           "additionalProperties": false,
@@ -3586,7 +3688,7 @@
           "properties": {
             "name": {
               "type": "string",
-              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~/]*$",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~/]*$",
               "title": "Name",
               "examples": ["release-action"]
             },
@@ -3613,7 +3715,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3622,7 +3723,6 @@
                         ]
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "SlackActionTarget"
@@ -3646,7 +3746,6 @@
                         "default": "1.0"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "WebhookActionTarget"
@@ -3668,7 +3767,6 @@
                         "title": "Emails"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
@@ -3685,7 +3783,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -3816,7 +3913,7 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~]*$",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
                   "title": "Name",
                   "examples": ["production-policy"]
                 },
@@ -3972,7 +4069,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -3991,7 +4092,11 @@
           "properties": {
             "data_json": {
               "properties": {
-                "name": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\-_.~]*$","title":"Name"},
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+                  "title": "Name"
+                },
                 "description": {"anyOf":[{"type":"string"},{"type":"null"}],"title":"Description"},
                 "git_commit_info": {
                   "anyOf": [
@@ -4084,7 +4189,7 @@
                   "anyOf": [
                     {
                       "patternProperties": {
-                        "^[^=.]+$": {
+                        "^[^=.\\x00]+$": {
                           "properties": {
                             "href": {"type":"string","title":"Href"},
                             "fingerprint": {
@@ -4098,7 +4203,7 @@
                           "additionalProperties": false,
                           "type": "object",
                           "required": ["href"],
-                          "title": "ExternalAttachmentUrl"
+                          "title": "ExternalAttachmentUrlInput"
                         }
                       },
                       "type": "object"
@@ -4268,7 +4373,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -4351,14 +4456,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -4384,14 +4497,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -4443,7 +4564,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "fingerprint",
@@ -4548,14 +4673,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "attestation_id",
@@ -4866,7 +4999,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "fingerprint",
@@ -4899,7 +5032,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -4936,7 +5069,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -4962,7 +5095,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -5147,7 +5280,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -5535,7 +5672,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "snapshot_expression",
@@ -5568,14 +5705,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -5601,14 +5746,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "attestation_name",
@@ -5641,14 +5794,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "moment_expression",
@@ -5692,7 +5853,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -5806,6 +5967,7 @@
         "description": "The page number of response",
         "schema": {
           "type": "integer",
+          "minimum": 1,
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -5818,6 +5980,7 @@
         "description": "How many artifacts to return per page of response",
         "schema": {
           "type": "integer",
+          "minimum": 1,
           "description": "How many artifacts to return per page of response",
           "default": 15,
           "title": "Per Page"
@@ -5851,7 +6014,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Commit Sha"}
+        "schema": {"type":"string","pattern":"^[a-f0-9]{5,40}$","title":"Commit Sha"}
       },
       {
         "name": "org",
@@ -6026,7 +6189,7 @@
         "required": false,
         "description": "The flow name to search for attestations in",
         "schema": {
-          "anyOf": [{"type":"string"},{"type":"null"}],
+          "anyOf": [{"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$"},{"type":"null"}],
           "description": "The flow name to search for attestations in",
           "title": "Flow Name"
         }
@@ -6690,7 +6853,7 @@
         "required": false,
         "description": "Filter by environment name",
         "schema": {
-          "anyOf": [{"type":"string"},{"type":"null"}],
+          "anyOf": [{"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$"},{"type":"null"}],
           "description": "Filter by environment name",
           "title": "Env Name"
         }
@@ -6734,7 +6897,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -6809,7 +6972,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -7148,7 +7311,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -7163,7 +7330,8 @@
         "required": false,
         "description": "The page number of response",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "type": "integer",
+          "minimum": 1,
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -7175,7 +7343,8 @@
         "required": false,
         "description": "How many results to return per page of response",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "type": "integer",
+          "minimum": 1,
           "description": "How many results to return per page of response",
           "default": 20,
           "title": "Per Page"
@@ -7739,7 +7908,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -7824,14 +7993,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -7884,7 +8061,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -8009,14 +8190,22 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "trail_name",
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Trail Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
       },
       {
         "name": "org",
@@ -8152,7 +8341,7 @@
               "anyOf": [
                 {
                   "patternProperties": {
-                    "^[^=.]+$": {
+                    "^[^=.\\x00]+$": {
                       "properties": {
                         "href": {"type":"string","title":"Href"},
                         "fingerprint": {
@@ -8163,7 +8352,7 @@
                       "additionalProperties": false,
                       "type": "object",
                       "required": ["href"],
-                      "title": "ExternalAttachmentUrl"
+                      "title": "ExternalAttachmentUrlInput"
                     }
                   },
                   "type": "object"
@@ -8225,7 +8414,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8271,7 +8460,11 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Flow Name"}
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
       },
       {
         "name": "org",
@@ -8315,7 +8508,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8420,7 +8613,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8542,7 +8735,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8627,7 +8820,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8731,7 +8924,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8874,7 +9067,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -8959,7 +9152,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -9044,7 +9237,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -9303,7 +9496,7 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"string","title":"Env Name"}
+        "schema": {"type":"string","pattern":"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_]*$","title":"Env Name"}
       },
       {
         "name": "org",
@@ -9376,7 +9569,7 @@
           "properties": {
             "name": {
               "type": "string",
-              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~/]*$",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~/]*$",
               "title": "Name",
               "examples": ["production-action"]
             },
@@ -9403,7 +9596,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -9412,7 +9604,6 @@
                         ]
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "SlackActionTarget"
@@ -9436,7 +9627,6 @@
                         "default": "1.0"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["webhook"],
                     "title": "WebhookActionTarget"
@@ -9458,7 +9648,6 @@
                         "title": "Emails"
                       }
                     },
-                    "additionalProperties": false,
                     "type": "object",
                     "required": ["emails"],
                     "title": "EmailActionTarget"
@@ -9475,7 +9664,6 @@
                               "channel_name": {"type":"string","title":"Channel Name"},
                               "team_id": {"type":"string","title":"Team Id"}
                             },
-                            "additionalProperties": false,
                             "type": "object",
                             "required": ["channel_id","channel_name","team_id"],
                             "title": "SlackAppContext"
@@ -9510,7 +9698,9 @@
                 ]
               },
               "type": "array",
-              "title": "Triggers"
+              "title": "Triggers",
+              "description": "The events that fire this action. Each value is shown in the UI under a different label:\n\n- `ON_STARTED_ARTIFACT` (Artifact Start): an artifact starts running in the environment.\n- `ON_EXITED_ARTIFACT` (Artifact Stop): an artifact stops running.\n- `ON_SCALED_ARTIFACT` (Artifact changed): a running artifact becomes compliant or non-compliant, or gains new provenance. It does not fire when an artifact starts, so it is not a deployment trigger. The name is historical; scaling events are no longer recorded.\n- `ON_ALLOWED_ARTIFACT` (Artifact allow-listing): an artifact is added to the allow-list.\n- `ON_COMPLIANT_ENV` (Environment becomes compliant): the environment as a whole flips to compliant.\n- `ON_NON_COMPLIANT_ENV` (Environment becomes non-compliant): the environment as a whole flips to non-compliant.",
+              "examples": [["ON_STARTED_ARTIFACT","ON_NON_COMPLIANT_ENV"]]
             }
           },
           "additionalProperties": false,
@@ -9621,7 +9811,7 @@
             "set_tags": {
               "anyOf": [
                 {
-                  "patternProperties": {"^[a-zA-Z0-9][a-zA-Z0-9\\-_\\.~]*$":{"type":"string"}},
+                  "patternProperties": {"^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$":{"type":"string"}},
                   "type": "object"
                 },
                 {"type":"null"}
