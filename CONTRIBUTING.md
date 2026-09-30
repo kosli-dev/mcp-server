@@ -4,6 +4,8 @@ Thanks for your interest in the Kosli MCP Server!
 
 ## Getting started
 
+**Node ≥ 22.12** (`.nvmrc` pins it — `nvm use` picks it up). The published server only needs Node ≥ 22, but the dev toolchain is stricter: vitest pulls Vite 8, which requires `^20.19.0 || >=22.12.0`. On Node 22.0–22.11 `npm install` reports `EBADENGINE` and the test run is likely broken.
+
 ```bash
 git clone https://github.com/kosli-dev/mcp-server.git
 cd mcp-server
