@@ -357,7 +357,7 @@ describe("KosliClient", () => {
         error: true,
         status: 403,
         statusText: "",
-        message: "Downloading the file failed with status 403",
+        message: "Following the Kosli API's redirect failed with status 403. The API token is not sent on a redirect.",
       });
       expect(file.bodyUsed).toBe(false);
     });

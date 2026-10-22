@@ -240,7 +240,9 @@ export class KosliClient {
 
     // The body is not read: an object store's error echoes the request back.
     if (!file.ok) {
-      const message = `Downloading the file failed with status ${file.status}`;
+      // A redirect that stays on the API, not a download, fails here with 401,
+      // so the message names the redirect and the missing token.
+      const message = `Following the Kosli API's redirect failed with status ${file.status}. The API token is not sent on a redirect.`;
       return { error: true, status: file.status, statusText: file.statusText, message };
     }
 
