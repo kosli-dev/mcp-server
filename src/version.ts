@@ -8,8 +8,9 @@
  * It is a literal rather than a read of package.json because neither
  * alternative works: tsconfig sets `rootDir: "src"`, so importing
  * ../package.json shifts the outDir layout and breaks the bin path; and
- * scripts/pack-mcpb.sh deletes package.json from the bundle after using it to
- * install dependencies, so reading it at runtime throws for .mcpb users.
+ * scripts/pack-mcpb.sh replaces package.json in the bundle with a
+ * { "type": "module" } stub after using it to install dependencies, so a
+ * version read at runtime would be missing for .mcpb users.
  *
  * test/version.test.ts fails if this drifts from package.json.
  */

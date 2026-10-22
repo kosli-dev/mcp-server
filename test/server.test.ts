@@ -40,6 +40,17 @@ describe("createServer", () => {
     expect(inputs.search_actions).not.toContain("org");
   });
 
+  // These annotations are what make an MCP client ask before a write.
+  // scripts/smoke.ts checks the same against a built server.
+  it("marks writes destructive and everything else read-only", async () => {
+    const { tools } = await client.listTools();
+    const annotations = new Map(tools.map((t) => [t.name, t.annotations]));
+
+    expect(annotations.get("execute_write_action")).toMatchObject({ destructiveHint: true, readOnlyHint: false });
+    expect(annotations.get("execute_read_action")).toMatchObject({ readOnlyHint: true });
+    expect(annotations.get("search_actions")).toMatchObject({ readOnlyHint: true });
+  });
+
   it("sends the org a client supplies", async () => {
     respondOk();
 

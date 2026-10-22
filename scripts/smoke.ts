@@ -76,11 +76,13 @@ async function main() {
 
     // These annotations are what make an MCP client ask before a write, so a lost
     // annotation would let the model write into an org unprompted.
-    const annotations = Object.fromEntries(tools.map((t) => [t.name, t.annotations ?? {}]));
-    check(annotations.execute_write_action.destructiveHint === true, "execute_write_action is marked destructive");
-    check(annotations.execute_write_action.readOnlyHint === false, "execute_write_action is marked not read-only");
-    check(annotations.execute_read_action.readOnlyHint === true, "execute_read_action is marked read-only");
-    check(annotations.search_actions.readOnlyHint === true, "search_actions is marked read-only");
+    // A Map rather than Object.fromEntries, which returns any and would leave
+    // these checks untyped.
+    const annotations = new Map(tools.map((t) => [t.name, t.annotations]));
+    check(annotations.get("execute_write_action")?.destructiveHint === true, "execute_write_action is marked destructive");
+    check(annotations.get("execute_write_action")?.readOnlyHint === false, "execute_write_action is marked not read-only");
+    check(annotations.get("execute_read_action")?.readOnlyHint === true, "execute_read_action is marked read-only");
+    check(annotations.get("search_actions")?.readOnlyHint === true, "search_actions is marked read-only");
 
     const found = (await callJson(client, "search_actions", { query: "list environments" })) as { id: string }[];
     check(found.some((a) => a.id === "list_environments"), "search_actions finds list_environments");

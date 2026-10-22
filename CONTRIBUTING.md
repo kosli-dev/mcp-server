@@ -42,7 +42,7 @@ The new endpoint becomes discoverable automatically. No code changes needed.
 
 ## Testing locally
 
-From quickest to most realistic. CI runs the first three on every PR.
+From quickest to most realistic. CI runs the build, typecheck, tests and the offline smoke test (against `dist/` and the unzipped bundle) on every PR; the live read, the Inspector and Claude Code are for you to run.
 
 ```bash
 npm run build && npm run typecheck && npm test

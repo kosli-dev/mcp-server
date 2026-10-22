@@ -65,10 +65,17 @@ jobs:
       # The smoke steps are only worth anything if they fail when the server
       # does. Pin that, so a refactor that swallows the error can't turn them
       # into steps that always pass.
+      # Requires smoke's own "not ok" line, so a crash in the smoke script
+      # itself (a bad import, a missing tsx) can't pass for a caught failure.
       - name: Smoke test fails on a broken server
         run: |
-          if npm run smoke -- does-not-exist.js; then
+          if out=$(npm run smoke -- does-not-exist.js 2>&1); then
             echo "::error::smoke test passed against a missing entry point"
+            exit 1
+          fi
+          if ! grep -q '^not ok - ' <<<"$out"; then
+            echo "$out"
+            echo "::error::smoke test failed without reporting a failed check"
             exit 1
           fi
 
