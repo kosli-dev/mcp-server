@@ -22,6 +22,10 @@ export interface FileParam {
 
 type FetchFn = typeof globalThis.fetch;
 
+const USER_AGENT = `kosli-mcp-server/${VERSION}`;
+
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
 function getRequestContentType(entry: CatalogEntry): string | undefined {
   const body = entry.requestBody?.[0];
   if (!body) return undefined;
@@ -91,7 +95,7 @@ export class KosliClient {
     const isMultipart = getRequestContentType(entry) === "multipart/form-data";
     const baseHeaders: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
-      "User-Agent": `kosli-mcp-server/${VERSION}`,
+      "User-Agent": USER_AGENT,
     };
     // For multipart, let fetch set Content-Type with the generated boundary.
     if (!isMultipart) {
@@ -147,7 +151,12 @@ export class KosliClient {
 
   private async doFetch(url: string, init: RequestInit): Promise<unknown | ErrorResponse> {
     try {
-      const response = await this.fetch(url, init);
+      // fetch would keep our token on a redirect to the same host.
+      const response = await this.fetch(url, { ...init, redirect: "manual" });
+
+      if (REDIRECT_STATUSES.has(response.status)) {
+        return await this.download(response);
+      }
 
       if (!response.ok) {
         let message: string;
@@ -165,7 +174,8 @@ export class KosliClient {
         };
       }
 
-      return response.json();
+      // Awaited so a body that is not JSON reaches the catch below.
+      return await response.json();
     } catch {
       // Do not forward the raw error: it may contain internal hostnames,
       // proxy URLs, or other topology that could leak via the LLM.
@@ -176,5 +186,42 @@ export class KosliClient {
         message: "Request failed before reaching the Kosli API",
       };
     }
+  }
+
+  /**
+   * Fetches the file a redirect points at. The target is a pre-signed
+   * object-store URL that carries its own credentials, and the store refuses
+   * a request that also sends our token, so the token is left off.
+   */
+  private async download(redirect: Response): Promise<unknown | ErrorResponse> {
+    const location = redirect.headers.get("location");
+    if (!location) {
+      return {
+        error: true,
+        status: redirect.status,
+        statusText: redirect.statusText,
+        message: "The Kosli API redirected without saying where to",
+      };
+    }
+
+    const file = await this.fetch(location, { headers: { "User-Agent": USER_AGENT } });
+
+    // The body is not read: an object store's error echoes the request back.
+    if (!file.ok) {
+      return { error: true, status: file.status, statusText: file.statusText, message: file.statusText };
+    }
+
+    // Kosli serves readable files as text/plain and everything else as
+    // application/octet-stream, which as text would be noise to the model.
+    if (!file.headers.get("content-type")?.startsWith("text/")) {
+      return {
+        error: true,
+        status: file.status,
+        statusText: "Binary File",
+        message: "The file is binary, so it cannot be returned as text. Download it from the Kosli web app instead.",
+      };
+    }
+
+    return file.text();
   }
 }

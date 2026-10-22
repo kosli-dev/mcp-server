@@ -172,6 +172,14 @@ describe("KosliClient", () => {
     expect(JSON.stringify(result)).not.toContain("10.0.0.5");
   });
 
+  it("returns structured error when an OK body is not JSON", async () => {
+    mockFetch.mockResolvedValue(new Response("<html>", { status: 200 }));
+
+    const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+    expect(result).toMatchObject({ error: true, statusText: "Network Error" });
+  });
+
   it("returns structured error on missing required path param (does not throw)", async () => {
     const result = await client.execute(getTrailEntry, { org: "test-org", flow_name: "my-flow" });
 
@@ -269,6 +277,83 @@ describe("KosliClient", () => {
       const [, init] = mockFetch.mock.calls[0];
       expect(init.body).toBe('{"name":"my-flow"}');
       expect(init.headers).toMatchObject({ "Content-Type": "application/json" });
+    });
+  });
+
+  describe("redirects", () => {
+    const signedUrl = "https://app.kosli.com/downloads/evidence/sbom.json?X-Amz-Signature=abc";
+
+    function redirectTo(location: string | null) {
+      const headers = location === null ? undefined : { location };
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 302, headers }));
+    }
+
+    it("follows the redirect without our token, and returns a text file as text", async () => {
+      redirectTo(signedUrl);
+      mockFetch.mockResolvedValueOnce(
+        new Response('{"bomFormat":"CycloneDX"}', {
+          headers: { "content-type": "text/plain; charset=utf-8" },
+        }),
+      );
+
+      const result = await client.execute(getTrailEntry, {
+        org: "test-org",
+        flow_name: "my-flow",
+        trail_name: "my-trail",
+      });
+
+      expect(result).toBe('{"bomFormat":"CycloneDX"}');
+      expect(mockFetch.mock.calls[0][1]).toMatchObject({ redirect: "manual" });
+      const [url, init] = mockFetch.mock.calls[1];
+      expect(url).toBe(signedUrl);
+      expect(init.headers).toEqual({ "User-Agent": `kosli-mcp-server/${VERSION}` });
+    });
+
+    it("returns an error for a binary file instead of decoding it", async () => {
+      redirectTo(signedUrl);
+      const file = new Response(new Uint8Array([0x50, 0x4b, 0x03, 0x04]), {
+        headers: { "content-type": "application/octet-stream" },
+      });
+      mockFetch.mockResolvedValueOnce(file);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, message: expect.stringContaining("binary") });
+      expect(file.bodyUsed).toBe(false);
+    });
+
+    // An object store's error body can echo the request back, so it is never read.
+    it("returns the status of a failed download without reading its body", async () => {
+      redirectTo(signedUrl);
+      const file = new Response("<Error>...</Error>", {
+        status: 403,
+        statusText: "Forbidden",
+        headers: { "content-type": "application/xml" },
+      });
+      mockFetch.mockResolvedValueOnce(file);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toEqual({ error: true, status: 403, statusText: "Forbidden", message: "Forbidden" });
+      expect(file.bodyUsed).toBe(false);
+    });
+
+    it("returns structured error when the download fails on the network", async () => {
+      redirectTo(signedUrl);
+      mockFetch.mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, statusText: "Network Error" });
+    });
+
+    it("returns an error for a redirect with no Location", async () => {
+      redirectTo(null);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 302 });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
   });
 });
