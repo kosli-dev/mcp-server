@@ -55,6 +55,16 @@ jobs:
       - name: Smoke test dist
         run: npm run smoke
 
+      # The smoke steps are only worth anything if they fail when the server
+      # does. Pin that, so a refactor that swallows the error can't turn them
+      # into steps that always pass.
+      - name: Smoke test fails on a broken server
+        run: |
+          if npm run smoke -- does-not-exist.js; then
+            echo "::error::smoke test passed against a missing entry point"
+            exit 1
+          fi
+
       - name: Pack .mcpb bundle
         run: npm run pack:mcpb
 
@@ -64,7 +74,20 @@ jobs:
       # against the bundled production node_modules rather than the repo's.
       - name: Validate and smoke test .mcpb bundle
         run: |
-          BUNDLE_DIR="$(mktemp -d)"
-          unzip -q kosli-mcp-server-*.mcpb -d "$BUNDLE_DIR"
-          npx -y @anthropic-ai/mcpb@2.1.2 validate "$BUNDLE_DIR/manifest.json"
-          npm run smoke -- "$BUNDLE_DIR/dist/index.js"
+          unzip -q kosli-mcp-server-*.mcpb -d "$RUNNER_TEMP/mcpb"
+          npx mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
+          npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
+
+      # The matrix floor is the dev floor (vitest needs a newer 22.x), but
+      # users run the bundle on anything engines allows. Run it once on the
+      # consumer floor itself; before 22.7 Node won't detect ESM by syntax, so
+      # this is what catches a bundle missing its "type": "module".
+      - name: Setup Node at the consumer floor
+        if: matrix.node-version == '22'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.0.0'
+
+      - name: Smoke test .mcpb bundle on the consumer floor
+        if: matrix.node-version == '22'
+        run: npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
