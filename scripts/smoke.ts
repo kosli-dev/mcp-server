@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { StdioClientTransport, getDefaultEnvironment } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 // Starts a built server over real stdio and drives it as an MCP client would.
 // The in-memory tests in test/server.test.ts cover the tool wiring; this covers
@@ -32,9 +32,10 @@ function check(condition: unknown, message: string): asserts condition {
 
 // A failed call carries a plain message rather than JSON, so report that
 // message instead of the parse error it would cause.
-async function callJson(client: Client, name: string, args: Record<string, unknown>): Promise<any> {
+async function callJson(client: Client, name: string, args: Record<string, unknown>): Promise<unknown> {
   const result = await client.callTool({ name, arguments: args });
-  const [first] = result.content as { type: string; text?: string }[];
+  const content = Array.isArray(result.content) ? (result.content as { type: string; text?: string }[]) : [];
+  const [first] = content;
   const text = first?.type === "text" ? first.text ?? "" : "";
   if (result.isError) throw new Error(`${name} returned an error: ${text}`);
   try {
@@ -47,10 +48,11 @@ async function callJson(client: Client, name: string, args: Record<string, unkno
 async function main() {
   console.log(`Smoke testing ${ENTRY} (${live ? `live, org ${org}` : "offline"})`);
 
-  // The transport passes only a minimal environment by default, so set what
-  // the server needs. Offline, a placeholder token satisfies loadConfig.
+  // The SDK's allowlist (PATH, HOME, and SystemRoot and friends on Windows)
+  // copies no KOSLI_* variable, so the server only sees what is set here.
+  // Offline, a placeholder token satisfies loadConfig.
   const env: Record<string, string> = {
-    PATH: process.env.PATH ?? "",
+    ...getDefaultEnvironment(),
     KOSLI_API_TOKEN: live ? token! : "smoke-test-placeholder",
   };
   if (process.env.KOSLI_BASE_URL) env.KOSLI_BASE_URL = process.env.KOSLI_BASE_URL;
@@ -84,7 +86,9 @@ async function main() {
     check(found.some((a) => a.id === "list_environments"), "search_actions finds list_environments");
 
     if (live) {
-      const body = await callJson(client, "execute_read_action", { actionId: "list_environments", org, fields: ["name"] });
+      const body = (await callJson(client, "execute_read_action", {
+        actionId: "list_environments", org, fields: ["name"],
+      })) as { error?: boolean; status?: number; message?: string } | null;
       check(!body?.error, `list_environments succeeds against the live API${body?.error ? `: ${body.status} ${body.message}` : ""}`);
     } else {
       console.log("skip - live read (set KOSLI_API_TOKEN and KOSLI_SMOKE_ORG to run it)");

@@ -12,6 +12,9 @@ jobs:
   test:
     # 22.12 is the dev floor (see the matrix comment); 24 is what release.yml
     # publishes from. Testing both ends stops either drifting untested.
+    # consumer-floor is the exact version engines allows: one leg also runs the
+    # bundle on it. It is declared here, once, so the steps that use it can't
+    # silently stop matching when the matrix changes.
     name: test (node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     strategy:
@@ -21,6 +24,9 @@ jobs:
         # >=22.12, and a bare '22' resolves to the latest 22.x, so the bottom of
         # the supported range would never actually be tested.
         node-version: ['22.12', '24']
+        include:
+          - node-version: '22.12'
+            consumer-floor: '22.0.0'
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
@@ -75,19 +81,22 @@ jobs:
       - name: Validate and smoke test .mcpb bundle
         run: |
           unzip -q kosli-mcp-server-*.mcpb -d "$RUNNER_TEMP/mcpb"
-          npx mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
+          npx --no-install mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
           npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
 
       # The matrix floor is the dev floor (vitest needs a newer 22.x), but
       # users run the bundle on anything engines allows. Run it once on the
       # consumer floor itself; before 22.7 Node won't detect ESM by syntax, so
       # this is what catches a bundle missing its "type": "module".
+      # The switch is job-wide, so the client side (tsx, the SDK client) runs on
+      # the floor too. If this fails after a dev-tooling bump, check that before
+      # suspecting the bundle.
       - name: Setup Node at the consumer floor
-        if: matrix.node-version == '22'
+        if: matrix.consumer-floor
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '22.0.0'
+          node-version: ${{ matrix.consumer-floor }}
 
       - name: Smoke test .mcpb bundle on the consumer floor
-        if: matrix.node-version == '22'
+        if: matrix.consumer-floor
         run: npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
