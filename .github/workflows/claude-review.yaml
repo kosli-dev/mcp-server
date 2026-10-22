@@ -10,14 +10,22 @@
 # - update-catalog PRs: what changed in the generated catalog, especially removals.
 # - Everything else: general code review against the invariants in CLAUDE.md.
 #
+# Reviews are phased. A PR gets a full review when it opens (or leaves draft). On a
+# later push, the "Compare with the previous push" step checks whether the PR's own
+# diff changed: a pure rebase onto a newer main leaves it unchanged, and no review
+# runs. Otherwise the bot PRs get their full review again (a new version or a new
+# catalog is a new diff), and general PRs get a follow-up scoped to the new commits
+# that checks the earlier findings instead of hunting for new nits.
+#
 # PRs from forks are skipped: they run without the credentials this needs, and on a
-# public repo an unguarded trigger lets anyone spend budget.
+# public repo an unguarded trigger lets anyone spend budget. Drafts are skipped until
+# they're marked ready.
 
 name: Claude PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -30,6 +38,7 @@ jobs:
   review-dependency-updates:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft &&
       github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -48,8 +57,32 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Compare with the previous push
+        id: delta
+        if: github.event.action == 'synchronize'
+        env:
+          BASE: origin/${{ github.event.pull_request.base.ref }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          # patch-id ignores line offsets, so a pure rebase compares equal. A force-push
+          # leaves BEFORE on no ref, so fetch it by SHA; if that fails, assume a change.
+          if ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null && ! git fetch -q origin "$BEFORE"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          old=$(git diff "$BASE...$BEFORE" | git patch-id --stable)
+          new=$(git diff "$BASE...$AFTER" | git patch-id --stable)
+          if [ "$old" = "$new" ]; then
+            echo "PR diff unchanged since the last push; skipping the review."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Claude review (dependency updates)
-        uses: anthropics/claude-code-action@756cc22e19660d20e8cc9496b4f242475a7f7790 # v1.0.235
+        if: github.event.action != 'synchronize' || steps.delta.outputs.changed == 'true'
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -63,7 +96,7 @@ jobs:
             --max-turns 60
             --max-budget-usd 3
             --model claude-opus-5
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(git diff:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(git diff:*)"
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
@@ -75,7 +108,7 @@ jobs:
                deprecations, and behaviour changes that could affect this codebase.
             3. Search the repo for how the dependency is actually used and flag anything that
                might break. Specifics that matter here:
-               - `@modelcontextprotocol/sdk` — tool registration and annotations in `src/index.ts`.
+               - `@modelcontextprotocol/sdk` — tool registration and annotations in `src/server.ts`.
                - `vitest` — config and test APIs across `test/`.
                - `typescript` — `strict: true` must not be weakened; ESM with `NodeNext` and
                  `.js` extensions on relative imports.
@@ -89,6 +122,10 @@ jobs:
                  release notes for breaking input or behaviour changes.
             4. Call out concrete risks and suggest follow-up checks or tests where useful.
 
+            You can't run `npm` here. CI builds, typechecks, tests and smoke-tests every PR:
+            read its results with `gh pr checks` (they may still be running) rather than
+            guessing whether something compiles.
+
             Note: The PR branch is already checked out in the current working directory.
             Keep the review concise and scoped to this PR.
 
@@ -100,6 +137,7 @@ jobs:
   review-catalog-update:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft &&
       github.event.pull_request.user.login == 'github-actions[bot]' &&
       github.event.pull_request.head.ref == 'chore/update-catalog'
     runs-on: ubuntu-latest
@@ -119,8 +157,32 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Compare with the previous push
+        id: delta
+        if: github.event.action == 'synchronize'
+        env:
+          BASE: origin/${{ github.event.pull_request.base.ref }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          # patch-id ignores line offsets, so a pure rebase compares equal. A force-push
+          # leaves BEFORE on no ref, so fetch it by SHA; if that fails, assume a change.
+          if ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null && ! git fetch -q origin "$BEFORE"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          old=$(git diff "$BASE...$BEFORE" | git patch-id --stable)
+          new=$(git diff "$BASE...$AFTER" | git patch-id --stable)
+          if [ "$old" = "$new" ]; then
+            echo "PR diff unchanged since the last push; skipping the review."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Claude review (catalog update)
-        uses: anthropics/claude-code-action@756cc22e19660d20e8cc9496b4f242475a7f7790 # v1.0.235
+        if: github.event.action != 'synchronize' || steps.delta.outputs.changed == 'true'
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -170,6 +232,7 @@ jobs:
   review-general:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft &&
       github.event.pull_request.user.login != 'dependabot[bot]' &&
       github.event.pull_request.user.login != 'github-actions[bot]'
     runs-on: ubuntu-latest
@@ -189,8 +252,43 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Compare with the previous push
+        id: delta
+        if: github.event.action == 'synchronize'
+        env:
+          BASE: origin/${{ github.event.pull_request.base.ref }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          # patch-id ignores line offsets, so a pure rebase compares equal. A force-push
+          # leaves BEFORE on no ref, so fetch it by SHA; if that fails, assume a change
+          # and let the follow-up fall back to the whole PR diff.
+          if ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null && ! git fetch -q origin "$BEFORE"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "delta=gh pr diff ${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          old_base=$(git merge-base "$BASE" "$BEFORE")
+          new_base=$(git merge-base "$BASE" "$AFTER")
+          old=$(git diff "$old_base" "$BEFORE" | git patch-id --stable)
+          new=$(git diff "$new_base" "$AFTER" | git patch-id --stable)
+          if [ "$old" = "$new" ]; then
+            echo "PR diff unchanged since the last push; skipping the follow-up."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          # After a rebase, BEFORE..AFTER would include everything main gained, so
+          # compare the two versions of the PR's commits instead.
+          if [ "$old_base" = "$new_base" ]; then
+            echo "delta=git diff $BEFORE $AFTER" >> "$GITHUB_OUTPUT"
+          else
+            echo "delta=git range-diff $old_base..$BEFORE $new_base..$AFTER" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Claude review (general)
-        uses: anthropics/claude-code-action@756cc22e19660d20e8cc9496b4f242475a7f7790 # v1.0.235
+        if: github.event.action != 'synchronize'
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -203,72 +301,113 @@ jobs:
             --max-turns 60
             --max-budget-usd 5
             --model claude-opus-5
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(git diff:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(git diff:*)"
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Read CLAUDE.md in the repo root first. It documents the architecture, the build and
-            test commands, and a set of deliberate design decisions. Use it to judge whether this
-            PR follows established conventions.
+            Read CLAUDE.md in the repo root first. Its "Conventions", "CI & repository rules"
+            and "Things not to do" sections are the invariants this repo cares about most —
+            catalog-driven design with exactly three tools, no configured org, the error-object
+            contract, the `User-Agent` version, and so on. A PR that quietly breaks one of them
+            is the most valuable thing you can catch. Judge against CLAUDE.md as it stands on
+            this branch; if the PR changes CLAUDE.md itself, check the code agrees with it.
 
-            ## Phase 1: Architectural Analysis
+            ## What to review
 
-            This is a catalog-driven MCP server. The design decisions below are intentional, and a
-            PR that quietly breaks one is the most valuable thing you can catch:
-
-            - Exactly three MCP tools. New endpoints come from regenerating the catalog, never
-              from adding a tool per endpoint.
-            - `src/catalog.json` is generated by `scripts/generate-catalog.ts`, not hand-edited.
-              `$ref`s are inlined at generation time.
-            - `KosliClient` returns `{ error: true, status, statusText, message }` on non-2xx.
-              It does not throw. Tools stringify whatever they get.
-            - Responses are serialised with compact `JSON.stringify` to save tokens. No
-              pretty-printing.
-            - The `org` path parameter falls back to `config.org` in `KosliClient.buildUrl`.
-            - Every request carries `User-Agent: kosli-mcp-server`.
-            - ESM only: relative imports need `.js` extensions even though the source is `.ts`.
-            - TypeScript `strict: true` must not be weakened.
-            - No HTTP client library — `globalThis.fetch`, injectable as `fetchFn` for tests.
-
-            Also check the read/write split: `execute_read_action` is annotated `readOnlyHint`
-            and `execute_write_action` `destructiveHint`. Changes that move an endpoint across
-            that boundary, or weaken an annotation, deserve scrutiny.
-
-            ## Phase 2: Code Review
-
-            Review this PR for:
-
-            1. **Code quality** – clarity and consistency with surrounding code.
+            1. **Possible bugs** – logic errors, misuse of APIs, incorrect assumptions.
             2. **Edge and corner cases** – missing null/empty checks, boundary conditions, error
                paths, invalid inputs. Param serialisation differs between GET/DELETE
                (querystring) and other methods (JSON body); both branches need to stay coherent.
-            3. **Possible bugs** – logic errors, misuse of APIs, incorrect assumptions.
-            4. **Readability and maintainability** – naming, structure, ease of future change.
-            5. **Testing** – tests live under `test/` mirroring `src/`, use Vitest, and inject
-               `fetchFn` rather than hitting the network. `test/fixtures/catalog-subset.json` is
-               a hand-curated slice; prefer extending it over loading the full catalog. Flag new
-               behaviour that arrives without tests, and any test that would make a network call.
-            6. **Security** – this server holds a Kosli API token and can perform destructive
+            3. **The read/write split** – `execute_read_action` is annotated `readOnlyHint` and
+               `execute_write_action` `destructiveHint`. Changes that move an endpoint across
+               that boundary, or weaken an annotation, deserve scrutiny.
+            4. **Security** – this server holds a Kosli API token and can perform destructive
                writes. Watch for token leakage into logs or error messages, and for changes that
-               widen what a write action can reach.
-            7. **Performance** – `searchActions` is deliberately dependency-free and O(n) over a
+               widen what a write action can reach or which org a request lands in.
+            5. **Testing** – flag new behaviour that arrives without tests, and any test that
+               would make a network call. CLAUDE.md's "Testing" section has the conventions.
+            6. **Performance** – `searchActions` is deliberately dependency-free and O(n) over a
                small catalog. Flag anything that makes it superlinear or pulls in a dependency.
+            7. **Scope** – changes outside what the PR title and description say it does.
 
-            Also worth checking: commit messages and the PR title follow Conventional Commits,
-            and `manifest.json`'s version placeholder is not hand-edited (it is injected at pack
-            time from `package.json`).
+            Also check that commit messages and the PR title follow Conventional Commits.
 
-            ## Phase 3: Acknowledge Good Work
+            ## What not to report
 
-            Briefly note genuinely good design, testing, or clean-ups in the PR. A good review
-            balances constructive criticism with recognition of quality work.
+            Report bugs, security problems, broken invariants, missing tests for new
+            behaviour, and out-of-scope changes. Leave out style nits, matters of preference,
+            and "consider also…" ideas about code the PR doesn't touch. If one of those is
+            genuinely worth saying, put it in a single closing line, not an inline comment.
+            Every finding you post will be checked again on each later push, so post only what
+            you'd want resolved before merge.
+
+            You can't run `npm` here. CI builds, typechecks, tests and smoke-tests every PR:
+            read its results with `gh pr checks` (they may still be running) rather than
+            guessing whether something compiles or passes.
 
             Note: The PR branch is already checked out in the current working directory.
-            Be concise and actionable. Prefer inline suggestions where possible; add a short
-            summary at the end.
+            Be concise and actionable. Prefer inline comments for findings; end with a short
+            summary, which may note in a sentence anything the PR does notably well.
 
             Use `gh pr comment --edit-last --create-if-none` for top-level feedback,
             so the summary replaces the previous run's summary instead of stacking.
             Use `mcp__github_inline_comment__create_inline_comment` to highlight specific code issues.
+            Only post GitHub comments - don't submit review text as messages.
+
+      - name: Claude follow-up review (new commits only)
+        if: github.event.action == 'synchronize' && steps.delta.outputs.changed == 'true'
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          track_progress: true
+          use_sticky_comment: true
+          claude_args: |
+            --max-turns 30
+            --max-budget-usd 2
+            --model claude-sonnet-5-5
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh api:*),Bash(git diff:*),Bash(git range-diff:*),Bash(git log:*),Bash(git show:*),Read,Grep,Glob"
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            You are following up on an earlier review of this PR. New commits were pushed.
+            The change since the last review is the output of:
+
+                ${{ steps.delta.outputs.delta }}
+
+            (A `git range-diff` means the branch was also rebased: read it as the difference
+            between the old and new versions of the PR's commits, and ignore anything that came
+            from the base branch. Commits marked `>` are new and shown without their patch:
+            read those with `git show`.)
+
+            Scope rules — follow these strictly:
+            - Review only the lines that change. Don't re-review unchanged code, and don't look
+              for new issues in files or regions these commits didn't touch.
+            - Within the changed lines, flag only bugs, security issues, broken invariants from
+              CLAUDE.md, or regressions introduced by the fix itself. Post these as inline
+              comments. Skip style nits and anything that is a matter of preference.
+
+            Steps:
+            1. Collect every finding Claude raised earlier: the inline comments
+               (`gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments`)
+               and the summary (`gh pr view ${{ github.event.pull_request.number }} --comments`).
+               If there is no earlier Claude review (a push cancelled the first run), say so,
+               then review the whole PR (`gh pr diff`) to the same bar as these scope rules
+               and skip steps 2 and 3.
+            2. For each earlier finding whose location the new commits touch, decide: resolved,
+               partially addressed, or not addressed. Don't repeat the finding; give the status
+               and, if it's still open, one sentence on what's missing.
+            3. Resolve the inline thread of each finding you judged resolved. Look up thread
+               IDs with `gh api graphql` (`repository.pullRequest.reviewThreads`) and resolve
+               with the `resolveReviewThread` mutation.
+            4. Replace the summary via `gh pr comment --edit-last --create-if-none`: the status
+               of each earlier finding you evaluated, and the count of new inline comments. If
+               everything touched is resolved and nothing new was found, a single line.
+
+            You can't run `npm` here; `gh pr checks` shows CI's build, typecheck and test results.
             Only post GitHub comments - don't submit review text as messages.
