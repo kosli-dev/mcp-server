@@ -42,8 +42,29 @@ jobs:
       - name: Build
         run: npm run build
 
+      # tsconfig.json covers src only and vitest strips types, so without this
+      # a type error in test/ or scripts/ never fails anything.
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Test
         run: npm test
 
-      - name: Pack .mcpb bundle (smoke test)
+      # Starts the built server over real stdio: catches what the in-memory
+      # tests can't, like the bin entry or the JSON imports failing to load.
+      - name: Smoke test dist
+        run: npm run smoke
+
+      - name: Pack .mcpb bundle
         run: npm run pack:mcpb
+
+      - name: Validate manifest
+        run: npx -y @anthropic-ai/mcpb@2.1.2 validate manifest.json
+
+      # Runs the server from the unzipped bundle, so it resolves against the
+      # bundled production node_modules rather than the repo's.
+      - name: Smoke test .mcpb bundle
+        run: |
+          BUNDLE_DIR="$(mktemp -d)"
+          unzip -q kosli-mcp-server-*.mcpb -d "$BUNDLE_DIR"
+          npm run smoke -- "$BUNDLE_DIR/dist/index.js"

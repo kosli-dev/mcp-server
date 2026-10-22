@@ -17,6 +17,8 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "smoke": "tsx scripts/smoke.ts",
     "generate-catalog": "tsx scripts/generate-catalog.ts",
     "sync-version": "node scripts/sync-version.mjs",
     "version": "npm run sync-version && git add src/version.ts package.json package-lock.json",

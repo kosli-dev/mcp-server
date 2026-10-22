@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { VERSION } from "../../src/version.js";
 import { KosliClient } from "../../src/client/kosli-client.js";
 import type { CatalogEntry, Config } from "../../src/types.js";
@@ -80,7 +80,7 @@ const createFlowJsonEntry: CatalogEntry = {
 
 describe("KosliClient", () => {
   let client: KosliClient;
-  let mockFetch: ReturnType<typeof vi.fn>;
+  let mockFetch: Mock;
 
   beforeEach(() => {
     mockFetch = vi.fn();
