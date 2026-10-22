@@ -11,6 +11,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
@@ -44,8 +45,26 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Test
         run: npm test
+
+      - name: Smoke test dist
+        run: npm run smoke
+
+      # Pack and check the bundle before publishing: npm publish can't be
+      # undone, so it goes last. This also checks the bundle under the npm this
+      # job installs, which CI never uses.
+      - name: Pack .mcpb bundle
+        run: npm run pack:mcpb
+
+      - name: Validate and smoke test .mcpb bundle
+        run: |
+          unzip -q kosli-mcp-server-*.mcpb -d "$RUNNER_TEMP/mcpb"
+          npx --no-install mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
+          npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
 
       - name: Publish to npm
         # Auth is npm Trusted Publishing (OIDC) — that is what id-token: write above
@@ -53,9 +72,6 @@ jobs:
         # Trusted publishing already generates provenance on a public repo; passing
         # --provenance makes it fail loudly rather than silently skip if that changes.
         run: npm publish --access public --provenance
-
-      - name: Pack .mcpb bundle
-        run: npm run pack:mcpb
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3

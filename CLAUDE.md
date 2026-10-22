@@ -104,6 +104,6 @@ To release:
 1. `npm version <x> --no-git-tag-version` on a branch.
 2. Commit (e.g. `chore: bump version to 0.3.0`) and open a PR — `main` is protected, so the bump can't be pushed directly.
 3. After merge, tag the merge commit on `main`: `git tag -a v0.3.0 -m "v0.3.0" && git push origin v0.3.0`. `tag.gpgSign` makes annotated tags signed.
-4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm with provenance, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
+4. The `release.yml` workflow will: verify the tag matches `package.json`; build, typecheck, test and smoke-test; build, validate and smoke-test the `.mcpb` bundle; then publish to npm with provenance and create a GitHub Release with the bundle attached. Publishing comes after every check because it can't be undone; keep it last.
 
 Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.
