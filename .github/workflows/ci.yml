@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test:
-    # 22 is the floor declared in package.json engines; 24 is what release.yml
+    # 22.12 is the dev floor (see the matrix comment); 24 is what release.yml
     # publishes from. Testing both ends stops either drifting untested.
     name: test (node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
