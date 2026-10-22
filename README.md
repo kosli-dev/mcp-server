@@ -164,8 +164,10 @@ npm run generate-catalog
 ```bash
 npm test             # run the test suite (vitest)
 npm run test:watch   # watch mode
+npm run typecheck    # type-check src, test and scripts
 npm run build        # compile to dist/
 npm start            # run the built server over stdio
+npm run smoke        # start the built server and drive it over stdio
 npm run pack:mcpb    # build a .mcpb bundle for Claude Desktop
 ```
 

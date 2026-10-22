@@ -17,7 +17,7 @@ npm test
 ## Development workflow
 
 1. Create a branch from `main`.
-2. Make your changes — run `npm test` and `npm run build` before pushing.
+2. Make your changes — run `npm run build`, `npm run typecheck`, and `npm test` before pushing.
 3. Open a pull request against `main`.
 
 ## Conventions
@@ -40,7 +40,40 @@ npm run generate-catalog
 
 The new endpoint becomes discoverable automatically. No code changes needed.
 
-## Testing the Claude Desktop extension locally
+## Testing locally
+
+From quickest to most realistic. CI runs the first three on every PR.
+
+```bash
+npm run build && npm run typecheck && npm test
+```
+
+`typecheck` covers `test/` and `scripts/` as well as `src/`. The build only compiles `src/`, and vitest strips types without checking them.
+
+```bash
+npm run smoke                          # start dist/index.js over stdio and drive it as a client
+npm run smoke -- path/to/dist/index.js # same, against another build, e.g. an unzipped .mcpb
+```
+
+The smoke test is offline by default. Set `KOSLI_API_TOKEN` and `KOSLI_SMOKE_ORG` to also run one read against the live API. Do this before merging an `@modelcontextprotocol/sdk` bump, since that is the dependency that ships:
+
+```bash
+KOSLI_API_TOKEN=... KOSLI_SMOKE_ORG=<your-org> npm run smoke
+```
+
+To call the tools by hand, use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+
+```bash
+KOSLI_API_TOKEN=... npx @modelcontextprotocol/inspector node dist/index.js
+```
+
+To use your checkout from Claude Code:
+
+```bash
+claude mcp add kosli-local -e KOSLI_API_TOKEN=... -- node "$PWD/dist/index.js"
+```
+
+To install the Claude Desktop extension exactly as users get it:
 
 ```bash
 npm run pack:mcpb
