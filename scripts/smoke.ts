@@ -30,9 +30,18 @@ function check(condition: unknown, message: string): asserts condition {
   console.log(`ok - ${message}`);
 }
 
-function textOf(result: Awaited<ReturnType<Client["callTool"]>>): string {
+// A failed call carries a plain message rather than JSON, so report that
+// message instead of the parse error it would cause.
+async function callJson(client: Client, name: string, args: Record<string, unknown>): Promise<any> {
+  const result = await client.callTool({ name, arguments: args });
   const [first] = result.content as { type: string; text?: string }[];
-  return first?.type === "text" ? first.text ?? "" : "";
+  const text = first?.type === "text" ? first.text ?? "" : "";
+  if (result.isError) throw new Error(`${name} returned an error: ${text}`);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`${name} returned non-JSON: ${text.slice(0, 200)}`);
+  }
 }
 
 async function main() {
@@ -48,9 +57,11 @@ async function main() {
 
   const transport = new StdioClientTransport({ command: process.execPath, args: [ENTRY], env, stderr: "inherit" });
   const client = new Client({ name: "kosli-smoke", version: "0" });
-  await client.connect(transport);
 
   try {
+    // Inside the try so a failed handshake still closes the child process.
+    await client.connect(transport);
+
     const server = client.getServerVersion();
     check(server?.version === version, `server advertises version ${version} (got ${server?.version})`);
 
@@ -61,16 +72,19 @@ async function main() {
       `lists exactly ${EXPECTED_TOOLS.join(", ")} (got ${names.join(", ")})`,
     );
 
-    const search = await client.callTool({ name: "search_actions", arguments: { query: "list environments" } });
-    const found = JSON.parse(textOf(search)) as { id: string }[];
+    // These hints are what make an MCP client ask before a write, so a lost
+    // annotation would let the model write into an org unprompted.
+    const hints = Object.fromEntries(tools.map((t) => [t.name, t.annotations ?? {}]));
+    check(hints.execute_write_action.destructiveHint === true, "execute_write_action is marked destructive");
+    check(hints.execute_write_action.readOnlyHint !== true, "execute_write_action is not marked read-only");
+    check(hints.execute_read_action.readOnlyHint === true, "execute_read_action is marked read-only");
+    check(hints.search_actions.readOnlyHint === true, "search_actions is marked read-only");
+
+    const found = (await callJson(client, "search_actions", { query: "list environments" })) as { id: string }[];
     check(found.some((a) => a.id === "list_environments"), "search_actions finds list_environments");
 
     if (live) {
-      const read = await client.callTool({
-        name: "execute_read_action",
-        arguments: { actionId: "list_environments", org, fields: ["name"] },
-      });
-      const body = JSON.parse(textOf(read));
+      const body = await callJson(client, "execute_read_action", { actionId: "list_environments", org, fields: ["name"] });
       check(!body?.error, `list_environments succeeds against the live API${body?.error ? `: ${body.status} ${body.message}` : ""}`);
     } else {
       console.log("skip - live read (set KOSLI_API_TOKEN and KOSLI_SMOKE_ORG to run it)");

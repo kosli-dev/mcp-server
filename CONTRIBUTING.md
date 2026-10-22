@@ -48,7 +48,7 @@ From quickest to most realistic. CI runs the first three on every PR.
 npm run build && npm run typecheck && npm test
 ```
 
-`typecheck` covers `test/` and `scripts/` as well as `src/`. The build only compiles `src/`, and vitest strips types without checking them.
+`typecheck` covers the TypeScript in `test/` and `scripts/` as well as `src/` (not `scripts/sync-version.mjs`, which is plain JS). The build only compiles `src/`, and vitest strips types without checking them.
 
 ```bash
 npm run smoke                          # start dist/index.js over stdio and drive it as a client

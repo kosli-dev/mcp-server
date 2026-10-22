@@ -51,7 +51,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - `test/fixtures/catalog-subset.json` is a hand-curated slice of the catalog for fast, deterministic tests. Prefer extending it over loading the full catalog.
 - Tests for `KosliClient` inject a `fetchFn`; don't hit the network in tests.
 - Run: `npm test` (CI) or `npm run test:watch` (dev).
-- `npm run typecheck` (`tsconfig.test.json`) is the only thing that type-checks `test/` and `scripts/`: `tsconfig.json` is `src`-only because it emits `dist/`, and vitest strips types without checking them.
+- `npm run typecheck` (`tsconfig.test.json`) is the only thing that type-checks the `.ts` files in `test/` and `scripts/`: `tsconfig.json` is `src`-only because it emits `dist/`, and vitest strips types without checking them.
 - `npm run smoke` (`scripts/smoke.ts`) starts a built server over real stdio. It's offline unless `KOSLI_API_TOKEN` and `KOSLI_SMOKE_ORG` are both set. CI never sets them, which keeps the step fork-safe.
 
 ## Common tasks

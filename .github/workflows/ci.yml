@@ -58,13 +58,13 @@ jobs:
       - name: Pack .mcpb bundle
         run: npm run pack:mcpb
 
-      - name: Validate manifest
-        run: npx -y @anthropic-ai/mcpb@2.1.2 validate manifest.json
-
-      # Runs the server from the unzipped bundle, so it resolves against the
-      # bundled production node_modules rather than the repo's.
-      - name: Smoke test .mcpb bundle
+      # Validates the manifest inside the bundle, the one users install, with
+      # the version pack-mcpb.sh injected, not the repo's placeholder copy.
+      # The smoke test runs the server from the unzipped bundle, so it resolves
+      # against the bundled production node_modules rather than the repo's.
+      - name: Validate and smoke test .mcpb bundle
         run: |
           BUNDLE_DIR="$(mktemp -d)"
           unzip -q kosli-mcp-server-*.mcpb -d "$BUNDLE_DIR"
+          npx -y @anthropic-ai/mcpb@2.1.2 validate "$BUNDLE_DIR/manifest.json"
           npm run smoke -- "$BUNDLE_DIR/dist/index.js"
