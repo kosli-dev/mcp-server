@@ -31,7 +31,12 @@ cp -r "$REPO_ROOT/dist" "$STAGING/"
 cp "$REPO_ROOT/package.json" "$STAGING/"
 cp "$REPO_ROOT/package-lock.json" "$STAGING/" 2>/dev/null || true
 (cd "$STAGING" && npm install --omit=dev --ignore-scripts --no-audit --no-fund)
-rm "$STAGING/package.json" "$STAGING/package-lock.json" 2>/dev/null || true
+rm "$STAGING/package-lock.json" 2>/dev/null || true
+
+# dist/ is ESM, and without a "type": "module" above it Node before 22.7 parses
+# it as CommonJS and fails on the first import. Ship only that field, not the
+# repo's package.json with its scripts and dependency lists.
+echo '{ "type": "module" }' > "$STAGING/package.json"
 
 # Create ZIP
 (cd "$STAGING" && zip -rq "$OUTPUT" .)

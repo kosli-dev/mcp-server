@@ -18,7 +18,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 ## Distribution
 
 - **npm** (`npx -y @kosli/mcp-server`) — works with Claude Code, Claude Desktop, Cursor, and any MCP client. Auto-updates on restart.
-- **`.mcpb` bundle** — one-click install for Claude Desktop. Secrets stored in OS keychain. Built by `npm run pack:mcpb` and attached to GitHub Releases.
+- **`.mcpb` bundle** — one-click install for Claude Desktop. Secrets stored in OS keychain. Built by `npm run pack:mcpb` and attached to GitHub Releases. The bundle ships a one-line `package.json` (`{ "type": "module" }`): without it, Node before 22.7 parses `dist/` as CommonJS and the server won't start. CI smoke-tests the bundle on exactly 22.0.0 to catch that.
 - **`manifest.json`** defines the Desktop Extension metadata (user config UI, icon, etc.). Its `version` field is a placeholder — injected from `package.json` at pack time.
 
 ## Conventions
@@ -38,11 +38,11 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 
 - **`main` is protected by a ruleset**: `deletion`, `non_fast_forward`, `pull_request`, `required_signatures`. Every commit must be signed, including bot-generated ones — that's why `update-catalog.yml` passes `sign-commits: true` to `peter-evans/create-pull-request` (it commits via the GitHub API, which signs as `github-actions[bot]`). An unsigned commit cannot be merged, no matter how green CI is.
 - **Actions are pinned to full commit SHAs** with a trailing `# vX.Y.Z` comment, and every job runs `step-security/harden-runner` first. Keep both when adding jobs. Dependabot (`.github/dependabot.yml`) updates the pins weekly and preserves the comment; its PR titles are prefixed `ci:`/`chore:` to satisfy Conventional Commits.
-- **Four workflows**: `ci.yml` (build + test + `.mcpb` smoke test), `release.yml` (tags `v*`), `update-catalog.yml` (weekly catalog regeneration PR), `claude-review.yaml` (automated PR review).
+- **Four workflows**: `ci.yml` (build, `typecheck`, test, `smoke` against `dist/`, pack, `mcpb validate`, `smoke` against the unzipped bundle), `release.yml` (tags `v*`), `update-catalog.yml` (weekly catalog regeneration PR), `claude-review.yaml` (automated PR review).
 - **Fork PRs get no secrets.** The repo is public, so PRs from forks run without repository secrets and with a read-only token. Guard any job needing credentials with `github.event.pull_request.head.repo.full_name == github.repository`, or it will fail on every external contribution.
 - **`claude-review.yaml`** has three jobs, each guarded against forks first, then keyed on `pull_request.user.login`: Dependabot PRs, `update-catalog` PRs (`github-actions[bot]` on branch `chore/update-catalog`; catalog diff — removals need confirming against the live spec), and everything else. Drafts are skipped until marked ready. Reviews are phased: a full review on open, then on each push a `git patch-id` step compares the PR's own diff with the previous push's — a pure rebase runs no review, Dependabot and catalog PRs get a full review again, and general PRs get a cheaper follow-up scoped to the new commits that rechecks earlier findings and resolves fixed threads. The general prompt points at this file for invariants rather than restating them, which is how it drifted before. Auth is OIDC federation via org-wide `ANTHROPIC_*` variables, not secrets — which is why it also works on Dependabot-triggered runs. The action validates its own workflow file and skips with `"The workflow file must exist and have identical content to the version on the repository's default branch"` when it differs — so changes to this file can't be reviewed by themselves and take effect only after merge (observed on PR #33).
 - **Two Node floors, deliberately.** The *consumer* floor is `engines.node` (`>=22`) — what the published server needs. The *dev* floor is higher (`>=22.12`, pinned in `.nvmrc` and the CI matrix low end) because vitest pulls Vite 8, which requires it. Don't raise `engines.node` to satisfy a devDependency: it constrains consumers, and nothing under `devDependencies` ships (`files: ["dist"]`).
-- **Raising the Node floor** means moving these together, or they drift silently: `engines.node` in `package.json`, `compatibility.runtimes.node` in `manifest.json`, the Requirements line in `README.md`, `node-version` in `ci.yml` (matrix low end) and `update-catalog.yml` (both on the dev floor), `.nvmrc`, the Prerequisites note in `CONTRIBUTING.md`, and the `@types/node` devDependency. `@types/node` tracks the consumer floor's **major** (22), not the newest release — otherwise `tsc` accepts APIs that don't exist on the minimum runtime. Its range is `^22.12.0` rather than `^22.0.0` because Vite 8's peer range requires it, and within 22.x it floats, so `tsc` won't catch an API added in a later 22 minor; be wary of recently added Node APIs. `dependabot.yml` ignores `@types/node` majors to keep that pin stable, so bump it deliberately here rather than waiting for a PR. `release.yml` deliberately runs a newer Node; it only builds and publishes.
+- **Raising the Node floor** means moving these together, or they drift silently: `engines.node` in `package.json`, `compatibility.runtimes.node` in `manifest.json`, the Requirements line in `README.md`, `node-version` in `ci.yml` (the matrix low end, on the dev floor, and `consumer-floor`, the exact consumer-floor version the bundle is smoke-tested on) and `update-catalog.yml` (dev floor), `.nvmrc`, the Prerequisites note in `CONTRIBUTING.md`, and the `@types/node` devDependency. `@types/node` tracks the consumer floor's **major** (22), not the newest release — otherwise `tsc` accepts APIs that don't exist on the minimum runtime. Its range is `^22.12.0` rather than `^22.0.0` because Vite 8's peer range requires it, and within 22.x it floats, so `tsc` won't catch an API added in a later 22 minor; be wary of recently added Node APIs. `dependabot.yml` ignores `@types/node` majors to keep that pin stable, so bump it deliberately here rather than waiting for a PR. `release.yml` deliberately runs a newer Node; it only builds and publishes.
 - **Security reports don't go in public issues.** `SECURITY.md` points at security@kosli.com, and the issue-template config offers private vulnerability reporting. If you find a vulnerability — in this server or in the Kosli API — surface it there, not as an issue or PR comment.
 
 ## Testing
@@ -51,6 +51,8 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - `test/fixtures/catalog-subset.json` is a hand-curated slice of the catalog for fast, deterministic tests. Prefer extending it over loading the full catalog.
 - Tests for `KosliClient` inject a `fetchFn`; don't hit the network in tests.
 - Run: `npm test` (CI) or `npm run test:watch` (dev).
+- `npm run typecheck` (`tsconfig.test.json`) is the only thing that type-checks the `.ts` files in `test/` and `scripts/`: `tsconfig.json` is `src`-only because it emits `dist/`, and vitest strips types without checking them.
+- `npm run smoke` (`scripts/smoke.ts`) starts a built server over real stdio. It's offline unless `KOSLI_API_TOKEN` and `KOSLI_SMOKE_ORG` are both set. CI never sets them, which keeps the step fork-safe.
 
 ## Common tasks
 
@@ -84,7 +86,7 @@ npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
 
 **`package.json` is the source of truth for the version.** Everything else derives from it:
 
-- `src/version.ts` — **generated** by `scripts/sync-version.mjs`. Never edit it by hand. It exists because the shipped code can't read `package.json`: `rootDir: "src"` rules out importing it, and `scripts/pack-mcpb.sh` strips it from the `.mcpb` bundle. It supplies both the `User-Agent` and the version the MCP server advertises to clients.
+- `src/version.ts` — **generated** by `scripts/sync-version.mjs`. Never edit it by hand. It exists because the shipped code can't read `package.json`: `rootDir: "src"` rules out importing it, and the `package.json` in the `.mcpb` bundle is a `{ "type": "module" }` stub with no `version` field. It supplies both the `User-Agent` and the version the MCP server advertises to clients.
 - `package-lock.json` — updated by `npm version`.
 - `manifest.json` — injected by the pack script at build time. Leave its placeholder alone.
 
@@ -102,6 +104,6 @@ To release:
 1. `npm version <x> --no-git-tag-version` on a branch.
 2. Commit (e.g. `chore: bump version to 0.3.0`) and open a PR — `main` is protected, so the bump can't be pushed directly.
 3. After merge, tag the merge commit on `main`: `git tag -a v0.3.0 -m "v0.3.0" && git push origin v0.3.0`. `tag.gpgSign` makes annotated tags signed.
-4. The `release.yml` workflow will: verify the tag matches `package.json`, run tests, publish to npm with provenance, build the `.mcpb` bundle, and create a GitHub Release with the bundle attached.
+4. The `release.yml` workflow will: verify the tag matches `package.json`; build, typecheck, test and smoke-test; build, validate and smoke-test the `.mcpb` bundle; then publish to npm with provenance and create a GitHub Release with the bundle attached. Publishing comes after every check because it can't be undone; keep it last.
 
 Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.

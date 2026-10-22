@@ -8,6 +8,15 @@ updates:
       day: monday
     commit-message:
       prefix: 'ci'
+    # Hold new releases back a week, so a compromised or broken one has time
+    # to be noticed and yanked before it is proposed here.
+    cooldown:
+      default-days: 7
+    # SHA bumps edit the same lines across the workflows, so separate PRs
+    # conflict with each other. One PR, rebased once.
+    groups:
+      actions:
+        patterns: ['*']
 
   - package-ecosystem: npm
     directory: /
@@ -17,6 +26,17 @@ updates:
     commit-message:
       prefix: 'chore'
       prefix-development: 'chore'
+    cooldown:
+      default-days: 7
+    # Majors stay ungrouped so each gets its own review. The SDK is the one
+    # runtime dependency, so it is kept apart from the dev tooling.
+    groups:
+      dev-minor-patch:
+        dependency-type: development
+        update-types: [minor, patch]
+      sdk:
+        patterns: ['@modelcontextprotocol/sdk']
+        update-types: [minor, patch]
     ignore:
       # @types/node must track the Node floor in engines, not the newest release —
       # otherwise tsc stops rejecting APIs that don't exist on the minimum runtime.
