@@ -214,8 +214,19 @@ export class KosliClient {
       };
     }
 
+    let target: URL;
+    try {
+      target = new URL(location, requestUrl);
+    } catch {
+      return {
+        error: true,
+        status: redirect.status,
+        statusText: redirect.statusText,
+        message: "The Kosli API redirected to a URL that cannot be parsed",
+      };
+    }
+
     // The evidence is as private as the API that pointed at it.
-    const target = new URL(location, requestUrl);
     if (target.protocol !== "https:") {
       return {
         error: true,
@@ -234,13 +245,14 @@ export class KosliClient {
     }
 
     // Kosli signs the type into the URL: text/plain for readable files,
-    // application/octet-stream for the rest, which as text is noise to a model.
-    if (!file.headers.get("content-type")?.startsWith("text/")) {
+    // application/octet-stream for the rest. Anything else, such as a proxy's
+    // HTML sign-in page, is not the file and is not passed to the model.
+    if (file.headers.get("content-type")?.split(";")[0].trim() !== "text/plain") {
       return {
         error: true,
         status: 0,
-        statusText: "Binary File",
-        message: "The file is binary, so it cannot be returned as text. Download it from the Kosli web app instead.",
+        statusText: "Not Plain Text",
+        message: "The file is not plain text, so it is not returned. Download it from the Kosli web app instead.",
       };
     }
 

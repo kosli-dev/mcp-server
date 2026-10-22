@@ -324,8 +324,20 @@ describe("KosliClient", () => {
 
       const result = await client.execute(listEnvEntry, { org: "test-org" });
 
-      expect(result).toMatchObject({ error: true, status: 0, message: expect.stringContaining("binary") });
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Not Plain Text" });
       expect(file.bodyUsed).toBe(false);
+    });
+
+    // A proxy can redirect to its sign-in page, which must not reach the model.
+    it("returns an error for an HTML page instead of its markup", async () => {
+      redirectTo("https://sso.example.com/login");
+      const page = new Response("<html><form>", { headers: { "content-type": "text/html" } });
+      mockFetch.mockResolvedValueOnce(page);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Not Plain Text" });
+      expect(page.bodyUsed).toBe(false);
     });
 
     // An object store's error body can echo the request back, so it is never read.
@@ -384,6 +396,19 @@ describe("KosliClient", () => {
       await client.execute(createFlowJsonEntry, { org: "test-org", name: "my-flow" });
 
       expect(mockFetch.mock.calls[0][1]).not.toHaveProperty("redirect");
+    });
+
+    it("says a Location that cannot be parsed is a bad redirect", async () => {
+      redirectTo("http://[");
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({
+        error: true,
+        status: 302,
+        message: "The Kosli API redirected to a URL that cannot be parsed",
+      });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
     it("returns an error for a redirect with no Location", async () => {
