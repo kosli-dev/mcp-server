@@ -151,11 +151,13 @@ export class KosliClient {
 
   private async doFetch(url: string, init: RequestInit): Promise<unknown | ErrorResponse> {
     try {
-      // fetch would keep our token on a redirect to the same host.
-      const response = await this.fetch(url, { ...init, redirect: "manual" });
+      // fetch would keep our token on a redirect to the same host. A write is
+      // left to fetch, which replays its method and body on a redirect.
+      const isRead = init.method === "GET";
+      const response = await this.fetch(url, isRead ? { ...init, redirect: "manual" } : init);
 
       if (REDIRECT_STATUSES.has(response.status)) {
-        return await this.download(response);
+        return await this.download(response, url);
       }
 
       if (!response.ok) {
@@ -174,8 +176,16 @@ export class KosliClient {
         };
       }
 
-      // Awaited so a body that is not JSON reaches the catch below.
-      return await response.json();
+      try {
+        return await response.json();
+      } catch {
+        return {
+          error: true,
+          status: response.status,
+          statusText: "Invalid Response",
+          message: "The Kosli API returned a body that is not JSON",
+        };
+      }
     } catch {
       // Do not forward the raw error: it may contain internal hostnames,
       // proxy URLs, or other topology that could leak via the LLM.
@@ -193,7 +203,7 @@ export class KosliClient {
    * object-store URL that carries its own credentials, and the store refuses
    * a request that also sends our token, so the token is left off.
    */
-  private async download(redirect: Response): Promise<unknown | ErrorResponse> {
+  private async download(redirect: Response, requestUrl: string): Promise<unknown | ErrorResponse> {
     const location = redirect.headers.get("location");
     if (!location) {
       return {
@@ -204,19 +214,31 @@ export class KosliClient {
       };
     }
 
-    const file = await this.fetch(location, { headers: { "User-Agent": USER_AGENT } });
+    // The evidence is as private as the API that pointed at it.
+    const target = new URL(location, requestUrl);
+    if (target.protocol !== "https:") {
+      return {
+        error: true,
+        status: 0,
+        statusText: "Insecure Redirect",
+        message: "The Kosli API redirected to a URL that does not use https",
+      };
+    }
+
+    const file = await this.fetch(target.href, { headers: { "User-Agent": USER_AGENT } });
 
     // The body is not read: an object store's error echoes the request back.
     if (!file.ok) {
-      return { error: true, status: file.status, statusText: file.statusText, message: file.statusText };
+      const message = `Downloading the file failed with status ${file.status}`;
+      return { error: true, status: file.status, statusText: file.statusText, message };
     }
 
-    // Kosli serves readable files as text/plain and everything else as
-    // application/octet-stream, which as text would be noise to the model.
+    // Kosli signs the type into the URL: text/plain for readable files,
+    // application/octet-stream for the rest, which as text is noise to a model.
     if (!file.headers.get("content-type")?.startsWith("text/")) {
       return {
         error: true,
-        status: file.status,
+        status: 0,
         statusText: "Binary File",
         message: "The file is binary, so it cannot be returned as text. Download it from the Kosli web app instead.",
       };

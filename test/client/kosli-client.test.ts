@@ -172,12 +172,18 @@ describe("KosliClient", () => {
     expect(JSON.stringify(result)).not.toContain("10.0.0.5");
   });
 
-  it("returns structured error when an OK body is not JSON", async () => {
+  // The realistic cause is a proxy or sign-in page answering instead of the API.
+  it("says the body was not JSON, rather than blaming the network", async () => {
     mockFetch.mockResolvedValue(new Response("<html>", { status: 200 }));
 
     const result = await client.execute(listEnvEntry, { org: "test-org" });
 
-    expect(result).toMatchObject({ error: true, statusText: "Network Error" });
+    expect(result).toEqual({
+      error: true,
+      status: 200,
+      statusText: "Invalid Response",
+      message: "The Kosli API returned a body that is not JSON",
+    });
   });
 
   it("returns structured error on missing required path param (does not throw)", async () => {
@@ -318,23 +324,29 @@ describe("KosliClient", () => {
 
       const result = await client.execute(listEnvEntry, { org: "test-org" });
 
-      expect(result).toMatchObject({ error: true, message: expect.stringContaining("binary") });
+      expect(result).toMatchObject({ error: true, status: 0, message: expect.stringContaining("binary") });
       expect(file.bodyUsed).toBe(false);
     });
 
     // An object store's error body can echo the request back, so it is never read.
     it("returns the status of a failed download without reading its body", async () => {
       redirectTo(signedUrl);
+      // HTTP/2 has no reason phrase, so statusText can be empty.
       const file = new Response("<Error>...</Error>", {
         status: 403,
-        statusText: "Forbidden",
+        statusText: "",
         headers: { "content-type": "application/xml" },
       });
       mockFetch.mockResolvedValueOnce(file);
 
       const result = await client.execute(listEnvEntry, { org: "test-org" });
 
-      expect(result).toEqual({ error: true, status: 403, statusText: "Forbidden", message: "Forbidden" });
+      expect(result).toEqual({
+        error: true,
+        status: 403,
+        statusText: "",
+        message: "Downloading the file failed with status 403",
+      });
       expect(file.bodyUsed).toBe(false);
     });
 
@@ -345,6 +357,33 @@ describe("KosliClient", () => {
       const result = await client.execute(listEnvEntry, { org: "test-org" });
 
       expect(result).toMatchObject({ error: true, statusText: "Network Error" });
+    });
+
+    it("resolves a relative Location against the request URL", async () => {
+      redirectTo("/downloads/evidence/sbom.json?X-Amz-Signature=abc");
+      mockFetch.mockResolvedValueOnce(new Response("ok", { headers: { "content-type": "text/plain" } }));
+
+      await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(mockFetch.mock.calls[1][0]).toBe(signedUrl);
+    });
+
+    it("refuses a redirect to plain http", async () => {
+      redirectTo("http://app.kosli.com/downloads/evidence/sbom.json");
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Insecure Redirect" });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    // A write that redirects must be replayed by fetch, not turned into a GET.
+    it("leaves redirects on a write to fetch", async () => {
+      mockFetch.mockResolvedValue({ ok: true, status: 201, json: () => Promise.resolve({}) });
+
+      await client.execute(createFlowJsonEntry, { org: "test-org", name: "my-flow" });
+
+      expect(mockFetch.mock.calls[0][1]).not.toHaveProperty("redirect");
     });
 
     it("returns an error for a redirect with no Location", async () => {
