@@ -172,6 +172,20 @@ describe("KosliClient", () => {
     expect(JSON.stringify(result)).not.toContain("10.0.0.5");
   });
 
+  // The realistic cause is a proxy or sign-in page answering instead of the API.
+  it("says the body was not JSON, rather than blaming the network", async () => {
+    mockFetch.mockResolvedValue(new Response("<html>", { status: 200 }));
+
+    const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+    expect(result).toEqual({
+      error: true,
+      status: 200,
+      statusText: "Invalid Response",
+      message: "The Kosli API returned a body that is not JSON",
+    });
+  });
+
   it("returns structured error on missing required path param (does not throw)", async () => {
     const result = await client.execute(getTrailEntry, { org: "test-org", flow_name: "my-flow" });
 
@@ -269,6 +283,141 @@ describe("KosliClient", () => {
       const [, init] = mockFetch.mock.calls[0];
       expect(init.body).toBe('{"name":"my-flow"}');
       expect(init.headers).toMatchObject({ "Content-Type": "application/json" });
+    });
+  });
+
+  describe("redirects", () => {
+    const signedUrl = "https://app.kosli.com/downloads/evidence/sbom.json?X-Amz-Signature=abc";
+
+    function redirectTo(location: string | null) {
+      const headers = location === null ? undefined : { location };
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 302, headers }));
+    }
+
+    it("follows the redirect without our token, and returns a text file as text", async () => {
+      redirectTo(signedUrl);
+      mockFetch.mockResolvedValueOnce(
+        new Response('{"bomFormat":"CycloneDX"}', {
+          headers: { "content-type": "text/plain; charset=utf-8" },
+        }),
+      );
+
+      const result = await client.execute(getTrailEntry, {
+        org: "test-org",
+        flow_name: "my-flow",
+        trail_name: "my-trail",
+      });
+
+      expect(result).toBe('{"bomFormat":"CycloneDX"}');
+      expect(mockFetch.mock.calls[0][1]).toMatchObject({ redirect: "manual" });
+      const [url, init] = mockFetch.mock.calls[1];
+      expect(url).toBe(signedUrl);
+      expect(init.headers).toEqual({ "User-Agent": `kosli-mcp-server/${VERSION}` });
+    });
+
+    it("returns an error for a binary file instead of decoding it", async () => {
+      redirectTo(signedUrl);
+      const file = new Response(new Uint8Array([0x50, 0x4b, 0x03, 0x04]), {
+        headers: { "content-type": "application/octet-stream" },
+      });
+      mockFetch.mockResolvedValueOnce(file);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Not Plain Text" });
+      expect(file.bodyUsed).toBe(false);
+    });
+
+    // A proxy can redirect to its sign-in page, which must not reach the model.
+    it("returns an error for an HTML page instead of its markup", async () => {
+      redirectTo("https://sso.example.com/login");
+      const page = new Response("<html><form>", { headers: { "content-type": "text/html" } });
+      mockFetch.mockResolvedValueOnce(page);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Not Plain Text" });
+      expect(page.bodyUsed).toBe(false);
+    });
+
+    // An object store's error body can echo the request back, so it is never read.
+    it("returns the status of a failed download without reading its body", async () => {
+      redirectTo(signedUrl);
+      // HTTP/2 has no reason phrase, so statusText can be empty.
+      const file = new Response("<Error>...</Error>", {
+        status: 403,
+        statusText: "",
+        headers: { "content-type": "application/xml" },
+      });
+      mockFetch.mockResolvedValueOnce(file);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toEqual({
+        error: true,
+        status: 403,
+        statusText: "",
+        message: "Following the Kosli API's redirect failed with status 403. The API token is not sent on a redirect.",
+      });
+      expect(file.bodyUsed).toBe(false);
+    });
+
+    it("returns structured error when the download fails on the network", async () => {
+      redirectTo(signedUrl);
+      mockFetch.mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, statusText: "Network Error" });
+    });
+
+    it("resolves a relative Location against the request URL", async () => {
+      redirectTo("/downloads/evidence/sbom.json?X-Amz-Signature=abc");
+      mockFetch.mockResolvedValueOnce(new Response("ok", { headers: { "content-type": "text/plain" } }));
+
+      await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(mockFetch.mock.calls[1][0]).toBe(signedUrl);
+    });
+
+    it("refuses a redirect to plain http", async () => {
+      redirectTo("http://app.kosli.com/downloads/evidence/sbom.json");
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 0, statusText: "Insecure Redirect" });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    // A write that redirects must be replayed by fetch, not turned into a GET.
+    it("leaves redirects on a write to fetch", async () => {
+      mockFetch.mockResolvedValue({ ok: true, status: 201, json: () => Promise.resolve({}) });
+
+      await client.execute(createFlowJsonEntry, { org: "test-org", name: "my-flow" });
+
+      expect(mockFetch.mock.calls[0][1]).not.toHaveProperty("redirect");
+    });
+
+    it("says a Location that cannot be parsed is a bad redirect", async () => {
+      redirectTo("http://[");
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({
+        error: true,
+        status: 302,
+        message: "The Kosli API redirected to a URL that cannot be parsed",
+      });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    it("returns an error for a redirect with no Location", async () => {
+      redirectTo(null);
+
+      const result = await client.execute(listEnvEntry, { org: "test-org" });
+
+      expect(result).toMatchObject({ error: true, status: 302 });
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
   });
 });

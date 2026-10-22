@@ -22,6 +22,10 @@ export interface FileParam {
 
 type FetchFn = typeof globalThis.fetch;
 
+const USER_AGENT = `kosli-mcp-server/${VERSION}`;
+
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
 function getRequestContentType(entry: CatalogEntry): string | undefined {
   const body = entry.requestBody?.[0];
   if (!body) return undefined;
@@ -91,7 +95,7 @@ export class KosliClient {
     const isMultipart = getRequestContentType(entry) === "multipart/form-data";
     const baseHeaders: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
-      "User-Agent": `kosli-mcp-server/${VERSION}`,
+      "User-Agent": USER_AGENT,
     };
     // For multipart, let fetch set Content-Type with the generated boundary.
     if (!isMultipart) {
@@ -147,7 +151,14 @@ export class KosliClient {
 
   private async doFetch(url: string, init: RequestInit): Promise<unknown | ErrorResponse> {
     try {
-      const response = await this.fetch(url, init);
+      // fetch would keep our token on a redirect to the same host. A write is
+      // left to fetch, which replays its method and body on a redirect.
+      const isRead = init.method === "GET";
+      const response = await this.fetch(url, isRead ? { ...init, redirect: "manual" } : init);
+
+      if (REDIRECT_STATUSES.has(response.status)) {
+        return await this.download(response, url);
+      }
 
       if (!response.ok) {
         let message: string;
@@ -165,7 +176,16 @@ export class KosliClient {
         };
       }
 
-      return response.json();
+      try {
+        return await response.json();
+      } catch {
+        return {
+          error: true,
+          status: response.status,
+          statusText: "Invalid Response",
+          message: "The Kosli API returned a body that is not JSON",
+        };
+      }
     } catch {
       // Do not forward the raw error: it may contain internal hostnames,
       // proxy URLs, or other topology that could leak via the LLM.
@@ -176,5 +196,68 @@ export class KosliClient {
         message: "Request failed before reaching the Kosli API",
       };
     }
+  }
+
+  /**
+   * Fetches the file a redirect points at. The target is a pre-signed
+   * object-store URL that carries its own credentials, and the store refuses
+   * a request that also sends our token, so the token is left off.
+   */
+  private async download(redirect: Response, requestUrl: string): Promise<unknown | ErrorResponse> {
+    const location = redirect.headers.get("location");
+    if (!location) {
+      return {
+        error: true,
+        status: redirect.status,
+        statusText: redirect.statusText,
+        message: "The Kosli API redirected without saying where to",
+      };
+    }
+
+    let target: URL;
+    try {
+      target = new URL(location, requestUrl);
+    } catch {
+      return {
+        error: true,
+        status: redirect.status,
+        statusText: redirect.statusText,
+        message: "The Kosli API redirected to a URL that cannot be parsed",
+      };
+    }
+
+    // The evidence is as private as the API that pointed at it.
+    if (target.protocol !== "https:") {
+      return {
+        error: true,
+        status: 0,
+        statusText: "Insecure Redirect",
+        message: "The Kosli API redirected to a URL that does not use https",
+      };
+    }
+
+    const file = await this.fetch(target.href, { headers: { "User-Agent": USER_AGENT } });
+
+    // The body is not read: an object store's error echoes the request back.
+    if (!file.ok) {
+      // A redirect that stays on the API, not a download, fails here with 401,
+      // so the message names the redirect and the missing token.
+      const message = `Following the Kosli API's redirect failed with status ${file.status}. The API token is not sent on a redirect.`;
+      return { error: true, status: file.status, statusText: file.statusText, message };
+    }
+
+    // Kosli signs the type into the URL: text/plain for readable files,
+    // application/octet-stream for the rest. Anything else, such as a proxy's
+    // HTML sign-in page, is not the file and is not passed to the model.
+    if (file.headers.get("content-type")?.split(";")[0].trim() !== "text/plain") {
+      return {
+        error: true,
+        status: 0,
+        statusText: "Not Plain Text",
+        message: "The file is not plain text, so it is not returned. Download it from the Kosli web app instead.",
+      };
+    }
+
+    return file.text();
   }
 }
