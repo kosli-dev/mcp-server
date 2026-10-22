@@ -386,6 +386,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -470,6 +478,17 @@
                     {"type":"null"}
                   ],
                   "title": "External Urls"
+                },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
                 },
                 "annotations": {
                   "anyOf": [
@@ -643,6 +662,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -727,6 +754,17 @@
                     {"type":"null"}
                   ],
                   "title": "External Urls"
+                },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
                 },
                 "annotations": {
                   "anyOf": [
@@ -898,6 +936,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -982,6 +1028,17 @@
                     {"type":"null"}
                   ],
                   "title": "External Urls"
+                },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
                 },
                 "annotations": {
                   "anyOf": [
@@ -1172,6 +1229,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -1257,6 +1322,17 @@
                   ],
                   "title": "External Urls"
                 },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
+                },
                 "annotations": {
                   "anyOf": [
                     {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
@@ -1276,10 +1352,30 @@
                   "items": {
                     "properties": {
                       "name": {"type":"string","title":"Name"},
-                      "failures": {"type":"integer","title":"Failures"},
-                      "errors": {"type":"integer","title":"Errors"},
-                      "skipped": {"type":"integer","title":"Skipped"},
-                      "total": {"type":"integer","title":"Total"},
+                      "failures": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": -9223372036854776000,
+                        "title": "Failures"
+                      },
+                      "errors": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": -9223372036854776000,
+                        "title": "Errors"
+                      },
+                      "skipped": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": -9223372036854776000,
+                        "title": "Skipped"
+                      },
+                      "total": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": -9223372036854776000,
+                        "title": "Total"
+                      },
                       "duration": {"type":"number","title":"Duration"},
                       "timestamp": {"anyOf":[{"type":"number"},{"type":"null"}],"title":"Timestamp"}
                     },
@@ -1449,6 +1545,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -1534,6 +1638,17 @@
                   ],
                   "title": "External Urls"
                 },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
+                },
                 "annotations": {
                   "anyOf": [
                     {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
@@ -1592,6 +1707,10 @@
                             "title": "Merged At"
                           },
                           "head_ref": {"type":"string","title":"Head Ref"},
+                          "head_sha": {
+                            "anyOf": [{"type":"string"},{"type":"null"}],
+                            "title": "Head Sha"
+                          },
                           "base_ref": {
                             "anyOf": [{"type":"string"},{"type":"null"}],
                             "title": "Base Ref"
@@ -1613,6 +1732,10 @@
                                     "timestamp": {
                                       "anyOf": [{"type":"number"},{"type":"null"}],
                                       "title": "Timestamp"
+                                    },
+                                    "commit_sha": {
+                                      "anyOf": [{"type":"string"},{"type":"null"}],
+                                      "title": "Commit Sha"
                                     }
                                   },
                                   "type": "object",
@@ -1624,6 +1747,35 @@
                               {"type":"null"}
                             ],
                             "title": "Approvers"
+                          },
+                          "reviews": {
+                            "anyOf": [
+                              {
+                                "items": {
+                                  "properties": {
+                                    "username": {"type":"string","title":"Username"},
+                                    "state": {
+                                      "anyOf": [{"type":"string"},{"type":"null"}],
+                                      "title": "State"
+                                    },
+                                    "timestamp": {
+                                      "anyOf": [{"type":"number"},{"type":"null"}],
+                                      "title": "Timestamp"
+                                    },
+                                    "commit_sha": {
+                                      "anyOf": [{"type":"string"},{"type":"null"}],
+                                      "title": "Commit Sha"
+                                    }
+                                  },
+                                  "type": "object",
+                                  "required": ["username"],
+                                  "title": "PullRequestApprover"
+                                },
+                                "type": "array"
+                              },
+                              {"type":"null"}
+                            ],
+                            "title": "Reviews"
                           },
                           "commits": {
                             "items": {
@@ -1664,6 +1816,14 @@
                                 "signature_state": {
                                   "anyOf": [{"type":"string"},{"type":"null"}],
                                   "title": "Signature State"
+                                },
+                                "signer_username": {
+                                  "anyOf": [{"type":"string"},{"type":"null"}],
+                                  "title": "Signer Username"
+                                },
+                                "signed_by_platform": {
+                                  "anyOf": [{"type":"boolean"},{"type":"null"}],
+                                  "title": "Signed By Platform"
                                 }
                               },
                               "type": "object",
@@ -1710,7 +1870,7 @@
                   "git_provider": "github",
                   "pull_requests": [
                     {
-                      "approvers": [{"author":"Jon Doe","state":"APPROVED","timestamp":1750923266}],
+                      "approvers": [{"state":"APPROVED","timestamp":1750923266,"username":"JonDoe"}],
                       "author": "JonSmith",
                       "commits": [
                         {
@@ -1718,7 +1878,7 @@
                           "author_username": "JonSmith",
                           "branch": "glorious-branch",
                           "message": "Add glorious feature",
-                          "sha": "f387a894992f7991489680696abf8b72bf7875f1",
+                          "sha1": "f387a894992f7991489680696abf8b72bf7875f1",
                           "timestamp": 1750851568,
                           "url": "https://github.com/org/repo/commit/f387a894992f7991489680696abf8b72bf7875f1"
                         },
@@ -1727,7 +1887,7 @@
                           "author_username": "JonSmith",
                           "branch": "glorious-branch",
                           "message": "Update glorious feature",
-                          "sha": "2d48854228633cca94f7f4a587b2172ebb01cf85",
+                          "sha1": "2d48854228633cca94f7f4a587b2172ebb01cf85",
                           "timestamp": 1750922905
                         }
                       ],
@@ -1735,6 +1895,20 @@
                       "head_ref": "glorious-branch",
                       "merge_commit": "ae08fc6a5c963ae8dfaa0c27d8e5de9980d433b6",
                       "merged_at": 1750923680,
+                      "reviews": [
+                        {
+                          "commit_sha": "f387a894992f7991489680696abf8b72bf7875f1",
+                          "state": "CHANGES_REQUESTED",
+                          "timestamp": 1750860000,
+                          "username": "JonDoe"
+                        },
+                        {
+                          "commit_sha": "2d48854228633cca94f7f4a587b2172ebb01cf85",
+                          "state": "APPROVED",
+                          "timestamp": 1750923266,
+                          "username": "JonDoe"
+                        }
+                      ],
                       "state": "MERGED",
                       "title": "Add glorious commit",
                       "url": "https://github.com/org/repo/pull/3497"
@@ -1872,6 +2046,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -1957,6 +2139,17 @@
                   ],
                   "title": "External Urls"
                 },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
+                },
                 "annotations": {
                   "anyOf": [
                     {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
@@ -1974,7 +2167,13 @@
                 },
                 "snyk_results": {
                   "properties": {
-                    "schema_version": {"type":"integer","title":"Schema Version","default":1},
+                    "schema_version": {
+                      "type": "integer",
+                      "maximum": 9223372036854776000,
+                      "minimum": -9223372036854776000,
+                      "title": "Schema Version",
+                      "default": 1
+                    },
                     "tool": {
                       "properties": {
                         "name": {"type":"string","title":"Name"},
@@ -1987,9 +2186,24 @@
                     "results": {
                       "items": {
                         "properties": {
-                          "low_count": {"type":"integer","title":"Low Count"},
-                          "medium_count": {"type":"integer","title":"Medium Count"},
-                          "high_count": {"type":"integer","title":"High Count"},
+                          "low_count": {
+                            "type": "integer",
+                            "maximum": 9223372036854776000,
+                            "minimum": -9223372036854776000,
+                            "title": "Low Count"
+                          },
+                          "medium_count": {
+                            "type": "integer",
+                            "maximum": 9223372036854776000,
+                            "minimum": -9223372036854776000,
+                            "title": "Medium Count"
+                          },
+                          "high_count": {
+                            "type": "integer",
+                            "maximum": 9223372036854776000,
+                            "minimum": -9223372036854776000,
+                            "title": "High Count"
+                          },
                           "low": {
                             "anyOf": [
                               {
@@ -2266,6 +2480,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -2350,6 +2572,17 @@
                     {"type":"null"}
                   ],
                   "title": "External Urls"
+                },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
                 },
                 "annotations": {
                   "anyOf": [
@@ -2590,6 +2823,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -2674,6 +2915,17 @@
                     {"type":"null"}
                   ],
                   "title": "External Urls"
+                },
+                "attachment_upload_id": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{8}$"
+                    },
+                    {"type":"null"}
+                  ],
+                  "title": "Attachment Upload Id",
+                  "description": "An upload minted at POST /attestations/{org}/uploads and already PUT, attached in place of the attachment_file part"
                 },
                 "annotations": {
                   "anyOf": [
@@ -2805,6 +3057,14 @@
                     "signature_state": {
                       "anyOf": [{"type":"string"},{"type":"null"}],
                       "title": "Signature State"
+                    },
+                    "signer_username": {
+                      "anyOf": [{"type":"string"},{"type":"null"}],
+                      "title": "Signer Username"
+                    },
+                    "signed_by_platform": {
+                      "anyOf": [{"type":"boolean"},{"type":"null"}],
+                      "title": "Signed By Platform"
                     }
                   },
                   "type": "object",
@@ -2886,6 +3146,14 @@
                       "signature_state": {
                         "anyOf": [{"type":"string"},{"type":"null"}],
                         "title": "Signature State"
+                      },
+                      "signer_username": {
+                        "anyOf": [{"type":"string"},{"type":"null"}],
+                        "title": "Signer Username"
+                      },
+                      "signed_by_platform": {
+                        "anyOf": [{"type":"boolean"},{"type":"null"}],
+                        "title": "Signed By Platform"
                       }
                     },
                     "type": "object",
@@ -2960,6 +3228,59 @@
       }
     ],
     "searchText": "report artifact create an artifact for organization. post artifacts org flow_name artifacts"
+  },
+  {
+    "id": "create_attestation_upload",
+    "method": "POST",
+    "path": "/attestations/{org}/uploads",
+    "summary": "Create an attachment upload",
+    "description": "Reserve an attachment upload: the response names where to PUT the file.\nThe upload id then goes in the attestation as `attachment_upload_id`.\nUpload the file first, then attest.",
+    "tags": ["Attestation"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "properties": {
+            "filename": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "title": "Filename",
+              "description": "The name the attachment is stored and downloaded under"
+            },
+            "size_bytes": {
+              "type": "integer",
+              "maximum": 5368709120,
+              "minimum": 1,
+              "title": "Size Bytes",
+              "description": "The size of the file, checked against the org's limit"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Sha256",
+              "description": "Hex SHA-256 of the file; S3 refuses the upload if the body differs"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["filename","size_bytes","sha256"],
+          "title": "UploadPostInput"
+        }
+      }
+    ],
+    "searchText": "create an attachment upload reserve an attachment upload: the response names where to put the file.\nthe upload id then goes in the attestation as `attachment_upload_id`.\nupload the file first, then attest. post attestations org uploads attestation"
   },
   {
     "id": "create_control",
@@ -3056,7 +3377,7 @@
                   "maxItems": 100,
                   "minItems": 1,
                   "title": "Trails",
-                  "description": "The trails to evaluate, all resolved at one instant. A flow and trail named more than once is evaluated once. Order carries no meaning: a policy addresses a trail by its flow_name and trail_name, never by position."
+                  "description": "The trails to evaluate, all resolved at one instant, which the policy reads as evaluation.time. A flow and trail named more than once is evaluated once. Order carries no meaning: a policy addresses a trail by its flow_name and trail_name, never by position."
                 }
               },
               "additionalProperties": false,
@@ -3065,26 +3386,45 @@
               "title": "EvaluationContextInput"
             },
             "policy": {
-              "properties": {
-                "files": {
-                  "additionalProperties": {"type":"string"},
+              "anyOf": [
+                {
+                  "properties": {
+                    "files": {
+                      "additionalProperties": {"type":"string"},
+                      "type": "object",
+                      "maxProperties": 100,
+                      "minProperties": 1,
+                      "title": "Files",
+                      "description": "Rego bundle as relative path to source; a single file is one entry"
+                    }
+                  },
+                  "additionalProperties": false,
                   "type": "object",
-                  "maxProperties": 100,
-                  "minProperties": 1,
-                  "title": "Files",
-                  "description": "Rego bundle as relative path to source; a single file is one entry"
+                  "required": ["files"],
+                  "title": "InlinePolicyInput"
+                },
+                {
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "title": "Identifier",
+                      "description": "Identifier of a published rego policy, matched without regard to case. Its current version, the highest valid one, is evaluated"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": ["identifier"],
+                  "title": "PublishedPolicyInput"
                 }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": ["files"],
-              "title": "InlinePolicyInput"
+              ],
+              "title": "Policy",
+              "description": "The policy to evaluate: its files inline, or the identifier of a published one"
             },
             "params": {
               "additionalProperties": true,
               "type": "object",
               "title": "Params",
-              "description": "Values the policy reads as `data.params`, not enforced against it"
+              "description": "Values the policy reads as `data.params`. Checked against a published version's params schema; inline params are not checked"
             },
             "decision": {
               "anyOf": [
@@ -3887,6 +4227,145 @@
     "searchText": "create or update flow with template create or update a flow for an organization. put flows org template_file flows"
   },
   {
+    "id": "create_or_update_notification_config",
+    "method": "PUT",
+    "path": "/notification-config/{org}/{notification_type}",
+    "summary": "Create or update notification configuration",
+    "description": "Set where an org sends one kind of notification Kosli raises itself.\n\nThe targets replace the recipients Kosli would otherwise derive. Admins only.",
+    "tags": ["Notification Config"],
+    "parameters": [
+      {
+        "name": "notification_type",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "enum": ["api_key_expiry"],
+          "title": "NotificationType",
+          "description": "A kind of notification a customer can configure.\n\nA new kind is a new member here, not a new field or a new collection."
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "properties": {
+            "targets": {
+              "items": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "type": {"type":"string","const":"SLACK","title":"Type","default":"SLACK"},
+                      "last_success_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Success At"
+                      },
+                      "last_failure_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Failure At"
+                      },
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
+                      "context": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "channel_id": {"type":"string","title":"Channel Id"},
+                              "channel_name": {"type":"string","title":"Channel Name"},
+                              "team_id": {"type":"string","title":"Team Id"}
+                            },
+                            "type": "object",
+                            "required": ["channel_id","channel_name","team_id"],
+                            "title": "SlackAppContext"
+                          },
+                          {"type":"null"}
+                        ]
+                      }
+                    },
+                    "type": "object",
+                    "required": ["webhook"],
+                    "title": "SlackActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","const":"WEBHOOK","title":"Type","default":"WEBHOOK"},
+                      "last_success_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Success At"
+                      },
+                      "last_failure_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Failure At"
+                      },
+                      "webhook": {"type":"string","pattern":"^https://","title":"Webhook"},
+                      "payload_version": {
+                        "type": "string",
+                        "const": "1.0",
+                        "title": "Payload Version",
+                        "default": "1.0"
+                      }
+                    },
+                    "type": "object",
+                    "required": ["webhook"],
+                    "title": "WebhookActionTarget"
+                  },
+                  {
+                    "properties": {
+                      "type": {"type":"string","const":"EMAIL","title":"Type","default":"EMAIL"},
+                      "last_success_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Success At"
+                      },
+                      "last_failure_at": {
+                        "anyOf": [{"type":"number"},{"type":"null"}],
+                        "title": "Last Failure At"
+                      },
+                      "emails": {
+                        "items": {"type":"string","format":"email"},
+                        "type": "array",
+                        "title": "Emails"
+                      }
+                    },
+                    "type": "object",
+                    "required": ["emails"],
+                    "title": "EmailActionTarget"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "EMAIL": "#/components/schemas/EmailActionTarget",
+                    "SLACK": "#/components/schemas/SlackActionTarget",
+                    "WEBHOOK": "#/components/schemas/WebhookActionTarget"
+                  }
+                }
+              },
+              "type": "array",
+              "minItems": 1,
+              "title": "Targets",
+              "description": "Where notifications of this type go, replacing the recipients Kosli would otherwise derive. At least one target: delete the configuration instead to restore the derived recipients."
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["targets"],
+          "title": "NotificationConfigPutInput"
+        }
+      }
+    ],
+    "searchText": "create or update notification configuration set where an org sends one kind of notification kosli raises itself.\n\nthe targets replace the recipients kosli would otherwise derive. admins only. put notification-config org notification_type notification config"
+  },
+  {
     "id": "create_or_update_policy",
     "method": "PUT",
     "path": "/policies/{org}",
@@ -4043,7 +4522,10 @@
           "properties": {
             "description": {"type":"string","maxLength":256,"minLength":1,"title":"Description"},
             "expires_at": {
-              "anyOf": [{"type":"integer","maximum":4102444800},{"type":"null"}],
+              "anyOf": [
+                {"type":"integer","maximum":4102444800,"minimum":-9223372036854776000},
+                {"type":"null"}
+              ],
               "title": "Expires At",
               "description": "Unix timestamp for key expiry. Must not be in the past. Omit or pass 0 for the maximum; every key expires at most 365 days from creation."
             }
@@ -4126,6 +4608,14 @@
                         "signature_state": {
                           "anyOf": [{"type":"string"},{"type":"null"}],
                           "title": "Signature State"
+                        },
+                        "signer_username": {
+                          "anyOf": [{"type":"string"},{"type":"null"}],
+                          "title": "Signer Username"
+                        },
+                        "signed_by_platform": {
+                          "anyOf": [{"type":"boolean"},{"type":"null"}],
+                          "title": "Signed By Platform"
                         }
                       },
                       "type": "object",
@@ -4256,7 +4746,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Action Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Action Number"
+        }
       },
       {
         "name": "org",
@@ -4282,7 +4777,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Notification Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Notification Number"
+        }
       },
       {
         "name": "org",
@@ -4294,6 +4794,37 @@
     ],
     "requestBody": null,
     "searchText": "delete environment notification delete a specific environments-notification for an org. delete organizations org environments_notifications notification_number organizations"
+  },
+  {
+    "id": "delete_notification_config",
+    "method": "DELETE",
+    "path": "/notification-config/{org}/{notification_type}",
+    "summary": "Delete notification configuration",
+    "description": "Remove an org's configuration for one kind of notification, so Kosli\nderives the recipients again. Admins only.",
+    "tags": ["Notification Config"],
+    "parameters": [
+      {
+        "name": "notification_type",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "enum": ["api_key_expiry"],
+          "title": "NotificationType",
+          "description": "A kind of notification a customer can configure.\n\nA new kind is a new member here, not a new field or a new collection."
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "delete notification configuration remove an org's configuration for one kind of notification, so kosli\nderives the recipients again. admins only. delete notification-config org notification_type notification config"
   },
   {
     "id": "delete_service_account",
@@ -4538,7 +5069,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Action Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Action Number"
+        }
       },
       {
         "name": "org",
@@ -4556,7 +5092,7 @@
     "method": "GET",
     "path": "/attestations/{org}/{flow_name}/artifact/{fingerprint}/{attestation_name}",
     "summary": "Get artifact attestation",
-    "description": "",
+    "description": "Every attestation reported under the name, as published.\n\nA custom attestation whose type defines a summary also carries `summary`:\none list of `{name, value}` pairs per attested element. If the summary\ncannot be built, it carries `summary_unavailable: true` instead.",
     "tags": ["Attestation"],
     "parameters": [
       {
@@ -4593,7 +5129,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get artifact attestation  get attestations org flow_name artifact fingerprint attestation_name attestation"
+    "searchText": "get artifact attestation every attestation reported under the name, as published.\n\na custom attestation whose type defines a summary also carries `summary`:\none list of `{name, value}` pairs per attested element. if the summary\ncannot be built, it carries `summary_unavailable: true` instead. get attestations org flow_name artifact fingerprint attestation_name attestation"
   },
   {
     "id": "get_artifact_by_fingerprint",
@@ -4665,7 +5201,7 @@
     "method": "GET",
     "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/attestation/{attestation_id}/evidence",
     "summary": "Get attestation evidence file",
-    "description": "Download the evidence file attached to an attestation.",
+    "description": "Download the evidence file attached to an attestation.\n\nThe file is served by the object store from the redirect target, not by\nthis endpoint, so a client has to follow the redirect.",
     "tags": ["Attestation"],
     "parameters": [
       {
@@ -4706,7 +5242,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get attestation evidence file download the evidence file attached to an attestation. get attestations org flow_name trail trail_name attestation attestation_id evidence attestation"
+    "searchText": "get attestation evidence file download the evidence file attached to an attestation.\n\nthe file is served by the object store from the redirect target, not by\nthis endpoint, so a client has to follow the redirect. get attestations org flow_name trail trail_name attestation attestation_id evidence attestation"
   },
   {
     "id": "get_build_statistics",
@@ -4837,6 +5373,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -4936,7 +5473,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Version Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Version Number"
+        }
       },
       {
         "name": "org",
@@ -4977,7 +5519,10 @@
         "required": false,
         "description": "Version of the custom attestation type",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "anyOf": [
+            {"type":"integer","maximum":9223372036854776000,"minimum":-9223372036854776000},
+            {"type":"null"}
+          ],
           "description": "Version of the custom attestation type",
           "title": "Version"
         }
@@ -5217,7 +5762,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Notification Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Notification Number"
+        }
       },
       {
         "name": "org",
@@ -5357,6 +5907,37 @@
     "searchText": "get latest artifact commit get the latest git commit of the artifact. get artifacts org flow_name fingerprint latest_commit artifacts"
   },
   {
+    "id": "get_notification_config",
+    "method": "GET",
+    "path": "/notification-config/{org}/{notification_type}",
+    "summary": "Get notification configuration",
+    "description": "Where an org sends one kind of notification Kosli raises itself.\n\nAn empty target list means the org has not configured any, and Kosli\nderives the recipients from what the notification is about.",
+    "tags": ["Notification Config"],
+    "parameters": [
+      {
+        "name": "notification_type",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "enum": ["api_key_expiry"],
+          "title": "NotificationType",
+          "description": "A kind of notification a customer can configure.\n\nA new kind is a new member here, not a new field or a new collection."
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get notification configuration where an org sends one kind of notification kosli raises itself.\n\nan empty target list means the org has not configured any, and kosli\nderives the recipients from what the notification is about. get notification-config org notification_type notification config"
+  },
+  {
     "id": "get_organization",
     "method": "GET",
     "path": "/organizations/{org}",
@@ -5400,6 +5981,70 @@
     ],
     "requestBody": null,
     "searchText": "get policy get a policy in an organization. get policies org policy_name policies"
+  },
+  {
+    "id": "get_rego_policy",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}",
+    "summary": "Get a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier rego policies"
+  },
+  {
+    "id": "get_rego_policy_version",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}/versions/{version_number}",
+    "summary": "Get a version of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "version_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Version Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number rego policies"
   },
   {
     "id": "get_repo",
@@ -5738,7 +6383,7 @@
     "method": "GET",
     "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/{attestation_name}",
     "summary": "Get trail attestation",
-    "description": "",
+    "description": "Every attestation reported under the name, as published.\n\nA custom attestation whose type defines a summary also carries `summary`:\none list of `{name, value}` pairs per attested element. If the summary\ncannot be built, it carries `summary_unavailable: true` instead.",
     "tags": ["Attestation"],
     "parameters": [
       {
@@ -5779,14 +6424,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get trail attestation  get attestations org flow_name trail trail_name attestation_name attestation"
+    "searchText": "get trail attestation every attestation reported under the name, as published.\n\na custom attestation whose type defines a summary also carries `summary`:\none list of `{name, value}` pairs per attested element. if the summary\ncannot be built, it carries `summary_unavailable: true` instead. get attestations org flow_name trail trail_name attestation_name attestation"
   },
   {
     "id": "get_trail_moment",
     "method": "GET",
     "path": "/trails/{org}/{flow_name}/{trail_name}/moments/{moment_expression}",
     "summary": "Get trail moment",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "Get one moment, with each attestation's stored body joined onto its slot entry.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `N`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{YYYY-MM-DDTHH:MM:SS}`: the newest moment recorded at or before that UTC\n  instant. Fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27T12:00:00}\n\nAddress a moment you already know by its `moment_number`. An instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it.",
     "tags": ["Trails"],
     "parameters": [
       {
@@ -5827,7 +6472,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get trail moment **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get trails org flow_name trail_name moments moment_expression trails"
+    "searchText": "get trail moment get one moment, with each attestation's stored body joined onto its slot entry.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `n`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{yyyy-mm-ddthh:mm:ss}`: the newest moment recorded at or before that utc\n  instant. fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27t12:00:00}\n\naddress a moment you already know by its `moment_number`. an instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it. get trails org flow_name trail_name moments moment_expression trails"
   },
   {
     "id": "get_user_default_org",
@@ -5967,6 +6612,7 @@
         "description": "The page number of response",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "The page number of response",
           "default": 1,
@@ -5980,6 +6626,7 @@
         "description": "How many artifacts to return per page of response",
         "schema": {
           "type": "integer",
+          "maximum": 100,
           "minimum": 1,
           "description": "How many artifacts to return per page of response",
           "default": 15,
@@ -6125,7 +6772,10 @@
         "required": false,
         "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "anyOf": [
+            {"type":"integer","maximum":9223372036854776000,"minimum":-9223372036854776000},
+            {"type":"null"}
+          ],
           "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
           "title": "From Timestamp"
         }
@@ -6136,7 +6786,10 @@
         "required": false,
         "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "anyOf": [
+            {"type":"integer","maximum":9223372036854776000,"minimum":-9223372036854776000},
+            {"type":"null"}
+          ],
           "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
           "title": "To Timestamp"
         }
@@ -6267,6 +6920,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6408,6 +7062,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6516,6 +7171,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6645,6 +7301,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6704,6 +7361,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6816,6 +7474,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -6935,6 +7594,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -7000,6 +7660,7 @@
         "description": "The page number of response.",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "The page number of response.",
           "default": 1,
@@ -7133,7 +7794,7 @@
         "required": false,
         "description": "Page number",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":1000000,"minimum":1},{"type":"null"}],
           "description": "Page number",
           "title": "Page"
         }
@@ -7238,6 +7899,18 @@
           "description": "Filter by tag key or key:value. Can be repeated, e.g. tag=team or tag=team:platform",
           "title": "Tag"
         }
+      },
+      {
+        "name": "archived",
+        "in": "query",
+        "required": false,
+        "description": "Return archived environments instead of live ones. An archived environment is listed under the name it was given when archived, '<name>-archived-at-<timestamp>'.",
+        "schema": {
+          "type": "boolean",
+          "description": "Return archived environments instead of live ones. An archived environment is listed under the name it was given when archived, '<name>-archived-at-<timestamp>'.",
+          "default": false,
+          "title": "Archived"
+        }
       }
     ],
     "requestBody": null,
@@ -7331,6 +8004,7 @@
         "description": "The page number of response",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "The page number of response",
           "default": 1,
@@ -7344,6 +8018,7 @@
         "description": "How many results to return per page of response",
         "schema": {
           "type": "integer",
+          "maximum": 100,
           "minimum": 1,
           "description": "How many results to return per page of response",
           "default": 20,
@@ -7356,7 +8031,10 @@
         "required": false,
         "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "anyOf": [
+            {"type":"integer","maximum":9223372036854776000,"minimum":-9223372036854776000},
+            {"type":"null"}
+          ],
           "description": "From timestamp filter. Example: ?from_timestamp=1675167540",
           "title": "From Timestamp"
         }
@@ -7367,7 +8045,10 @@
         "required": false,
         "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
         "schema": {
-          "anyOf": [{"type":"integer"},{"type":"null"}],
+          "anyOf": [
+            {"type":"integer","maximum":9223372036854776000,"minimum":-9223372036854776000},
+            {"type":"null"}
+          ],
           "description": "To timestamp filter. Example: ?to_timestamp=1675167540",
           "title": "To Timestamp"
         }
@@ -7420,7 +8101,7 @@
         "required": false,
         "description": "The page number of response",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":1000000,"minimum":1},{"type":"null"}],
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -7509,6 +8190,144 @@
     "searchText": "list policies list policies in an organization. get policies org policies"
   },
   {
+    "id": "list_rego_policies",
+    "method": "GET",
+    "path": "/rego-policies/{org}",
+    "summary": "List rego policies",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "maximum": 1000000,
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of rego policies per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1,
+          "description": "Number of rego policies per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      },
+      {
+        "name": "sort_by",
+        "in": "query",
+        "required": false,
+        "description": "Field to sort by: time of the last publish or metadata change, or the identifier, which sorts without regard to case",
+        "schema": {
+          "type": "string",
+          "enum": ["updated_at","identifier"],
+          "title": "RegoPolicySortField",
+          "description": "Field to sort by: time of the last publish or metadata change, or the identifier, which sorts without regard to case",
+          "default": "updated_at"
+        }
+      },
+      {
+        "name": "sort_direction",
+        "in": "query",
+        "required": false,
+        "description": "Sort direction",
+        "schema": {
+          "type": "string",
+          "enum": ["asc","desc"],
+          "title": "SortDirection",
+          "description": "Sort direction",
+          "default": "desc"
+        }
+      },
+      {
+        "name": "search",
+        "in": "query",
+        "required": false,
+        "description": "Filter by name or identifier (case-insensitive substring match on either field)",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Filter by name or identifier (case-insensitive substring match on either field)",
+          "title": "Search"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list rego policies **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org rego policies"
+  },
+  {
+    "id": "list_rego_policy_versions",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}/versions",
+    "summary": "List versions of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "maximum": 1000000,
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of versions per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1,
+          "description": "Number of versions per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list versions of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions rego policies"
+  },
+  {
     "id": "list_repo_deployments",
     "method": "GET",
     "path": "/repos/{org}/{repo}/deployments",
@@ -7537,6 +8356,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -7718,6 +8538,7 @@
         "description": "Page number",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "Page number",
           "default": 1,
@@ -7923,7 +8744,7 @@
         "required": false,
         "description": "The page number of response",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":1000000,"minimum":1},{"type":"null"}],
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -7935,7 +8756,7 @@
         "required": false,
         "description": "How many results to return per page of response",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":100,"minimum":1},{"type":"null"}],
           "description": "How many results to return per page of response",
           "default": 15,
           "title": "Per Page"
@@ -7985,7 +8806,7 @@
     "method": "GET",
     "path": "/trails/{org}/{flow_name}/{trail_name}/moments",
     "summary": "List trail moments",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "List a trail's moments, newest first.\n\nA moment is recorded each time a trail event changes the trail's compliance\nslots. Read one back with `GET .../moments/{moment_expression}`, citing the\n`moment_number` from this listing.",
     "tags": ["Trails"],
     "parameters": [
       {
@@ -8024,6 +8845,7 @@
         "description": "The page number of response",
         "schema": {
           "type": "integer",
+          "maximum": 1000000,
           "minimum": 1,
           "description": "The page number of response",
           "default": 1,
@@ -8046,7 +8868,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list trail moments **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get trails org flow_name trail_name moments trails"
+    "searchText": "list trail moments list a trail's moments, newest first.\n\na moment is recorded each time a trail event changes the trail's compliance\nslots. read one back with `get .../moments/{moment_expression}`, citing the\n`moment_number` from this listing. get trails org flow_name trail_name moments trails"
   },
   {
     "id": "list_trails",
@@ -8080,7 +8902,7 @@
         "required": false,
         "description": "The page number of response",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":1000000,"minimum":1},{"type":"null"}],
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -8100,6 +8922,64 @@
     ],
     "requestBody": null,
     "searchText": "list trails list trails of a flow. get trails org flow_name trails"
+  },
+  {
+    "id": "list_trails_for_commit",
+    "method": "GET",
+    "path": "/search/{org}/commit/{sha}/trails",
+    "summary": "List trails for a commit",
+    "description": "Get the trails that report the commit, newest first, across all flows.",
+    "tags": ["Search"],
+    "parameters": [
+      {
+        "name": "sha",
+        "in": "path",
+        "required": true,
+        "description": "The full 40 character commit SHA-1.",
+        "schema": {
+          "type": "string",
+          "description": "The full 40 character commit SHA-1.",
+          "title": "Sha"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "maximum": 1000000,
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of trails per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 50,
+          "minimum": 1,
+          "description": "Number of trails per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list trails for a commit get the trails that report the commit, newest first, across all flows. get search org commit sha trails search"
   },
   {
     "id": "list_trails_for_org",
@@ -8155,7 +9035,7 @@
         "required": false,
         "description": "The page number of response",
         "schema": {
-          "anyOf": [{"type":"integer","minimum":1},{"type":"null"}],
+          "anyOf": [{"type":"integer","maximum":1000000,"minimum":1},{"type":"null"}],
           "description": "The page number of response",
           "default": 1,
           "title": "Page"
@@ -8279,6 +9159,14 @@
                     "signature_state": {
                       "anyOf": [{"type":"string"},{"type":"null"}],
                       "title": "Signature State"
+                    },
+                    "signer_username": {
+                      "anyOf": [{"type":"string"},{"type":"null"}],
+                      "title": "Signer Username"
+                    },
+                    "signed_by_platform": {
+                      "anyOf": [{"type":"boolean"},{"type":"null"}],
+                      "title": "Signed By Platform"
                     }
                   },
                   "type": "object",
@@ -8361,6 +9249,7 @@
               ],
               "title": "External Urls"
             },
+            "attachment_upload_id": {"type":"null","title":"Attachment Upload Id"},
             "annotations": {
               "anyOf": [
                 {"patternProperties":{"^[A-Za-z0-9_]+$":{"type":"string"}},"type":"object"},
@@ -8400,6 +9289,74 @@
       }
     ],
     "searchText": "override attestation override an attestation in a trail. post attestations org flow_name trail trail_name override attestation"
+  },
+  {
+    "id": "publish_rego_policy",
+    "method": "PUT",
+    "path": "/rego-policies/{org}/{identifier}",
+    "summary": "Publish a version of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "properties": {
+            "name": {
+              "anyOf": [{"type":"string"},{"type":"null"}],
+              "title": "Name",
+              "description": "Display name. Omit to keep the current one; required when the policy does not exist yet, and never cleared"
+            },
+            "description": {
+              "anyOf": [{"type":"string"},{"type":"null"}],
+              "title": "Description",
+              "description": "Omit to keep the current description, or send null to clear it"
+            },
+            "input_schema": {
+              "type": "string",
+              "enum": ["trail","trails"],
+              "title": "Input Schema",
+              "description": "Shape of the input the policy is written against: one trail, or a set of them"
+            },
+            "comment": {
+              "type": "string",
+              "title": "Comment",
+              "description": "Why this version was published, kept with the version",
+              "default": ""
+            },
+            "files": {
+              "additionalProperties": {"type":"string"},
+              "type": "object",
+              "title": "Files",
+              "description": "Rego bundle as relative path to source; a single file is one entry"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": ["input_schema","files"],
+          "title": "RegoPolicyPutInput"
+        }
+      }
+    ],
+    "searchText": "publish a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. put rego-policies org identifier rego policies"
   },
   {
     "id": "rename_environment",
@@ -8560,6 +9517,8 @@
                   "app_kind": {"type":"string","title":"App Kind","description":"Azure app kind"},
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the Web app in UTC"
                   }
@@ -8653,6 +9612,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the revision or job execution in UTC"
                   },
@@ -8770,6 +9731,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the container in UTC"
                   }
@@ -8871,6 +9834,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the task in UTC"
                   }
@@ -8965,6 +9930,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the pod in UTC"
                   },
@@ -9102,6 +10069,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the function in UTC"
                   }
@@ -9187,6 +10156,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the object in UTC"
                   }
@@ -9272,6 +10243,8 @@
                   },
                   "creationTimestamp": {
                     "type": "integer",
+                    "maximum": 9223372036854776000,
+                    "minimum": -9223372036854776000,
                     "title": "Creationtimestamp",
                     "description": "Creation time stamp for the artifact in UTC"
                   }
@@ -9355,7 +10328,10 @@
               "default": 24
             },
             "expires_at": {
-              "anyOf": [{"type":"integer","maximum":4102444800},{"type":"null"}],
+              "anyOf": [
+                {"type":"integer","maximum":4102444800,"minimum":-9223372036854776000},
+                {"type":"null"}
+              ],
               "title": "Expires At",
               "description": "Unix timestamp for the new key's expiry. Must not be in the past. Omit to keep the current key's expiry, bounded to at most 365 days from now."
             }
@@ -9392,6 +10368,64 @@
     ],
     "requestBody": null,
     "searchText": "search artifacts by sha or fingerprint get artifacts that match fingerprint or commit-sha. get search org sha search_value search"
+  },
+  {
+    "id": "search_commits",
+    "method": "GET",
+    "path": "/search/{org}/commit/{sha_prefix}",
+    "summary": "Search commits by SHA prefix",
+    "description": "Get the commits Kosli knows about whose SHA-1 starts with the given value,\nfrom trails and artifacts, ordered by SHA-1. Each links to the trails\nthat report it.",
+    "tags": ["Search"],
+    "parameters": [
+      {
+        "name": "sha_prefix",
+        "in": "path",
+        "required": true,
+        "description": "The start of a commit SHA-1, 5 to 40 hex characters.",
+        "schema": {
+          "type": "string",
+          "description": "The start of a commit SHA-1, 5 to 40 hex characters.",
+          "title": "Sha Prefix"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "description": "Page number",
+        "schema": {
+          "type": "integer",
+          "maximum": 1000000,
+          "minimum": 1,
+          "description": "Page number",
+          "default": 1,
+          "title": "Page"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "Number of commits per page",
+        "schema": {
+          "type": "integer",
+          "maximum": 50,
+          "minimum": 1,
+          "description": "Number of commits per page",
+          "default": 15,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "search commits by sha prefix get the commits kosli knows about whose sha-1 starts with the given value,\nfrom trails and artifacts, ordered by sha-1. each links to the trails\nthat report it. get search org commit sha_prefix search"
   },
   {
     "id": "set_user_default_org",
@@ -9550,7 +10584,12 @@
         "in": "path",
         "required": true,
         "description": "",
-        "schema": {"type":"integer","title":"Notification Number"}
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Notification Number"
+        }
       },
       {
         "name": "org",
