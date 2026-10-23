@@ -1,0 +1,71 @@
+# CodeQL code scanning, modelled on terraform-provider-kosli's codeql.yaml
+# (analyze job only; the Kosli attestation is deferred until this repo
+# reports to a Kosli flow, see #91).
+#
+# Scans TypeScript/JavaScript (src/, scripts/, test/) and the GitHub Actions
+# workflows themselves. Neither needs a build. Results land under
+# Security > Code scanning.
+#
+# Needs no secrets, so it runs unguarded on fork PRs too.
+
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly baseline re-scan, so new queries catch old code. An off-peak,
+    # off-the-hour minute keeps it out of the top-of-hour queue.
+    - cron: '23 5 * * 3'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Cancel superseded PR runs only. A cancelled run on main uploads no SARIF
+  # and leaves the code scanning baseline stale.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+      # Lets codeql-action/analyze read workflow run details if the repository
+      # is ever made private.
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Both are extracted from source, so no build step is needed.
+          - language: javascript-typescript
+            build-mode: none
+          - language: actions
+            build-mode: none
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-extended
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          category: "/language:${{ matrix.language }}"
