@@ -122,6 +122,26 @@ describe("createServer", () => {
     expect(result.content).toEqual([{ type: "text", text: '[{"name":"prod"}]' }]);
   });
 
+  // Without a length limit, zod reports one issue per bad element before giving
+  // up, so memory grows with the array (GHSA-mrhx-c7xc-m3w5). With it, the
+  // call is refused on length alone and the error stays small.
+  it.each(["execute_read_action", "execute_write_action"])(
+    "%s refuses an oversized fields array on its length alone",
+    async (name) => {
+      const outcome = await client
+        .callTool({
+          name,
+          arguments: { actionId: "list_environments", org: "cyber-dojo", fields: new Array(50_000).fill(0) },
+        })
+        .then((r) => ({ isError: r.isError, text: JSON.stringify(r.content) }))
+        .catch((e: unknown) => ({ isError: true, text: String(e) }));
+
+      expect(outcome.isError).toBe(true);
+      expect(outcome.text.length).toBeLessThan(2_000);
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
   it("keeps writes out of the read tool", async () => {
     const result = await client.callTool({
       name: "execute_read_action",
