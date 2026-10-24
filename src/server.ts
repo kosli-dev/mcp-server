@@ -11,6 +11,12 @@ const entries = catalog as CatalogEntry[];
 
 /** Builds the server with its three tools registered. */
 export function createServer(config: Config) {
+  // A length limit makes zod reject an oversized fields array on its length
+  // alone. Without one, it builds an issue per bad element first, so a huge
+  // array of non-strings costs memory in proportion to its size
+  // (GHSA-mrhx-c7xc-m3w5). 100 is far more keys than any response has.
+  const FIELDS = z.array(z.string()).max(100);
+
   const ORG_INPUT = z.string().nullable().optional().describe(
     'Kosli organization to run this call against, e.g. "cyber-dojo". Required for every action whose path contains {org}, which is all but four of them. There is no default: a call that names no org is refused rather than sent somewhere you did not choose.',
   );
@@ -73,7 +79,7 @@ export function createServer(config: Config) {
         actionId: z.string().describe("The action ID from search_actions results"),
         org: ORG_INPUT,
         params: z.record(z.string(), z.unknown()).optional().default({}).describe("Parameters for the action (path params or query params)"),
-        fields: z.array(z.string()).optional().describe("Only include these fields in each object of the response. Dramatically reduces response size. Example: [\"name\",\"compliant\",\"fingerprint\",\"reasons_for_incompliance\"]"),
+        fields: FIELDS.optional().describe("Only include these fields in each object of the response. Dramatically reduces response size. Example: [\"name\",\"compliant\",\"fingerprint\",\"reasons_for_incompliance\"]"),
       },
     },
     run("GET"),
@@ -92,7 +98,7 @@ export function createServer(config: Config) {
         actionId: z.string().describe("The action ID from search_actions results"),
         org: ORG_INPUT,
         params: z.record(z.string(), z.unknown()).optional().default({}).describe("Parameters for the action (path params, query params, or body)"),
-        fields: z.array(z.string()).optional().describe("Only include these fields in each object of the response. Dramatically reduces response size."),
+        fields: FIELDS.optional().describe("Only include these fields in each object of the response. Dramatically reduces response size."),
       },
     },
     run("WRITE"),
