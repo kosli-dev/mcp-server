@@ -5197,6 +5197,54 @@
     "searchText": "get artifact by fingerprint get artifact by fingerprint. get artifacts org flow_name fingerprint fingerprint artifacts"
   },
   {
+    "id": "get_attestation",
+    "method": "GET",
+    "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/attestation/{attestation_id}",
+    "summary": "Get trail attestation by ID",
+    "description": "The attestation with this ID in the trail, as published, whichever\nartifact it was reported for.\n\nA custom attestation whose type defines a summary also carries `summary`,\nor `summary_unavailable: true` when it cannot be built.",
+    "tags": ["Attestation"],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "attestation_id",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Attestation Id"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get trail attestation by id the attestation with this id in the trail, as published, whichever\nartifact it was reported for.\n\na custom attestation whose type defines a summary also carries `summary`,\nor `summary_unavailable: true` when it cannot be built. get attestations org flow_name trail trail_name attestation attestation_id attestation"
+  },
+  {
     "id": "get_attestation_evidence",
     "method": "GET",
     "path": "/attestations/{org}/{flow_name}/trail/{trail_name}/attestation/{attestation_id}/evidence",
@@ -6009,6 +6057,89 @@
     "searchText": "get a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier rego policies"
   },
   {
+    "id": "get_rego_policy_bundle",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/bundle",
+    "summary": "Download the files of a version of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "version_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Version Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "download the files of a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number bundle rego policies"
+  },
+  {
+    "id": "get_rego_policy_file",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/files/{file_path}",
+    "summary": "Get the source of a file in a version of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "version_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Version Number"
+        }
+      },
+      {
+        "name": "file_path",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"File Path"}
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get the source of a file in a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files file_path rego policies"
+  },
+  {
     "id": "get_rego_policy_version",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions/{version_number}",
@@ -6373,6 +6504,19 @@
         "required": true,
         "description": "",
         "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "exclude",
+        "in": "query",
+        "required": false,
+        "description": "Sections to leave out of the trail, which are then not read. Repeat the parameter to name several. An excluded list is returned empty: with `events` excluded, page through them with `GET /trails/{org}/{flow_name}/{trail_name}/events` instead.",
+        "schema": {
+          "type": "array",
+          "items": {"const":"events","type":"string"},
+          "description": "Sections to leave out of the trail, which are then not read. Repeat the parameter to name several. An excluded list is returned empty: with `events` excluded, page through them with `GET /trails/{org}/{flow_name}/{trail_name}/events` instead.",
+          "default": [],
+          "title": "Exclude"
+        }
       }
     ],
     "requestBody": null,
@@ -6748,10 +6892,10 @@
         "name": "type",
         "in": "query",
         "required": false,
-        "description": "Filter by attestation type. Use built-in types (e.g. 'junit', 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
+        "description": "Filter by attestation type. Use built-in types (e.g. 'junit'), a system type name (e.g. 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
         "schema": {
           "anyOf": [{"type":"array","items":{"type":"string"}},{"type":"null"}],
-          "description": "Filter by attestation type. Use built-in types (e.g. 'junit', 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
+          "description": "Filter by attestation type. Use built-in types (e.g. 'junit'), a system type name (e.g. 'decision') or 'custom:<name>' for custom types. Repeat the parameter to match several types.",
           "title": "Type"
         }
       },
@@ -7966,6 +8110,59 @@
           "default": 20,
           "title": "Per Page"
         }
+      },
+      {
+        "name": "policy",
+        "in": "query",
+        "required": false,
+        "description": "Identifier of a published rego policy, matched without regard to case. Only evaluations of that policy are returned",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Identifier of a published rego policy, matched without regard to case. Only evaluations of that policy are returned",
+          "title": "Policy"
+        }
+      },
+      {
+        "name": "version",
+        "in": "query",
+        "required": false,
+        "description": "Version of the policy named by policy. Only evaluations of that version are returned; repeat it to name several",
+        "schema": {
+          "anyOf": [
+            {"type":"array","items":{"type":"integer","maximum":9223372036854776000,"minimum":1}},
+            {"type":"null"}
+          ],
+          "description": "Version of the policy named by policy. Only evaluations of that version are returned; repeat it to name several",
+          "title": "Version"
+        }
+      },
+      {
+        "name": "outcome",
+        "in": "query",
+        "required": false,
+        "description": "Only evaluations with one of these outcomes are returned; repeat it to name several. Needs policy. A pending evaluation has no outcome yet, so it is never returned",
+        "schema": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {"type":"string","enum":["allow","deny","error"],"title":"EvaluationOutcome"}
+            },
+            {"type":"null"}
+          ],
+          "description": "Only evaluations with one of these outcomes are returned; repeat it to name several. Needs policy. A pending evaluation has no outcome yet, so it is never returned",
+          "title": "Outcome"
+        }
+      },
+      {
+        "name": "decided",
+        "in": "query",
+        "required": false,
+        "description": "Only evaluations that recorded a decision attestation (true), or that did not (false), are returned. Needs policy. A pending evaluation is never returned",
+        "schema": {
+          "anyOf": [{"type":"boolean"},{"type":"null"}],
+          "description": "Only evaluations that recorded a decision attestation (true), or that did not (false), are returned. Needs policy. A pending evaluation is never returned",
+          "title": "Decided"
+        }
       }
     ],
     "requestBody": null,
@@ -8268,10 +8465,59 @@
           "description": "Filter by name or identifier (case-insensitive substring match on either field)",
           "title": "Search"
         }
+      },
+      {
+        "name": "input_schema",
+        "in": "query",
+        "required": false,
+        "description": "Filter by the input schema of the current version; a policy with no valid version has none, so it never matches",
+        "schema": {
+          "anyOf": [{"enum":["trail","trails"],"type":"string"},{"type":"null"}],
+          "description": "Filter by the input schema of the current version; a policy with no valid version has none, so it never matches",
+          "title": "Input Schema"
+        }
       }
     ],
     "requestBody": null,
     "searchText": "list rego policies **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org rego policies"
+  },
+  {
+    "id": "list_rego_policy_files",
+    "method": "GET",
+    "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/files",
+    "summary": "List the files of a version of a rego policy",
+    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Rego Policies"],
+    "parameters": [
+      {
+        "name": "identifier",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Identifier"}
+      },
+      {
+        "name": "version_number",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "integer",
+          "maximum": 9223372036854776000,
+          "minimum": -9223372036854776000,
+          "title": "Version Number"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list the files of a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files rego policies"
   },
   {
     "id": "list_rego_policy_versions",
@@ -8800,6 +9046,107 @@
     "parameters": [],
     "requestBody": null,
     "searchText": "list system attestation types list all registered system attestation types with their per-version attestation_data schemas. get attestations system-attestation-types attestation"
+  },
+  {
+    "id": "list_trail_events",
+    "method": "GET",
+    "path": "/trails/{org}/{flow_name}/{trail_name}/events",
+    "summary": "List trail events",
+    "description": "One page of the trail's events, each typed by its `type`. Page by\nfollowing _links.next and _links.prev, which are absent at the ends of\nthe walk.",
+    "tags": ["Trails"],
+    "parameters": [
+      {
+        "name": "flow_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Flow Name"
+        }
+      },
+      {
+        "name": "trail_name",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\.\\-_~]*$",
+          "title": "Trail Name"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      },
+      {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "description": "Order of the events: `newest` or `oldest` first.",
+        "schema": {
+          "enum": ["oldest","newest"],
+          "type": "string",
+          "description": "Order of the events: `newest` or `oldest` first.",
+          "default": "newest",
+          "title": "Sort"
+        }
+      },
+      {
+        "name": "anchor_id",
+        "in": "query",
+        "required": false,
+        "description": "Start the page at the event that reported the attestation, override or artifact with this ID. `_links.prev` reaches the events before it. Ignored with a cursor.",
+        "schema": {
+          "anyOf": [{"type":"string","maxLength":36,"pattern":"^[0-9a-f-]+$"},{"type":"null"}],
+          "description": "Start the page at the event that reported the attestation, override or artifact with this ID. `_links.prev` reaches the events before it. Ignored with a cursor.",
+          "title": "Anchor Id"
+        }
+      },
+      {
+        "name": "after",
+        "in": "query",
+        "required": false,
+        "description": "Cursor for the next page. Use the token from a response's _links.next.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Cursor for the next page. Use the token from a response's _links.next.",
+          "title": "After"
+        }
+      },
+      {
+        "name": "before",
+        "in": "query",
+        "required": false,
+        "description": "Cursor for the previous page. Use the token from a response's _links.prev. Cannot be combined with after.",
+        "schema": {
+          "anyOf": [{"type":"string"},{"type":"null"}],
+          "description": "Cursor for the previous page. Use the token from a response's _links.prev. Cannot be combined with after.",
+          "title": "Before"
+        }
+      },
+      {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "description": "How many events to return per page (max 100).",
+        "schema": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 1,
+          "description": "How many events to return per page (max 100).",
+          "default": 50,
+          "title": "Per Page"
+        }
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list trail events one page of the trail's events, each typed by its `type`. page by\nfollowing _links.next and _links.prev, which are absent at the ends of\nthe walk. get trails org flow_name trail_name events trails"
   },
   {
     "id": "list_trail_moments",
