@@ -58,7 +58,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 ## Common tasks
 
 - **Add support for a new Kosli endpoint:** usually nothing to do — regenerate the catalog (`npm run generate-catalog`) and the new action is discoverable via `search_actions`.
-- **Change how params are serialized:** edit `KosliClient.execute`. Update both the GET/DELETE (querystring) and the body branches consistently, and add a test.
+- **Change how params are serialized:** edit `KosliClient.execute`. Update both the GET/DELETE (querystring) and the body branches consistently, and add a test. An array value repeats the key (`?tag=a&tag=b`) in both the query string and multipart form: the API declares list parameters as FastAPI `List[...] = Query()`, which never accepts a comma-joined value.
 - **Change search relevance:** `searchActions` in `src/tools/search-actions.ts`. Keep it dependency-free and O(n) — the catalog is small.
 - **Add config:** extend `Config` in `types.ts` and `loadConfig` in `config.ts`. Document in README.
 

@@ -117,13 +117,21 @@ export class KosliClient {
       const queryEntries = Object.entries(extraParams).filter(
         ([, v]) => v !== undefined,
       );
-      if (queryEntries.length > 0) {
-        const searchParams = new URLSearchParams();
-        for (const [k, v] of queryEntries) {
+      // The API reads a list parameter as the key repeated (?tag=a&tag=b),
+      // never as one comma-joined value: String(["a","b"]) would send a
+      // single "a,b" that is refused or matched as a literal.
+      const searchParams = new URLSearchParams();
+      for (const [k, v] of queryEntries) {
+        if (Array.isArray(v)) {
+          for (const item of v) searchParams.append(k, String(item));
+        } else {
           searchParams.set(k, String(v));
         }
+      }
+      const query = searchParams.toString();
+      if (query.length > 0) {
         const separator = url.includes("?") ? "&" : "?";
-        return this.doFetch(`${url}${separator}${searchParams.toString()}`, init);
+        return this.doFetch(`${url}${separator}${query}`, init);
       }
     } else if (isMultipart) {
       init.body = buildFormData(extraParams);

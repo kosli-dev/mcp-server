@@ -38,6 +38,22 @@ const getTrailEntry: CatalogEntry = {
   searchText: "get trail",
 };
 
+const listFlowsEntry: CatalogEntry = {
+  id: "list_flows",
+  method: "GET",
+  path: "/flows/{org}",
+  summary: "List flows",
+  description: "List all flows.",
+  tags: ["Flows"],
+  parameters: [
+    { name: "org", in: "path", required: true, description: "Organization name" },
+    { name: "page", in: "query", required: false, description: "Page number" },
+    { name: "tag", in: "query", required: false, description: "Filter by tag. Can be repeated" },
+  ],
+  requestBody: null,
+  searchText: "list flows",
+};
+
 const putPolicyEntry: CatalogEntry = {
   id: "create_or_update_policy",
   method: "PUT",
@@ -125,6 +141,49 @@ describe("KosliClient", () => {
       "https://app.kosli.com/api/v2/trails/test-org/my-flow/my-trail",
       expect.anything(),
     );
+  });
+
+  describe("query parameters", () => {
+    beforeEach(() => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ flows: [] }),
+      });
+    });
+
+    it("sends scalars as single query entries", async () => {
+      await client.execute(listFlowsEntry, { org: "test-org", page: 2, tag: "team" });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://app.kosli.com/api/v2/flows/test-org?page=2&tag=team",
+        expect.anything(),
+      );
+    });
+
+    // FastAPI reads List[...] = Query() as the key repeated. A comma-joined value
+    // is one element, refused by an enum or int list and matched literally by a
+    // string one.
+    it("repeats the key for each element of an array, never comma-joins", async () => {
+      await client.execute(listFlowsEntry, {
+        org: "test-org",
+        tag: ["team:platform", "framework"],
+      });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://app.kosli.com/api/v2/flows/test-org?tag=team%3Aplatform&tag=framework",
+        expect.anything(),
+      );
+    });
+
+    it("sends an empty array as no query at all", async () => {
+      await client.execute(listFlowsEntry, { org: "test-org", tag: [] });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://app.kosli.com/api/v2/flows/test-org",
+        expect.anything(),
+      );
+    });
   });
 
   // The client knows nothing about orgs: executeAction refuses a call that names
