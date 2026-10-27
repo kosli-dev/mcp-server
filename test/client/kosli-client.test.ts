@@ -184,6 +184,30 @@ describe("KosliClient", () => {
         expect.anything(),
       );
     });
+
+    // The catalog types a list filter as array-or-null, so a model sends null to
+    // mean "no filter". As a query entry it would filter on the name "null".
+    it("sends a null value as no query entry, like undefined", async () => {
+      await client.execute(listFlowsEntry, {
+        org: "test-org",
+        tag: null,
+        page: undefined,
+      });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://app.kosli.com/api/v2/flows/test-org",
+        expect.anything(),
+      );
+    });
+
+    it("skips null elements inside an array", async () => {
+      await client.execute(listFlowsEntry, { org: "test-org", tag: ["team", null] });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://app.kosli.com/api/v2/flows/test-org?tag=team",
+        expect.anything(),
+      );
+    });
   });
 
   // The client knows nothing about orgs: executeAction refuses a call that names
