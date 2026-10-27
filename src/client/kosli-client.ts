@@ -114,16 +114,29 @@ export class KosliClient {
     const init: RequestInit = { method: entry.method, headers: baseHeaders };
 
     if (entry.method === "GET" || entry.method === "DELETE") {
+      // null is "not supplied" here, as in buildFormData: the catalog types a
+      // list filter as array-or-null, and String(null) would filter on "null".
+      // The JSON body branch keeps null, where it is a value.
       const queryEntries = Object.entries(extraParams).filter(
-        ([, v]) => v !== undefined,
+        ([, v]) => v !== undefined && v !== null,
       );
-      if (queryEntries.length > 0) {
-        const searchParams = new URLSearchParams();
-        for (const [k, v] of queryEntries) {
+      // The API reads a list parameter as the key repeated (?tag=a&tag=b),
+      // never as one comma-joined value: String(["a","b"]) would send a
+      // single "a,b" that is refused or matched as a literal.
+      const searchParams = new URLSearchParams();
+      for (const [k, v] of queryEntries) {
+        if (Array.isArray(v)) {
+          for (const item of v) {
+            if (item !== undefined && item !== null) searchParams.append(k, String(item));
+          }
+        } else {
           searchParams.set(k, String(v));
         }
+      }
+      const query = searchParams.toString();
+      if (query.length > 0) {
         const separator = url.includes("?") ? "&" : "?";
-        return this.doFetch(`${url}${separator}${searchParams.toString()}`, init);
+        return this.doFetch(`${url}${separator}${query}`, init);
       }
     } else if (isMultipart) {
       init.body = buildFormData(extraParams);
