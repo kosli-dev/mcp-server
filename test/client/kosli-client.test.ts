@@ -198,6 +198,79 @@ describe("KosliClient", () => {
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
+  // encodeURIComponent keeps "/" inside a segment but leaves "." alone, and
+  // fetch's URL parser collapses dot segments: "/trails/mine/../other-org"
+  // would be sent as "/trails/other-org", the trails of another org.
+  describe("path values that are not names", () => {
+    it.each([
+      ["a bare ..", ".."],
+      ["a bare .", "."],
+      ["an empty value", ""],
+    ])("refuses %s rather than letting the parser rewrite the path", async (_label, flow_name) => {
+      const result = await client.execute(getTrailEntry, { org: "mine", flow_name, trail_name: "other-org" });
+
+      expect(result).toEqual({
+        error: true,
+        status: 0,
+        statusText: "Invalid Request",
+        message: expect.stringContaining("Path parameter flow_name must be a name"),
+      });
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it("refuses a dot segment on a write, so it cannot reach another route than the one approved", async () => {
+      const deleteFlowEntry: CatalogEntry = {
+        id: "delete_flow", method: "DELETE", path: "/flows/{org}/{flow_name}",
+        summary: "", description: "", tags: [],
+        parameters: [
+          { name: "org", in: "path", required: true, description: "" },
+          { name: "flow_name", in: "path", required: true, description: "" },
+        ],
+        requestBody: null, searchText: "delete flow",
+      };
+
+      const result = await client.execute(deleteFlowEntry, { org: "mine", flow_name: ".." });
+
+      expect(result).toMatchObject({ error: true, statusText: "Invalid Request" });
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it("keeps a value that only contains dots", async () => {
+      mockFetch.mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve({}) });
+
+      await client.execute(getTrailEntry, { org: "mine", flow_name: "...", trail_name: "v1.2" });
+
+      expect(mockFetch).toHaveBeenCalledWith("https://app.kosli.com/api/v2/trails/mine/.../v1.2", expect.anything());
+    });
+
+    // The value check covers every way a parameter can reach the path today; this
+    // pins the backstop that refuses any URL fetch would not send as built.
+    it.each([
+      ["GET", "a read"],
+      ["POST", "a write"],
+    ])("refuses %s URL whose parsed path differs from the one built (%s)", async (method) => {
+      const rewritten: CatalogEntry = {
+        id: "rewritten", method, path: "/trails/{org}/../{flow_name}",
+        summary: "", description: "", tags: [],
+        parameters: [
+          { name: "org", in: "path", required: true, description: "" },
+          { name: "flow_name", in: "path", required: true, description: "" },
+        ],
+        requestBody: null, searchText: "rewritten",
+      };
+
+      const result = await client.execute(rewritten, { org: "mine", flow_name: "other-org" });
+
+      expect(result).toEqual({
+        error: true,
+        status: 0,
+        statusText: "Invalid Request",
+        message: `The path parameters would send this request somewhere other than ${method} /trails/{org}/../{flow_name}, so it was not sent`,
+      });
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+  });
+
   describe("multipart/form-data encoding", () => {
     it("sends FormData body and omits Content-Type header", async () => {
       mockFetch.mockResolvedValue({

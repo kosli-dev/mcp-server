@@ -1,5 +1,5 @@
 import type { CatalogEntry, Config } from "../types.js";
-import { KosliClient } from "../client/kosli-client.js";
+import { KosliClient, isPathSegment } from "../client/kosli-client.js";
 import { takesOrg } from "../org.js";
 
 type FetchFn = typeof globalThis.fetch;
@@ -95,7 +95,8 @@ function normalizeOrg(value: unknown): string | undefined {
   // Coercion would invent a name: ["a", "b"] reads as the org "a,b", and an org
   // id as an org called "1234". Both would then pass as a single name.
   if (typeof value !== "string") return "";
-  return value.trim();
+  const org = value.trim();
+  return isPathSegment(org) ? org : "";
 }
 
 /**
@@ -120,7 +121,7 @@ function resolveOrg(
   }
 
   if (named.includes("")) {
-    return { error: "The org must be a single organization name, given as a non-empty string. Check the org parameter and params.org." };
+    return { error: 'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.' };
   }
 
   if (named.length > 1) {

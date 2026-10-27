@@ -26,6 +26,16 @@ const USER_AGENT = `kosli-mcp-server/${VERSION}`;
 
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
+/**
+ * `.` and `..` survive encodeURIComponent, and the URL parser inside fetch then
+ * collapses them: a `..` deletes the segment before it, so the request lands on
+ * another route or in another org. An empty value leaves a `//` the server may
+ * collapse too. None of them is a name.
+ */
+export function isPathSegment(value: string): boolean {
+  return value !== "" && value !== "." && value !== "..";
+}
+
 function getRequestContentType(entry: CatalogEntry): string | undefined {
   const body = entry.requestBody?.[0];
   if (!body) return undefined;
@@ -142,11 +152,38 @@ export class KosliClient {
       }
 
       if (value !== undefined) {
-        path = path.replace(`{${param.name}}`, encodeURIComponent(String(value)));
+        const segment = String(value);
+        if (!isPathSegment(segment)) {
+          return {
+            error: true,
+            status: 0,
+            statusText: "Invalid Request",
+            message: `Path parameter ${param.name} must be a name, not empty, "." or "..", for ${entry.method} ${entry.path}`,
+          };
+        }
+        path = path.replace(`{${param.name}}`, encodeURIComponent(segment));
       }
     }
 
-    return `${this.config.baseUrl}/api/v2${path}`;
+    const url = `${this.config.baseUrl}/api/v2${path}`;
+    // The check above is the reason; this is the guarantee. Whatever fetch's
+    // parser makes of the URL, it must still end in the path built here, or the
+    // request and the approval prompt describe different calls.
+    let pathname: string;
+    try {
+      pathname = new URL(url).pathname;
+    } catch {
+      pathname = "";
+    }
+    if (!pathname.endsWith(`/api/v2${path}`)) {
+      return {
+        error: true,
+        status: 0,
+        statusText: "Invalid Request",
+        message: `The path parameters would send this request somewhere other than ${entry.method} ${entry.path}, so it was not sent`,
+      };
+    }
+    return url;
   }
 
   private async doFetch(url: string, init: RequestInit): Promise<unknown | ErrorResponse> {

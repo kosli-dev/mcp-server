@@ -345,7 +345,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single organization name, given as a non-empty string. Check the org parameter and params.org.",
+        'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -405,7 +405,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single organization name, given as a non-empty string. Check the org parameter and params.org.",
+        'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -453,7 +453,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single organization name, given as a non-empty string. Check the org parameter and params.org.",
+        'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -466,7 +466,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        "The org must be a single organization name, given as a non-empty string. Check the org parameter and params.org.",
+        'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -603,6 +603,39 @@ describe("org selection", () => {
       "https://app.kosli.com/api/v2/environments/..%2F..%2Fuser%2Fdefault-org",
       expect.anything(),
     );
+  });
+
+  // "%2F" keeps slashes inside the segment, but "." needs no encoding and fetch
+  // collapses it: "/environments/.." would be sent as "/environments".
+  it.each([
+    ["a bare .. as the org", {}, ".."],
+    ["a bare . as the org", {}, "."],
+    ["a bare .. inside params", { org: " .. " }, undefined],
+  ])("rejects %s rather than letting it remove a path segment", async (_label, params, org) => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(entries, config, "get_environment", { ...params, env_name: "organizations" }, { fetchFn: mockFetch, mode: "GET", org });
+
+    expect(result).toEqual({
+      error: true,
+      message:
+        'The org must be a single organization name, given as a non-empty string other than "." or "..". Check the org parameter and params.org.',
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  // The org named must be the org hit: a ".." after it would drop it and let
+  // trail_name take its place, reading another org with no approval prompt.
+  it("refuses a dot segment in a later path parameter that would swap the org", async () => {
+    const mockFetch = vi.fn();
+
+    const result = await executeAction(
+      entries, config, "get_trail", { flow_name: "..", trail_name: "other-org" },
+      { fetchFn: mockFetch, mode: "GET", org: "mine" },
+    );
+
+    expect(result).toMatchObject({ error: true, message: expect.stringContaining("Path parameter flow_name must be a name") });
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it("applies to writes, and the org does not leak into the request body", async () => {
