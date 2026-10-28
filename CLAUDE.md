@@ -34,6 +34,7 @@ A Model Context Protocol (MCP) server that exposes the Kosli API to LLM clients 
 - Errors from the Kosli API are returned as `{ error: true, status, statusText, message }` — not thrown. Tools stringify whatever they get. Keep this contract; the LLM handles the error object.
 - Responses are serialized with `JSON.stringify(result)` (compact, no pretty-printing) to minimize token usage. Don't revert to pretty-printing.
 - All API requests include `User-Agent: kosli-mcp-server/<version>` for server-side tracking, with the version coming from `VERSION` in `src/version.ts`. Preserve the header and keep the version in it — the backend uses it to tell releases apart.
+- Every Kosli API request also carries `X-Kosli-Client: mcp/<version>`, and requests made by an execute tool add `X-Kosli-Operation: <tool name> <action id>` and `X-Kosli-Invocation-Id` (a UUID made once per `createServer`, so one per MCP session). They feed Kosli's product analytics; the backend treats each as optional and falls back to the `User-Agent`. Only names go in them: never a tool argument, param value, search query or prompt text. The action id is the catalog's, a public OpenAPI operationId. They are not sent on the redirect download, which goes to an object store, not Kosli. `search_actions` makes no request, so it sends nothing.
 
 ## CI & repository rules
 

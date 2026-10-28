@@ -3,6 +3,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../src/server.js";
 import type { Config } from "../src/types.js";
+import { VERSION } from "../src/version.js";
 
 // The registered tools are what a client actually sees, so this covers the
 // wiring: a schema that no longer admits `org`, or a handler wired to the wrong
@@ -150,5 +151,78 @@ describe("createServer", () => {
 
     expect(JSON.stringify(result.content)).toContain("Use execute_write_action instead");
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+  describe("analytics headers", () => {
+    const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
+    function sentHeaders(call = 0): Record<string, string> {
+      return fetchMock.mock.calls[call][1].headers;
+    }
+
+    async function callReadThenWrite(c: Client) {
+      respondOk();
+      await c.callTool({
+        name: "execute_read_action",
+        arguments: {
+          actionId: "get_trail",
+          org: "secret-org",
+          params: { flow_name: "secret-flow", trail_name: "secret-trail", exclude: "secret-exclude" },
+          fields: ["secret-field"],
+        },
+      });
+      await c.callTool({
+        name: "execute_write_action",
+        arguments: {
+          actionId: "create_control",
+          org: "secret-org",
+          params: { name: "secret-control", description: "secret-description" },
+        },
+      });
+    }
+
+    it("names the tool and the catalog action on each request", async () => {
+      await callReadThenWrite(client);
+
+      expect(sentHeaders(0)).toMatchObject({
+        "User-Agent": `kosli-mcp-server/${VERSION}`,
+        "X-Kosli-Client": `mcp/${VERSION}`,
+        "X-Kosli-Operation": "execute_read_action get_trail",
+      });
+      expect(sentHeaders(1)).toMatchObject({
+        "X-Kosli-Client": `mcp/${VERSION}`,
+        "X-Kosli-Operation": "execute_write_action create_control",
+      });
+    });
+
+    it("sends one invocation id for the whole session, and a new one for the next", async () => {
+      await callReadThenWrite(client);
+      const first = sentHeaders(0)["X-Kosli-Invocation-Id"];
+      expect(first).toMatch(UUID_V4);
+      expect(sentHeaders(1)["X-Kosli-Invocation-Id"]).toBe(first);
+
+      fetchMock.mockReset();
+      const other = new Client({ name: "test", version: "0" });
+      const [clientSide, serverSide] = InMemoryTransport.createLinkedPair();
+      await Promise.all([createServer(config).connect(serverSide), other.connect(clientSide)]);
+      await callReadThenWrite(other);
+
+      expect(sentHeaders(0)["X-Kosli-Invocation-Id"]).toMatch(UUID_V4);
+      expect(sentHeaders(0)["X-Kosli-Invocation-Id"]).not.toBe(first);
+    });
+
+    it("never puts a tool argument in a header", async () => {
+      await callReadThenWrite(client);
+
+      for (const call of [0, 1]) {
+        const { Authorization: _token, ...rest } = sentHeaders(call);
+        expect(JSON.stringify(rest)).not.toContain("secret");
+      }
+    });
+
+    it("sends no request for search_actions", async () => {
+      await client.callTool({ name: "search_actions", arguments: { query: "secret trail" } });
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
   });
 });

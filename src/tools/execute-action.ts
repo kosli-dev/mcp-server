@@ -1,5 +1,5 @@
 import type { CatalogEntry, Config } from "../types.js";
-import { KosliClient, isPathSegment } from "../client/kosli-client.js";
+import { KosliClient, isPathSegment, type RequestOrigin } from "../client/kosli-client.js";
 import { takesOrg } from "../org.js";
 
 type FetchFn = typeof globalThis.fetch;
@@ -142,6 +142,7 @@ export interface ExecuteOptions {
   mode?: ToolMode;
   /** `null` counts as not supplied, the same as `params.org`. */
   org?: string | null;
+  origin?: RequestOrigin;
 }
 
 export async function executeAction(
@@ -149,7 +150,7 @@ export async function executeAction(
   config: Config,
   actionId: string,
   params: Record<string, unknown>,
-  { fields, fetchFn = globalThis.fetch, mode, org }: ExecuteOptions = {},
+  { fields, fetchFn = globalThis.fetch, mode, org, origin }: ExecuteOptions = {},
 ): Promise<unknown> {
   const entry = catalog.find((e) => e.id === actionId);
   if (!entry) {
@@ -186,7 +187,7 @@ export async function executeAction(
   else withOrg.org = resolved.org;
 
   const client = new KosliClient(config, fetchFn);
-  const result = await client.execute(entry, withOrg);
+  const result = await client.execute(entry, withOrg, origin);
 
   // Never strip error shapes — pickFields would reduce them to {}
   // and hide the failure from the LLM.

@@ -143,6 +143,56 @@ describe("KosliClient", () => {
     );
   });
 
+  describe("analytics headers", () => {
+    beforeEach(() => {
+      mockFetch.mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve({}) });
+    });
+
+    it("names the client and version, keeping the User-Agent as it is", async () => {
+      await client.execute(listEnvEntry, { org: "test-org" });
+
+      const [, init] = mockFetch.mock.calls[0];
+      expect(init.headers).toMatchObject({
+        "User-Agent": `kosli-mcp-server/${VERSION}`,
+        "X-Kosli-Client": `mcp/${VERSION}`,
+      });
+      expect(init.headers).not.toHaveProperty("X-Kosli-Operation");
+      expect(init.headers).not.toHaveProperty("X-Kosli-Invocation-Id");
+    });
+
+    it("names the tool, the catalog action and the invocation, and nothing the caller passed", async () => {
+      const invocationId = "6f1c1d2e-8a0b-4c3d-9e4f-5a6b7c8d9e0f";
+
+      await client.execute(
+        listFlowsEntry,
+        { org: "secret-org", page: 7, tag: ["secret-a", "secret-b"] },
+        { tool: "execute_read_action", invocationId },
+      );
+
+      const [, init] = mockFetch.mock.calls[0];
+      expect(init.headers).toMatchObject({
+        "X-Kosli-Client": `mcp/${VERSION}`,
+        "X-Kosli-Operation": "execute_read_action list_flows",
+        "X-Kosli-Invocation-Id": invocationId,
+      });
+      const { Authorization: _token, ...rest } = init.headers;
+      expect(JSON.stringify(rest)).not.toMatch(/secret|"7"/);
+    });
+
+    it("sends them on a multipart write too", async () => {
+      await client.execute(
+        putPolicyEntry,
+        { org: "test-org", name: "provenance" },
+        { tool: "execute_write_action", invocationId: "6f1c1d2e-8a0b-4c3d-9e4f-5a6b7c8d9e0f" },
+      );
+
+      const [, init] = mockFetch.mock.calls[0];
+      expect(init.headers).toMatchObject({
+        "X-Kosli-Operation": "execute_write_action create_or_update_policy",
+      });
+    });
+  });
+
   describe("query parameters", () => {
     beforeEach(() => {
       mockFetch.mockResolvedValue({
