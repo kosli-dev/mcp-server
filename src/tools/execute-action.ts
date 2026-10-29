@@ -130,7 +130,7 @@ function resolveOrg(
   }
 
   if (named.length === 0) {
-    return { error: `Action "${entry.id}" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose.` };
+    return { error: `Action "${entry.id}" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose. If the user has not named one, get_user_default_org returns their default: offer it and have them confirm it before using it, never use it silently.` };
   }
 
   return { org: named[0] };

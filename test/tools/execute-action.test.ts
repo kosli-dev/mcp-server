@@ -421,7 +421,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        'Action "list_environments" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose.',
+        'Action "list_environments" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose. If the user has not named one, get_user_default_org returns their default: offer it and have them confirm it before using it, never use it silently.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });
@@ -437,7 +437,7 @@ describe("org selection", () => {
     expect(result).toEqual({
       error: true,
       message:
-        'Action "list_environments" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose.',
+        'Action "list_environments" runs against one organization and none was named. Set the org parameter. There is no default, so that no call lands somewhere the caller did not choose. If the user has not named one, get_user_default_org returns their default: offer it and have them confirm it before using it, never use it silently.',
     });
     expect(mockFetch).not.toHaveBeenCalled();
   });

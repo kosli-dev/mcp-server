@@ -41,6 +41,19 @@ describe("createServer", () => {
     expect(inputs.search_actions).not.toContain("org");
   });
 
+  // No endpoint lists a user's orgs, so without this hint the model asks an
+  // open question instead of offering the default for the user to confirm.
+  it("points the org input at get_user_default_org, to offer rather than assume", async () => {
+    const { tools } = await client.listTools();
+
+    for (const name of ["execute_read_action", "execute_write_action"]) {
+      const org = tools.find((t) => t.name === name)?.inputSchema.properties?.org as
+        { description?: string } | undefined;
+      expect(org?.description).toContain("get_user_default_org");
+      expect(org?.description).toMatch(/confirm/);
+    }
+  });
+
   // These annotations are what make an MCP client ask before a write.
   // scripts/smoke.ts checks the same against a built server.
   it("marks writes destructive and everything else read-only", async () => {

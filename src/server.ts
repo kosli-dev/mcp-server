@@ -19,7 +19,7 @@ export function createServer(config: Config) {
   const FIELDS = z.array(z.string()).max(100);
 
   const ORG_INPUT = z.string().nullable().optional().describe(
-    'Kosli organization to run this call against, e.g. "cyber-dojo". Required for every action whose path contains {org}, which is all but four of them. There is no default: a call that names no org is refused rather than sent somewhere you did not choose.',
+    'Kosli organization to run this call against, e.g. "cyber-dojo". Required for every action whose path contains {org}, which is all but four of them. There is no default: a call that names no org is refused rather than sent somewhere you did not choose. If the user has not named an org, get_user_default_org returns their default: offer it and have them confirm it before using it, never use it silently.',
   );
 
   const invocationId = randomUUID();
