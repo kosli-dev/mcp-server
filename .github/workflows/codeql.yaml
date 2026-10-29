@@ -104,6 +104,11 @@ jobs:
         with:
           egress-policy: audit
 
+      # kosli attest reads the commit's git info from --repo-root (default ".").
+      # Without a repository it warns and attests without that info.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@b90ac9b0ddfce708c687f198430f54dfa960f80d # v5.2.3
         with:
