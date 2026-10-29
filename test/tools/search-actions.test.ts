@@ -64,6 +64,14 @@ describe("searchActions", () => {
     });
   });
 
+  it("includes a hint that only carries a note", () => {
+    const noteOnly: ActionHints = { list_environments: { note: "Ask the user first." } };
+    const results = searchActions(entries, "environments", 10, noteOnly);
+
+    const env = results.find((r) => r.id === "list_environments");
+    expect(env!.hints).toEqual({ note: "Ask the user first." });
+  });
+
   // The tool's own `org` input carries it. Advertising it here as well tells
   // the model to put it in `params`.
   it("does not advertise the org path parameter", () => {
