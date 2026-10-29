@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://docs.kosli.com/schemas/flow-template/v1.json
+# Flow mcp-server-release: one trail per release tag. release.yml creates the
+# flow from this file and attests both shipped artifacts before publishing.
+version: 1
+trail:
+  attestations:
+  - name: unit-tests
+    type: junit
+  artifacts:
+  - name: npm-package
+  - name: mcpb-bundle

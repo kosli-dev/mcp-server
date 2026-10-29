@@ -12,6 +12,11 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Each release reports to the mcp-server-release flow in kosli-public, one
+    # trail per tag. The token and org are set on the Kosli steps alone, never
+    # job-wide: the tests and the smoke test read KOSLI_API_TOKEN and KOSLI_ORG.
+    env:
+      KOSLI_FLOW_NAME: mcp-server-release
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
@@ -39,6 +44,25 @@ jobs:
             exit 1
           fi
 
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@b90ac9b0ddfce708c687f198430f54dfa960f80d # v5.2.3
+        with:
+          version: '2'
+
+      # create flow is an upsert: it keeps the flow's template in step with
+      # kosli/release-template.yml.
+      - name: Begin Kosli trail
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+        run: |
+          kosli create flow "${KOSLI_FLOW_NAME}" \
+            --description "Releases of kosli-dev/mcp-server to npm and GitHub Releases" \
+            --template-file kosli/release-template.yml
+          kosli begin trail "${GITHUB_REF_NAME}" \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --description "Release ${GITHUB_REF_NAME}"
+
       - name: Install dependencies
         run: npm ci
 
@@ -49,7 +73,21 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        run: npm test
+        id: test
+        run: npm test -- --reporter=default --reporter=junit --outputFile.junit=test-results/junit.xml
+
+      # Runs when the tests fail too, so a failed release attempt is on record.
+      - name: Attest unit tests
+        if: ${{ !cancelled() && steps.test.outcome != 'skipped' }}
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+        run: |
+          kosli attest junit \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --trail "${GITHUB_REF_NAME}" \
+            --name unit-tests \
+            --results-dir test-results
 
       - name: Smoke test dist
         run: npm run smoke
@@ -66,12 +104,54 @@ jobs:
           npx --no-install mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
           npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
 
+      # Pack the npm tarball once, so the file Kosli fingerprints is the file
+      # npm publish uploads. Publishing the directory would pack it again.
+      # Packed into an empty directory and found there, rather than parsed from
+      # npm pack --json, whose shape changed in npm 12.
+      - name: Pack npm tarball
+        id: tarball
+        run: |
+          dir="$RUNNER_TEMP/npm-pack"
+          mkdir "$dir"
+          npm pack --pack-destination "$dir"
+          files=("$dir"/*.tgz)
+          if [ "${#files[@]}" -ne 1 ] || [ ! -f "${files[0]}" ]; then
+            echo "::error::expected one tarball in $dir"
+            exit 1
+          fi
+          echo "file=${files[0]}" >> "$GITHUB_OUTPUT"
+
+      # Before publishing, which can't be undone, so a release that can't be
+      # recorded never ships.
+      - name: Attest artifacts
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+          TARBALL: ${{ steps.tarball.outputs.file }}
+        run: |
+          kosli attest artifact "${TARBALL}" \
+            --artifact-type file \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --trail "${GITHUB_REF_NAME}" \
+            --name npm-package
+          for bundle in kosli-mcp-server-*.mcpb; do
+            kosli attest artifact "${bundle}" \
+              --artifact-type file \
+              --flow "${KOSLI_FLOW_NAME}" \
+              --trail "${GITHUB_REF_NAME}" \
+              --name mcpb-bundle
+          done
+
       - name: Publish to npm
         # Auth is npm Trusted Publishing (OIDC) — that is what id-token: write above
         # is for, not provenance. Dropping it breaks publishing entirely.
         # Trusted publishing already generates provenance on a public repo; passing
         # --provenance makes it fail loudly rather than silently skip if that changes.
-        run: npm publish --access public --provenance
+        # Publishing a tarball skips prepublishOnly; the build and tests it would
+        # run have already passed above.
+        env:
+          TARBALL: ${{ steps.tarball.outputs.file }}
+        run: npm publish "${TARBALL}" --access public --provenance
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
