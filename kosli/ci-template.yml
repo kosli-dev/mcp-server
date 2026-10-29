@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://docs.kosli.com/schemas/flow-template/v1.json
+# Flow mcp-server-ci: one trail per commit on main. ci.yml creates the flow
+# from this file and begins the trail; codeql.yaml attests into the same trail.
+version: 1
+trail:
+  attestations:
+  - name: pull-request
+    type: pull_request
+  - name: unit-tests
+    type: junit
+  - name: codeql-scan
+    type: generic

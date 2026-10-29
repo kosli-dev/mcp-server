@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  # kosli attest pullrequest github reads the PR that merged the commit.
+  pull-requests: read
 
 jobs:
   test:
@@ -28,6 +30,16 @@ jobs:
         include:
           - node-version: '22.12'
             consumer-floor: '22.0.0'
+    # Commits on main report to the mcp-server-ci flow in kosli-public, from
+    # one leg only: every leg attesting under the same names would overwrite
+    # each other. 24 is the leg release.yml matches. Pushes only, so fork PRs,
+    # which get no secrets, never reach a Kosli step, and the trail is a commit
+    # that exists on main rather than a PR's ephemeral merge commit.
+    # The token and org are set on the Kosli steps alone, never job-wide: the
+    # tests and the smoke test read KOSLI_API_TOKEN and KOSLI_ORG too.
+    env:
+      REPORT_TO_KOSLI: ${{ github.event_name == 'push' && matrix.node-version == '24' }}
+      KOSLI_FLOW_NAME: mcp-server-ci
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
@@ -36,6 +48,40 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Kosli CLI
+        if: env.REPORT_TO_KOSLI == 'true'
+        uses: kosli-dev/setup-cli-action@b90ac9b0ddfce708c687f198430f54dfa960f80d # v5.2.3
+        with:
+          version: '2'
+
+      # create flow is an upsert: it keeps the flow's template in step with
+      # kosli/ci-template.yml.
+      - name: Begin Kosli trail
+        if: env.REPORT_TO_KOSLI == 'true'
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+        run: |
+          kosli create flow "${KOSLI_FLOW_NAME}" \
+            --description "CI for kosli-dev/mcp-server: commits on main" \
+            --template-file kosli/ci-template.yml
+          kosli begin trail "${GITHUB_SHA}" \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --description "Run ${GITHUB_RUN_NUMBER}: ${GITHUB_REF_NAME}"
+
+      - name: Attest pull request
+        if: env.REPORT_TO_KOSLI == 'true'
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          kosli attest pullrequest github \
+            --github-token "${GITHUB_TOKEN}" \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --trail "${GITHUB_SHA}" \
+            --name pull-request
 
       - name: Setup Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -54,8 +100,25 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # The JUnit report is what the Kosli attestation reads; it costs nothing
+      # on the legs that don't attest.
       - name: Test
-        run: npm test
+        id: test
+        run: npm test -- --reporter=default --reporter=junit --outputFile.junit=test-results/junit.xml
+
+      # Runs when the tests fail too: Kosli derives compliance from the report,
+      # so a failing run is recorded rather than missing.
+      - name: Attest unit tests
+        if: ${{ !cancelled() && env.REPORT_TO_KOSLI == 'true' && steps.test.outcome != 'skipped' }}
+        env:
+          KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
+          KOSLI_ORG: kosli-public
+        run: |
+          kosli attest junit \
+            --flow "${KOSLI_FLOW_NAME}" \
+            --trail "${GITHUB_SHA}" \
+            --name unit-tests \
+            --results-dir test-results
 
       # Starts the built server over real stdio: catches what the in-memory
       # tests can't, like the bin entry or the JSON imports failing to load.

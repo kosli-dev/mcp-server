@@ -10,3 +10,4 @@ docs/
 run.sh
 *.mcpb
 .mcpb-staging/
+test-results/
