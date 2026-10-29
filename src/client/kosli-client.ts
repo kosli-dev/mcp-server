@@ -23,6 +23,18 @@ export interface FileParam {
 type FetchFn = typeof globalThis.fetch;
 
 const USER_AGENT = `kosli-mcp-server/${VERSION}`;
+const KOSLI_CLIENT = `mcp/${VERSION}`;
+
+/**
+ * Which tool and server session a request came from, for Kosli's product
+ * analytics. Only names go here, never what the caller passed: the action id is
+ * a public OpenAPI operationId, so no argument, query or prompt text can leave
+ * in a header.
+ */
+export interface RequestOrigin {
+  tool: string;
+  invocationId: string;
+}
 
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
@@ -86,6 +98,7 @@ export class KosliClient {
   async execute(
     entry: CatalogEntry,
     params: Record<string, unknown>,
+    origin?: RequestOrigin,
   ): Promise<unknown | ErrorResponse> {
     const urlResult = this.buildUrl(entry, params);
     if (typeof urlResult !== "string") return urlResult;
@@ -106,7 +119,12 @@ export class KosliClient {
     const baseHeaders: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
       "User-Agent": USER_AGENT,
+      "X-Kosli-Client": KOSLI_CLIENT,
     };
+    if (origin) {
+      baseHeaders["X-Kosli-Operation"] = `${origin.tool} ${entry.id}`;
+      baseHeaders["X-Kosli-Invocation-Id"] = origin.invocationId;
+    }
     // For multipart, let fetch set Content-Type with the generated boundary.
     if (!isMultipart) {
       baseHeaders["Content-Type"] = "application/json";

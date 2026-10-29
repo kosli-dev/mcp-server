@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { searchActions } from "./tools/search-actions.js";
@@ -21,7 +22,9 @@ export function createServer(config: Config) {
     'Kosli organization to run this call against, e.g. "cyber-dojo". Required for every action whose path contains {org}, which is all but four of them. There is no default: a call that names no org is refused rather than sent somewhere you did not choose.',
   );
 
-  const run = (mode: ToolMode) =>
+  const invocationId = randomUUID();
+
+  const run = (tool: string, mode: ToolMode) =>
     async ({ actionId, params, fields, org }: {
       actionId: string;
       params: Record<string, unknown>;
@@ -31,7 +34,12 @@ export function createServer(config: Config) {
       content: [{
         type: "text" as const,
         text: JSON.stringify(
-          await executeAction(entries, config, actionId, params, { fields, mode, org }),
+          await executeAction(entries, config, actionId, params, {
+            fields,
+            mode,
+            org,
+            origin: { tool, invocationId },
+          }),
         ),
       }],
     });
@@ -82,7 +90,7 @@ export function createServer(config: Config) {
         fields: FIELDS.optional().describe("Only include these fields in each object of the response. Dramatically reduces response size. Example: [\"name\",\"compliant\",\"fingerprint\",\"reasons_for_incompliance\"]"),
       },
     },
-    run("GET"),
+    run("execute_read_action", "GET"),
   );
 
   server.registerTool(
@@ -101,7 +109,7 @@ export function createServer(config: Config) {
         fields: FIELDS.optional().describe("Only include these fields in each object of the response. Dramatically reduces response size."),
       },
     },
-    run("WRITE"),
+    run("execute_write_action", "WRITE"),
   );
 
   return server;
