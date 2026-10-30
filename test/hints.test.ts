@@ -45,4 +45,12 @@ describe("hints.json", () => {
       expect(h[id]?.note, id).toMatch(/never pick one yourself/);
     }
   });
+
+  // is_compliant is required and the spec's example sets it to true, so a
+  // model left alone records a pass nobody gave (#110).
+  it("tells the model to ask whether a generic attestation passed", () => {
+    const note = (hints as ActionHints).attest_generic?.note;
+    expect(note).toMatch(/Ask the user/);
+    expect(note).toMatch(/is_compliant/);
+  });
 });
