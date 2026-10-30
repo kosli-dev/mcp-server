@@ -135,7 +135,7 @@ rather than coerced, because coercing invents a name: `["cyber-dojo",
 
 A few actions are not organization-scoped: `get_user_default_org`,
 `list_system_attestation_types`, the two `/schemas/...` actions, and the five
-`*_personal_api_key` actions that manage the authenticated user's own API keys.
+`*_personal_api_key(s)` actions that manage the authenticated user's own API keys.
 Passing an org to one of those is rejected rather than ignored.
 
 An org your token cannot reach returns the usual error object with the API's

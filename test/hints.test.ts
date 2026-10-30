@@ -31,4 +31,18 @@ describe("hints.json", () => {
     expect(note).toMatch(/can't upload/);
     expect(note).toMatch(/attachment_upload_id/);
   });
+
+  // The personal API key actions mint and revoke credentials. A new key value
+  // is returned once and lands in the model's context, and rotate or delete
+  // can revoke the key this server authenticates with.
+  it("tells the model to hand a new API key to the user and never choose a key to revoke", () => {
+    const h = hints as ActionHints;
+    for (const id of ["create_personal_api_key", "rotate_personal_api_key"]) {
+      expect(h[id]?.note, id).toMatch(/only once/);
+      expect(h[id]?.note, id).toMatch(/do not store/);
+    }
+    for (const id of ["rotate_personal_api_key", "delete_personal_api_key"]) {
+      expect(h[id]?.note, id).toMatch(/never pick one yourself/);
+    }
+  });
 });
