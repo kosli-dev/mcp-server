@@ -2,11 +2,24 @@
 set -euo pipefail
 
 # Build a .mcpb bundle (ZIP archive) for Claude Desktop distribution.
-# Usage: npm run pack
+# Usage: npm run pack:mcpb        (version from package.json)
+#        npm run pack:mcpb:dev    (next patch, -dev.<UTC timestamp>)
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 STAGING="$REPO_ROOT/.mcpb-staging"
 VERSION=$(node -p "require('$REPO_ROOT/package.json').version")
+
+# A dev bundle sorts above the installed release, so Claude Desktop takes it
+# as an upgrade, and below the next real release, which then replaces it.
+# Only the bundle's manifest carries it: package.json and src/version.ts keep
+# the release version.
+if [[ "${1:-}" == "--dev" ]]; then
+  VERSION=$(node -p "
+    const [major, minor, patch] = '$VERSION'.split('-')[0].split('.').map(Number);
+    const stamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+    \`\${major}.\${minor}.\${patch + 1}-dev.\${stamp}\`;
+  ")
+fi
 OUTPUT="$REPO_ROOT/kosli-mcp-server-${VERSION}.mcpb"
 
 echo "Building .mcpb bundle v${VERSION}..."

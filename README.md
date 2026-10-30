@@ -170,6 +170,7 @@ npm run build        # compile to dist/
 npm start            # run the built server over stdio
 npm run smoke        # start the built server and drive it over stdio
 npm run pack:mcpb    # build a .mcpb bundle for Claude Desktop
+npm run pack:mcpb:dev  # same, versioned to install over the release in Claude Desktop
 ```
 
 ## Layout

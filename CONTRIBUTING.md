@@ -77,8 +77,19 @@ To install the Claude Desktop extension exactly as users get it:
 
 ```bash
 npm run pack:mcpb
-open kosli-mcp-server-*.mcpb   # opens Claude Desktop install dialog
+open kosli-mcp-server-<version>.mcpb   # opens Claude Desktop install dialog
 ```
+
+Claude Desktop won't install a bundle over an extension of the same version, so to try your changes where a release is already installed, build a dev bundle instead:
+
+```bash
+npm run pack:mcpb:dev
+open "$(ls -t kosli-mcp-server-*-dev.*.mcpb | head -1)"   # the newest
+```
+
+Its version is the next patch with a timestamp, e.g. `0.6.3-dev.20261030110738` on 0.6.2. It sorts above the installed release, so Desktop takes it as an upgrade, and below the next real release, which replaces it once it's out. Each build gets a new timestamp, so you can reinstall as often as you like.
+
+The next patch is worked out from `package.json`, so build the dev bundle before bumping the version for a release, not after. On a branch already bumped to 0.6.3 it comes out as `0.6.4-dev.*`, which the 0.6.3 release never replaces; if you've installed one, uninstall it before installing the release. Only the bundle's manifest carries it: the server still reports the release version in its `User-Agent`. The `.mcpb` files are git-ignored; delete old ones when you're done.
 
 ## Versioning
 
