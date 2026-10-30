@@ -30,9 +30,12 @@ export interface Config {
   baseUrl: string;
 }
 
+// Guidance search_actions attaches to an action. `note` is for what the
+// catalog can't say, such as a step the model can't perform over MCP.
 export interface ActionHint {
-  schemaUrl: string;
-  example: Record<string, string>;
+  schemaUrl?: string;
+  example?: Record<string, string>;
+  note?: string;
 }
 
 export type ActionHints = Record<string, ActionHint>;

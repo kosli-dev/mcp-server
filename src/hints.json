@@ -10,5 +10,8 @@
     "example": {
       "template_file": "version: 1\ntrail:\n  attestations:\n    - name: pull-request\n      type: pull_request\n  artifacts:\n    - name: backend\n      attestations:\n        - name: unit-tests\n          type: junit\n"
     }
+  },
+  "create_attestation_upload": {
+    "note": "You can't upload the file yourself: this server only sends JSON to the Kosli API. Give the user the upload URL from the response (with any headers it lists) so they can PUT the file to it, and wait for them to confirm the upload succeeded before passing the upload id as `attachment_upload_id` to an attest_* action."
   }
 }
