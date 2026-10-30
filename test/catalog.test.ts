@@ -18,18 +18,23 @@ describe("catalog.json", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  // The README names these four. Update both together when the spec moves.
-  it("has exactly the four documented actions that take no org", () => {
+  // The README names these. Update both together when the spec moves.
+  it("has exactly the documented actions that take no org", () => {
     const withoutOrg = catalog
       .filter((entry) => !entry.parameters.some((p) => p.name === "org" && p.in === "path"))
       .map((entry) => entry.id)
       .sort();
 
     expect(withoutOrg).toEqual([
+      "create_personal_api_key",
+      "delete_personal_api_key",
       "get_environment_policy_schema_v1",
       "get_flow_template_schema_v1",
+      "get_personal_api_key",
       "get_user_default_org",
+      "list_personal_api_keys",
       "list_system_attestation_types",
+      "rotate_personal_api_key",
     ]);
   });
 

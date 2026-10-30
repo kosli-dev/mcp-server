@@ -11,6 +11,15 @@
       "template_file": "version: 1\ntrail:\n  attestations:\n    - name: pull-request\n      type: pull_request\n  artifacts:\n    - name: backend\n      attestations:\n        - name: unit-tests\n          type: junit\n"
     }
   },
+  "create_personal_api_key": {
+    "note": "The response holds the new key value, which Kosli returns only once. Hand it to the user verbatim right away and do not store it, reuse it, or repeat it later in the conversation. It is a credential: never pass it to another tool or action."
+  },
+  "rotate_personal_api_key": {
+    "note": "Rotating replaces a credential: the old key stops working after the grace period, and this may be the very key this server authenticates with. Only rotate a key the user has named by id after listing them, never pick one yourself. The response holds the new key value, which Kosli returns only once: hand it to the user verbatim right away and do not store it, reuse it, or pass it to another tool."
+  },
+  "delete_personal_api_key": {
+    "note": "Deleting revokes a credential immediately, and this may be the very key this server authenticates with. Only delete a key the user has named by id after listing them, never pick one yourself."
+  },
   "create_attestation_upload": {
     "note": "You can't upload the file yourself: this server only sends JSON to the Kosli API. Give the user the upload URL from the response (with any headers it lists) so they can PUT the file to it, and wait for them to confirm the upload succeeded before passing the upload id as `attachment_upload_id` to an attest_* action."
   }
