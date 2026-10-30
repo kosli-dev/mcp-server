@@ -115,7 +115,7 @@ your token has access to:
 ```
 
 It is required for every action whose path contains `{org}`, which is all but
-four of them. There is no configured default: a call that names no org is
+a few of them. There is no configured default: a call that names no org is
 refused rather than sent to one nobody chose.
 
 `KOSLI_ORG` used to supply that default and has been removed. A config that
@@ -133,9 +133,10 @@ The org must be one name, given as a non-empty string. Anything else is rejected
 rather than coerced, because coercing invents a name: `["cyber-dojo",
 "kosli-public"]` would request the org `cyber-dojo,kosli-public`.
 
-Four actions are not organization-scoped: `get_user_default_org`,
-`list_system_attestation_types`, and the two `/schemas/...` actions. Passing an
-org to one of those is rejected rather than ignored.
+A few actions are not organization-scoped: `get_user_default_org`,
+`list_system_attestation_types`, the two `/schemas/...` actions, and the five
+`*_personal_api_key` actions that manage the authenticated user's own API keys.
+Passing an org to one of those is rejected rather than ignored.
 
 An org your token cannot reach returns the usual error object with the API's
 status, `403` for both a non-member and a non-existent org. Kosli staff accounts
