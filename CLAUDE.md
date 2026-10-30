@@ -83,6 +83,7 @@ npm run build      # tsc → dist/
 npm start          # runs dist/index.js over stdio
 npm run generate-catalog   # refresh src/catalog.json from OpenAPI
 npm run pack:mcpb  # build .mcpb bundle for Claude Desktop
+npm run pack:mcpb:dev  # same, as <next patch>-dev.<UTC timestamp> for local testing
 ```
 
 ## Releasing
@@ -109,4 +110,4 @@ To release:
 3. After merge, tag the merge commit on `main`: `git tag -a v0.3.0 -m "v0.3.0" && git push origin v0.3.0`. `tag.gpgSign` makes annotated tags signed.
 4. The `release.yml` workflow will: verify the tag matches `package.json`; build, typecheck, test and smoke-test; build, validate and smoke-test the `.mcpb` bundle; `npm pack` the tarball and attest it and the bundle to Kosli; then publish that same tarball to npm with provenance and create a GitHub Release with the bundle attached. Publishing comes after every check because it can't be undone; keep it last.
 
-Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces.
+Do **not** update the version in `manifest.json` manually — it contains a placeholder that the pack script replaces. `npm run pack:mcpb:dev` stamps a dev version (`0.6.3-dev.20261030110738` on 0.6.2) into the bundle's manifest only, so Claude Desktop installs it over the release without an uninstall; `package.json` and `src/version.ts` keep the release version, so the `User-Agent` still reports it.

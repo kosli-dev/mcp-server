@@ -23,6 +23,7 @@
     "sync-version": "node scripts/sync-version.mjs",
     "version": "npm run sync-version && git add src/version.ts package.json package-lock.json",
     "pack:mcpb": "bash scripts/pack-mcpb.sh",
+    "pack:mcpb:dev": "bash scripts/pack-mcpb.sh --dev",
     "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
