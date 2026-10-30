@@ -54,6 +54,15 @@ describe("createServer", () => {
     }
   });
 
+  // A write is a record; a value the model invents lands in it as if the user
+  // had given it (#110).
+  it("tells the write tool to ask for values the user didn't give", async () => {
+    const { tools } = await client.listTools();
+    const write = tools.find((t) => t.name === "execute_write_action");
+    expect(write?.description).toMatch(/Don't make up a value/);
+    expect(write?.description).toMatch(/ask/);
+  });
+
   // These annotations are what make an MCP client ask before a write.
   // scripts/smoke.ts checks the same against a built server.
   it("marks writes destructive and everything else read-only", async () => {

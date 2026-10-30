@@ -22,5 +22,8 @@
   },
   "create_attestation_upload": {
     "note": "You can't upload the file yourself: this server only sends JSON to the Kosli API. Give the user the upload URL from the response (with any headers it lists) so they can PUT the file to it, and wait for them to confirm the upload succeeded before passing the upload id as `attachment_upload_id` to an attest_* action."
+  },
+  "attest_generic": {
+    "note": "Ask the user whether the attestation passed before calling this, and set `is_compliant` from their answer. Never choose it yourself, not even `true` as in the spec's example: a generic attestation is compliant only because someone said so, and once it's written the record stands."
   }
 }

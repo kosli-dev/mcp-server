@@ -97,7 +97,7 @@ export function createServer(config: Config) {
     "execute_write_action",
     {
       title: "Execute write action",
-      description: "Execute a write (POST, PUT, PATCH, DELETE) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. Set 'org' to say which organization the write lands in; there is no default, so check it before approving.",
+      description: "Execute a write (POST, PUT, PATCH, DELETE) Kosli API action by its ID with the given parameters. Use search_actions first to find the action ID and required parameters. Set 'org' to say which organization the write lands in; there is no default, so check it before approving. Don't make up a value the user didn't give: look it up with a read action if one returns it, otherwise ask, and leave out optional fields they didn't ask for.",
       annotations: {
         destructiveHint: true,
         readOnlyHint: false,
