@@ -3746,7 +3746,7 @@
     "method": "POST",
     "path": "/evaluations/{org}",
     "summary": "Create an evaluation",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Evaluations"],
     "parameters": [
       {
@@ -3907,7 +3907,7 @@
         }
       }
     ],
-    "searchText": "create an evaluation **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. post evaluations org evaluations"
+    "searchText": "create an evaluation **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. post evaluations org evaluations"
   },
   {
     "id": "create_or_update_custom_attestation_type",
@@ -6510,7 +6510,7 @@
     "method": "GET",
     "path": "/evaluations/{org}/{evaluation_id}",
     "summary": "Get an evaluation",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Evaluations"],
     "parameters": [
       {
@@ -6529,7 +6529,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get an evaluation **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluation_id evaluations"
+    "searchText": "get an evaluation **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluation_id evaluations"
   },
   {
     "id": "get_flow",
@@ -6731,7 +6731,7 @@
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}",
     "summary": "Get a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -6750,14 +6750,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier rego policies"
+    "searchText": "get a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier rego policies"
   },
   {
     "id": "get_rego_policy_bundle",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/bundle",
     "summary": "Download the files of a version of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -6788,14 +6788,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "download the files of a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number bundle rego policies"
+    "searchText": "download the files of a version of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number bundle rego policies"
   },
   {
     "id": "get_rego_policy_file",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/files/{file_path}",
     "summary": "Get the source of a file in a version of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -6833,14 +6833,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get the source of a file in a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files file_path rego policies"
+    "searchText": "get the source of a file in a version of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files file_path rego policies"
   },
   {
     "id": "get_rego_policy_version",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions/{version_number}",
     "summary": "Get a version of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -6871,7 +6871,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number rego policies"
+    "searchText": "get a version of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number rego policies"
   },
   {
     "id": "get_repo",
@@ -8849,7 +8849,7 @@
     "method": "GET",
     "path": "/evaluations/{org}",
     "summary": "List evaluations",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Evaluations"],
     "parameters": [
       {
@@ -8950,7 +8950,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list evaluations **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluations"
+    "searchText": "list evaluations **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluations"
   },
   {
     "id": "list_flow_attestations",
@@ -9201,7 +9201,7 @@
     "method": "GET",
     "path": "/rego-policies/{org}",
     "summary": "List rego policies",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -9289,14 +9289,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list rego policies **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org rego policies"
+    "searchText": "list rego policies **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org rego policies"
   },
   {
     "id": "list_rego_policy_files",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions/{version_number}/files",
     "summary": "List the files of a version of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -9327,14 +9327,14 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list the files of a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files rego policies"
+    "searchText": "list the files of a version of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions version_number files rego policies"
   },
   {
     "id": "list_rego_policy_versions",
     "method": "GET",
     "path": "/rego-policies/{org}/{identifier}/versions",
     "summary": "List versions of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -9381,7 +9381,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "list versions of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions rego policies"
+    "searchText": "list versions of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get rego-policies org identifier versions rego policies"
   },
   {
     "id": "list_repo_deployments",
@@ -10516,7 +10516,7 @@
     "method": "PUT",
     "path": "/rego-policies/{org}/{identifier}",
     "summary": "Publish a version of a rego policy",
-    "description": "**Beta** — the Server-side evaluation feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
     "tags": ["Rego Policies"],
     "parameters": [
       {
@@ -10577,7 +10577,7 @@
         }
       }
     ],
-    "searchText": "publish a version of a rego policy **beta** — the server-side evaluation feature is in beta. requests from organizations without it enabled receive `403 forbidden`. put rego-policies org identifier rego policies"
+    "searchText": "publish a version of a rego policy **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. put rego-policies org identifier rego policies"
   },
   {
     "id": "rename_environment",
