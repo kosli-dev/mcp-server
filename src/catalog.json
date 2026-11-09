@@ -3338,7 +3338,7 @@
                 "type": "object",
                 "required": ["attestation_name","type_name","attestation_data"],
                 "title": "SystemAttestationPostInput",
-                "description": "Generic input for POST /system. Accepts any system attestation type.\nDispatches to the type-specific subclass registered in the YAML via the registry."
+                "description": "Generic input for POST /system. Accepts any system attestation type."
               },
               "title": "Data Json",
               "description": "Attestation data in JSON format"
@@ -6532,6 +6532,58 @@
     "searchText": "get an evaluation **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluation_id evaluations"
   },
   {
+    "id": "get_evaluation_input",
+    "method": "GET",
+    "path": "/evaluations/{org}/{evaluation_id}/input",
+    "summary": "Get an evaluation's input",
+    "description": "**Beta** — the Controls feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Evaluations"],
+    "parameters": [
+      {
+        "name": "evaluation_id",
+        "in": "path",
+        "required": true,
+        "description": "Id of the evaluation, as returned when it was created or listed",
+        "schema": {
+          "type": "string",
+          "description": "Id of the evaluation, as returned when it was created or listed",
+          "title": "Evaluation Id"
+        }
+      },
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "get an evaluation's input **beta** — the controls feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get evaluations org evaluation_id input evaluations"
+  },
+  {
+    "id": "get_evaluation_input_trail_schema_v1",
+    "method": "GET",
+    "path": "/schemas/evaluation-input/trail/v1",
+    "summary": "Rego policy input schema for a single trail v1",
+    "description": "Return the JSON Schema of the `input` a Rego policy published with\n`--input-schema trail` receives: `trail`, `trails` and `evaluation`. Publishing\nvalidates the policy against this same schema, so `opa check --strict --schema`\nagainst it reports what publishing would. For a policy that reads only `trails`,\nuse `/schemas/evaluation-input/trails/v1`.",
+    "tags": ["Schemas"],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "rego policy input schema for a single trail v1 return the json schema of the `input` a rego policy published with\n`--input-schema trail` receives: `trail`, `trails` and `evaluation`. publishing\nvalidates the policy against this same schema, so `opa check --strict --schema`\nagainst it reports what publishing would. for a policy that reads only `trails`,\nuse `/schemas/evaluation-input/trails/v1`. get schemas evaluation-input trail v1 schemas"
+  },
+  {
+    "id": "get_evaluation_input_trails_schema_v1",
+    "method": "GET",
+    "path": "/schemas/evaluation-input/trails/v1",
+    "summary": "Rego policy input schema for many trails v1",
+    "description": "Return the JSON Schema of the `input` a Rego policy published with\n`--input-schema trails` receives: `trails` and `evaluation`, with no `trail`.\nPublishing validates the policy against this same schema, so\n`opa check --strict --schema` against it reports what publishing would. For a\npolicy that reads `trail`, use `/schemas/evaluation-input/trail/v1`.",
+    "tags": ["Schemas"],
+    "parameters": [],
+    "requestBody": null,
+    "searchText": "rego policy input schema for many trails v1 return the json schema of the `input` a rego policy published with\n`--input-schema trails` receives: `trails` and `evaluation`, with no `trail`.\npublishing validates the policy against this same schema, so\n`opa check --strict --schema` against it reports what publishing would. for a\npolicy that reads `trail`, use `/schemas/evaluation-input/trail/v1`. get schemas evaluation-input trails v1 schemas"
+  },
+  {
     "id": "get_flow",
     "method": "GET",
     "path": "/flows/{org}/{flow_name}",
@@ -7290,7 +7342,7 @@
     "method": "GET",
     "path": "/trails/{org}/{flow_name}/{trail_name}/moments/{moment_expression}",
     "summary": "Get trail moment",
-    "description": "Get one moment, with each attestation's stored body joined onto its slot entry.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `N`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{YYYY-MM-DDTHH:MM:SS}`: the newest moment recorded at or before that UTC\n  instant. Fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27T12:00:00}\n\nAddress a moment you already know by its `moment_number`. An instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it.",
+    "description": "Get one moment, with each attestation's stored body joined onto its slot entry\nand the event that recorded the moment.\n\nA policy is given the moment without `event`, so remove it before using a\nfetched moment as a policy's test input.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `N`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{YYYY-MM-DDTHH:MM:SS}`: the newest moment recorded at or before that UTC\n  instant. Fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27T12:00:00}\n\nAddress a moment you already know by its `moment_number`. An instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it.",
     "tags": ["Trails"],
     "parameters": [
       {
@@ -7338,7 +7390,7 @@
       }
     ],
     "requestBody": null,
-    "searchText": "get trail moment get one moment, with each attestation's stored body joined onto its slot entry.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `n`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{yyyy-mm-ddthh:mm:ss}`: the newest moment recorded at or before that utc\n  instant. fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27t12:00:00}\n\naddress a moment you already know by its `moment_number`. an instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it. get trails org flow_name trail_name moments moment_expression trails"
+    "searchText": "get trail moment get one moment, with each attestation's stored body joined onto its slot entry\nand the event that recorded the moment.\n\na policy is given the moment without `event`, so remove it before using a\nfetched moment as a policy's test input.\n\n`moment_expression` can be specified as follows:\n- `latest`: the newest moment in the series\n- `n`: the moment with that `moment_number`, as cited by the listing\n    example: 42\n- `@{yyyy-mm-ddthh:mm:ss}`: the newest moment recorded at or before that utc\n  instant. fractional seconds are optional, and are read to microseconds.\n    example: @{2026-08-27t12:00:00}\n\naddress a moment you already know by its `moment_number`. an instant carries\nless precision than the `created_at` the listing publishes, so one built by\nrounding a listed `created_at` can fall before its own moment and select the\none before it. get trails org flow_name trail_name moments moment_expression trails"
   },
   {
     "id": "get_user_default_org",
