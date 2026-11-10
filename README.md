@@ -53,6 +53,12 @@ Download the latest `.mcpb` file from [Releases](https://github.com/kosli-dev/mc
 > [!NOTE]
 > When installing from a `.mcpb` file, Claude Desktop shows a warning that the extension has not been verified by Anthropic. This is expected for any extension installed from a file rather than from the built-in directory. Sideloaded extensions also do not auto-update — you'll need to download and reinstall new versions manually. Both of these limitations go away once the extension is listed in Anthropic's [Connectors Directory](https://claude.com/docs/connectors/building/submission).
 
+To check that a downloaded bundle was built from this repository by its release workflow, verify its [build provenance](https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds) with the GitHub CLI:
+
+```bash
+gh attestation verify kosli-mcp-server-<version>.mcpb --repo kosli-dev/mcp-server
+```
+
 ### Claude Desktop (manual)
 
 Alternatively, add the following to your `claude_desktop_config.json` (Settings → Developer → Edit Config). This method auto-updates via `npx` on each restart, but stores secrets in plain text:
