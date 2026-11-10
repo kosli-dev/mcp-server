@@ -29,6 +29,8 @@ describe("catalog.json", () => {
       "create_personal_api_key",
       "delete_personal_api_key",
       "get_environment_policy_schema_v1",
+      "get_evaluation_input_trail_schema_v1",
+      "get_evaluation_input_trails_schema_v1",
       "get_flow_template_schema_v1",
       "get_personal_api_key",
       "get_user_default_org",
