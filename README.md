@@ -134,7 +134,7 @@ rather than coerced, because coercing invents a name: `["cyber-dojo",
 "kosli-public"]` would request the org `cyber-dojo,kosli-public`.
 
 A few actions are not organization-scoped: `get_user_default_org`,
-`list_system_attestation_types`, the two `/schemas/...` actions, and the five
+`list_system_attestation_types`, the four `/schemas/...` actions, and the five
 `*_personal_api_key(s)` actions that manage the authenticated user's own API keys.
 Passing an org to one of those is rejected rather than ignored.
 
