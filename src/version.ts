@@ -14,4 +14,4 @@
  *
  * test/version.test.ts fails if this drifts from package.json.
  */
-export const VERSION = "0.7.0";
+export const VERSION = "0.8.0";
