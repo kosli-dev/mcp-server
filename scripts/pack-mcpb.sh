@@ -21,11 +21,12 @@ if [[ "${1:-}" == "--dev" ]]; then
   ")
 fi
 OUTPUT="$REPO_ROOT/kosli-mcp-server-${VERSION}.mcpb"
+SBOM="$REPO_ROOT/kosli-mcp-server-${VERSION}.cdx.json"
 
 echo "Building .mcpb bundle v${VERSION}..."
 
 # Clean build
-rm -rf "$STAGING" "$OUTPUT"
+rm -rf "$STAGING" "$OUTPUT" "$SBOM"
 npm run build --prefix "$REPO_ROOT"
 
 # Stage files
@@ -40,11 +41,26 @@ node -e "
 cp -r "$REPO_ROOT/assets" "$STAGING/"
 cp -r "$REPO_ROOT/dist" "$STAGING/"
 
-# Install production dependencies only
+# Install production dependencies only. npm ci, not npm install: it installs
+# exactly what the lockfile pins and fails if package.json has drifted from it,
+# so the bundle and its SBOM never carry versions nobody reviewed.
 cp "$REPO_ROOT/package.json" "$STAGING/"
-cp "$REPO_ROOT/package-lock.json" "$STAGING/" 2>/dev/null || true
-(cd "$STAGING" && npm install --omit=dev --ignore-scripts --no-audit --no-fund)
-rm "$STAGING/package-lock.json" 2>/dev/null || true
+cp "$REPO_ROOT/package-lock.json" "$STAGING/"
+(cd "$STAGING" && npm ci --omit=dev --ignore-scripts --no-audit --no-fund)
+
+# CycloneDX SBOM of the node_modules the bundle ships, written next to the
+# bundle, not into it. It describes the installed tree, not the lockfile, with
+# devDependencies dropped from the staged package.json first so npm doesn't
+# report them missing. Not --omit dev: npm sbom then also drops production
+# packages that a dev dependency happens to share (zod, via @anthropic-ai/mcpb).
+rm "$STAGING/package-lock.json"
+node -e "
+  const f = '$STAGING/package.json';
+  const p = JSON.parse(require('fs').readFileSync(f, 'utf8'));
+  delete p.devDependencies;
+  require('fs').writeFileSync(f, JSON.stringify(p));
+"
+(cd "$STAGING" && npm sbom --sbom-format cyclonedx) > "$SBOM"
 
 # dist/ is ESM, and without a "type": "module" above it Node before 22.7 parses
 # it as CommonJS and fails on the first import. Ship only that field, not the
@@ -59,3 +75,4 @@ rm -rf "$STAGING"
 
 SIZE=$(du -h "$OUTPUT" | cut -f1)
 echo "Created $OUTPUT ($SIZE)"
+echo "Created $SBOM"
