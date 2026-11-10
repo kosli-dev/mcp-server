@@ -59,11 +59,14 @@ To check that a downloaded bundle was built from this repository by its release 
 gh attestation verify kosli-mcp-server-<version>.mcpb --repo kosli-dev/mcp-server
 ```
 
-Each release also attaches `kosli-mcp-server-<version>.cdx.json`, a [CycloneDX](https://cyclonedx.org/) SBOM listing every package bundled in the `.mcpb`, so you can check a release against new vulnerability advisories. It is attested against the bundle, so you can confirm it describes the file you downloaded:
+Each release also attaches `kosli-mcp-server-<version>.cdx.json`, a [CycloneDX](https://cyclonedx.org/) SBOM listing every package bundled in the `.mcpb`, so you can check a release against new vulnerability advisories.
+
+The attached file itself is not signed. The signed copy is the one attested against the bundle: verifying it proves that this SBOM was published for the exact `.mcpb` you downloaded. Read that copy rather than the attached file when it matters:
 
 ```bash
 gh attestation verify kosli-mcp-server-<version>.mcpb --repo kosli-dev/mcp-server \
-  --predicate-type https://cyclonedx.org/bom
+  --predicate-type https://cyclonedx.org/bom --format json \
+  | jq '.[0].verificationResult.statement.predicate' > sbom.cdx.json
 ```
 
 The npm package has no SBOM: it ships no lockfile, so npm resolves its dependencies on each install.
