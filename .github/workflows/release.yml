@@ -108,8 +108,10 @@ jobs:
           npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
 
       # pack:mcpb writes a CycloneDX SBOM of the bundle's node_modules next to
-      # it. actions/attest takes one sbom-path, not a glob, so find it here.
-      - name: Locate .mcpb SBOM
+      # it. actions/attest and kosli attest sbom take one file, not a glob, so
+      # find it here. The check runs again under the npm this job installs,
+      # which CI never uses: an SBOM that drops packages stays well-formed.
+      - name: Locate and check .mcpb SBOM
         id: sbom
         run: |
           files=(kosli-mcp-server-*.cdx.json)
@@ -117,6 +119,7 @@ jobs:
             echo "::error::expected one non-empty SBOM next to the .mcpb bundle"
             exit 1
           fi
+          node scripts/check-mcpb-sbom.mjs "${files[0]}" "$RUNNER_TEMP/mcpb"
           echo "file=${files[0]}" >> "$GITHUB_OUTPUT"
 
       # Pack the npm tarball once, so the file Kosli fingerprints is the file
@@ -143,6 +146,7 @@ jobs:
           KOSLI_API_TOKEN: ${{ secrets.KOSLI_PUBLIC_API_TOKEN }}
           KOSLI_ORG: kosli-public
           TARBALL: ${{ steps.tarball.outputs.file }}
+          SBOM: ${{ steps.sbom.outputs.file }}
         run: |
           kosli attest artifact "${TARBALL}" \
             --artifact-type file \
@@ -155,6 +159,14 @@ jobs:
               --flow "${KOSLI_FLOW_NAME}" \
               --trail "${GITHUB_REF_NAME}" \
               --name mcpb-bundle
+            # Bound to the bundle by its fingerprint. The SBOM file goes to the
+            # Evidence Vault as-is, so its sbom_sha256 matches the release asset.
+            kosli attest sbom "${bundle}" \
+              --artifact-type file \
+              --flow "${KOSLI_FLOW_NAME}" \
+              --trail "${GITHUB_REF_NAME}" \
+              --name mcpb-bundle.sbom \
+              --sbom-file "${SBOM}"
           done
 
       # SLSA build provenance for the .mcpb bundle, signed via Sigstore and
