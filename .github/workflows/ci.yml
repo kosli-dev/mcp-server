@@ -149,11 +149,14 @@ jobs:
       # the version pack-mcpb.sh injected, not the repo's placeholder copy.
       # The smoke test runs the server from the unzipped bundle, so it resolves
       # against the bundled production node_modules rather than the repo's.
+      # The SBOM check fails unless the SBOM pack-mcpb.sh wrote lists exactly
+      # the packages in the bundle; an SBOM that drops some stays well-formed.
       - name: Validate and smoke test .mcpb bundle
         run: |
           unzip -q kosli-mcp-server-*.mcpb -d "$RUNNER_TEMP/mcpb"
           npx --no-install mcpb validate "$RUNNER_TEMP/mcpb/manifest.json"
           npm run smoke -- "$RUNNER_TEMP/mcpb/dist/index.js"
+          node scripts/check-mcpb-sbom.mjs kosli-mcp-server-*.cdx.json "$RUNNER_TEMP/mcpb"
 
       # The matrix floor is the dev floor (vitest needs a newer 22.x), but
       # users run the bundle on anything engines allows. Run it once on the

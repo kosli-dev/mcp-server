@@ -9,5 +9,6 @@ docs/
 
 run.sh
 *.mcpb
+*.cdx.json
 .mcpb-staging/
 test-results/
