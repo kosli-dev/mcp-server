@@ -9249,6 +9249,25 @@
     "searchText": "list policies list policies in an organization. get policies org policies"
   },
   {
+    "id": "list_product_updates",
+    "method": "GET",
+    "path": "/product-updates/{org}",
+    "summary": "List product updates",
+    "description": "**Beta** — the Product updates feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Product Updates"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": null,
+    "searchText": "list product updates **beta** — the product updates feature is in beta. requests from organizations without it enabled receive `403 forbidden`. get product-updates org product updates"
+  },
+  {
     "id": "list_rego_policies",
     "method": "GET",
     "path": "/rego-policies/{org}",
@@ -10296,6 +10315,45 @@
     ],
     "requestBody": null,
     "searchText": "list trails for organization get a paginated list of trails for an organization based on filters provided as query parameters. get trails org trails"
+  },
+  {
+    "id": "mark_product_updates_seen",
+    "method": "POST",
+    "path": "/product-updates/{org}/seen",
+    "summary": "Mark product updates as seen",
+    "description": "**Beta** — the Product updates feature is in beta. Requests from organizations without it enabled receive `403 Forbidden`.",
+    "tags": ["Product Updates"],
+    "parameters": [
+      {
+        "name": "org",
+        "in": "path",
+        "required": true,
+        "description": "",
+        "schema": {"type":"string","title":"Org"}
+      }
+    ],
+    "requestBody": [
+      {
+        "name": "body",
+        "required": true,
+        "description": "Request body (application/json)",
+        "schema": {
+          "properties": {
+            "ids": {
+              "items": {"type":"string"},
+              "type": "array",
+              "maxItems": 200,
+              "title": "Ids",
+              "description": "The ids of the updates the user was shown. An id of an update the organization cannot see is ignored."
+            }
+          },
+          "type": "object",
+          "required": ["ids"],
+          "title": "ProductUpdatesSeenInput"
+        }
+      }
+    ],
+    "searchText": "mark product updates as seen **beta** — the product updates feature is in beta. requests from organizations without it enabled receive `403 forbidden`. post product-updates org seen product updates"
   },
   {
     "id": "override_attestation",
