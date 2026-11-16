@@ -22,7 +22,7 @@ jobs:
       KOSLI_FLOW_NAME: mcp-server-release
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
         with:
           egress-policy: audit
 
@@ -48,7 +48,7 @@ jobs:
           fi
 
       - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@b90ac9b0ddfce708c687f198430f54dfa960f80d # v5.2.3
+        uses: kosli-dev/setup-cli-action@9295a94031a6fc5eb1783a9027649a3cf7d1b950 # v5.2.4
         with:
           version: '2'
 
@@ -200,7 +200,7 @@ jobs:
         run: npm publish "${TARBALL}" --access public --provenance
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
           files: |
             *.mcpb
