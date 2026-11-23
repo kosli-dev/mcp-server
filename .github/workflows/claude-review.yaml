@@ -82,7 +82,7 @@ jobs:
 
       - name: Claude review (dependency updates)
         if: github.event.action != 'synchronize' || steps.delta.outputs.changed == 'true'
-        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -182,7 +182,7 @@ jobs:
 
       - name: Claude review (catalog update)
         if: github.event.action != 'synchronize' || steps.delta.outputs.changed == 'true'
-        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -288,7 +288,7 @@ jobs:
 
       - name: Claude review (general)
         if: github.event.action != 'synchronize'
-        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -357,7 +357,7 @@ jobs:
 
       - name: Claude follow-up review (new commits only)
         if: github.event.action == 'synchronize' && steps.delta.outputs.changed == 'true'
-        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         env:
           GH_TOKEN: ${{ github.token }}
         with:
